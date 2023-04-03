@@ -1,0 +1,63 @@
+###################
+#   travel-blog   #
+###################
+
+npx create-next-app@latest labranzas --typescript --eslint
+cd travel-blog
+git init 
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+code .
+nano tailwind.config.js
+...
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+ 
+    // Or if using `src` directory:
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+...
+
+nano globals.css
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+************************************************
+
+$ npm i sequelize sqlite3 bcrypt dot-env next-auth
+npm i -g sequelize-cli
+
+$ nano .sequelizerc
+const path = require('path');
+module.exports = {
+  config: path.resolve('db/config', 'config.js'),
+  'models-path': path.resolve('db', 'models'),
+  'seeders-path': path.resolve('db', 'seeders'),
+  'migrations-path': path.resolve('db', 'migrations'),
+};
+
+$ sequelize init
+
+copiar config, models, migrations, seeders, services, 
+Agregar al package.json
+
+"migrations:generate": "sequelize-cli migration:generate --name",
+"migrations:run": "sequelize-cli db:migrate",
+"migrations:debug": "sequelize-cli db:migrate --debug",
+"migrations:revert": "sequelize-cli db:migrate:undo",
+"migrations:delete": "sequelize-cli db:migrate:undo:all",
+"seeders:generate": "sequelize seed:generate --name",
+"seeders:runAll": "sequelize-cli db:seed:all",
+"seeders:run": "sequelize-cli db:seed --seed 20221130125351-settings.js"
+
+$ npm run migrations:run
+$ npm run seeders:runAll
+
+Generador de pass en base 64:
+openssl rand -base64 32
