@@ -18,7 +18,7 @@ const Profile = () => {
       console.log('User', data.user);
       setUserData(data.user);
     } catch (error) {
-      console.log('ERRORRRRRRRRRRRRRRRRRRRRRR', error);
+      console.log('ERROR', error);
     }
   };
 

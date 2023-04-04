@@ -7,6 +7,7 @@ const config = {
   isProd: process.env.NODE_ENV === 'production',
   port: process.env.PORT || 3000,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
+  basePathMl: process.env.NEXT_PUBLIC_BASE_PATH_ML,
 
   adminName: process.env.ADMIN_NAME,
   adminEmail: process.env.ADMIN_EMAIL,
