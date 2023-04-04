@@ -17,6 +17,7 @@ const links = [
     route: '/admin',
     icon: FaTh,
   },
+  { label: 'Categorías', route: '/admin/categories', icon: FaBoxOpen },
   { label: 'Productos', route: '/admin/products', icon: FaBoxOpen },
   { label: 'Perfil', route: '/admin/profile', icon: FaUserCog },
 ];
