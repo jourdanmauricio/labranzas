@@ -5,7 +5,7 @@ import styles from '@/styles/Form.module.css';
 import { HiAtSymbol, HiFingerPrint, HiOutlineUser } from 'react-icons/hi';
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import { registerValidate } from '@/lib/validate';
+import { registerValidate } from '@/utils/validate';
 import { useRouter } from 'next/router';
 import { Url } from 'next/dist/shared/lib/router/router';
 import MainLayout from '@/layout/MainLayout';

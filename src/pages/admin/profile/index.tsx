@@ -2,16 +2,16 @@
 import Button from '@/components/elements/Button';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { User } from '@/types/interfaces';
+import { IUser } from '@/models';
 import { getUser } from '@/services/local';
 import AdminLayout from '@/layout/AdminLayout';
 
 const Profile = () => {
   const { data: session } = useSession();
-  const [userData, setUserData] = useState<User>();
+  const [userData, setUserData] = useState<IUser>();
 
   const fetchUserProfile = async () => {
-    console.log(session);
+    // console.log(session);
 
     try {
       const { data } = await getUser();

@@ -19,25 +19,16 @@ module.exports = {
       },
       ml_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       ml_name: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: true,
       },
-      // path_from_root: {
-      //   field: 'PATH_FROM_ROOT',
-      //   type: DataTypes.TEXT,
-      //   allowNull: true,
-      //   defaultValue: '[]',
-      //   get() {
-      //     return JSON.parse(this.getDataValue('PATH_FROM_ROOT'));
-      //   },
-      //   set(value) {
-      //     this.setDataValue('PATH_FROM_ROOT', JSON.stringify(value));
-      //   },
-      // },
+      ml_full_name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       image: {
         type: DataTypes.STRING,
         allowNull: true,

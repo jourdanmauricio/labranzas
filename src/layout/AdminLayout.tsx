@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import Link from 'next/link';
-import { IProps } from '@/types';
 import AdminBar from '@/components/AdminBar/AdminBar';
 import {
+  FaSitemap,
   FaBoxOpen,
   FaAngleLeft,
   FaAngleRight,
@@ -11,13 +11,17 @@ import {
 } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
+interface IProps {
+  children: ReactNode;
+}
+
 const links = [
   {
     label: 'Dashboard',
     route: '/admin',
     icon: FaTh,
   },
-  { label: 'Categorías', route: '/admin/categories', icon: FaBoxOpen },
+  { label: 'Categorías', route: '/admin/categorias', icon: FaSitemap },
   { label: 'Productos', route: '/admin/products', icon: FaBoxOpen },
   { label: 'Perfil', route: '/admin/profile', icon: FaUserCog },
 ];

@@ -7,7 +7,7 @@ import BarMenuProfile from '@/components/BarMenuProfile/BarMenuProfile';
 const AdminBar = () => {
   const [mobileMenu, setMobileMenu] = useState(true);
   const { data: session } = useSession();
-  console.log({ session });
+  // console.log({ session });
 
   const handleMobileMenu = () => {
     setMobileMenu(!mobileMenu);

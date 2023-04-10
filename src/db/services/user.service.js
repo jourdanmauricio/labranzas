@@ -1,6 +1,6 @@
 // const boom = require('@hapi/boom');
 // const bcrypt = require('bcrypt');
-const { models } = require('@/lib/sequelize');
+const { models } = require('@/db/config/sequelize');
 
 class UserService {
   async create(data) {

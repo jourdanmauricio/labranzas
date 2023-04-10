@@ -3,12 +3,12 @@ import Button from '@/components/elements/Button';
 
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { User } from '@/types';
+import { IUser } from '@/models';
 import MainLayout from '@/layout/MainLayout';
 
 const User = () => {
   const { data: session } = useSession();
-  const [userData, setUserData] = useState<User>();
+  const [userData, setUserData] = useState<IUser>();
 
   const fetchUserProfile = async () => {
     console.log(session);

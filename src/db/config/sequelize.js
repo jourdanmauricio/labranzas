@@ -1,15 +1,13 @@
 const { Sequelize } = require('sequelize');
-
-const { config } = require('../config/config');
-const setupModels = require('../db/models/index');
+const setupModels = require('../models/index');
 
 const options = {
   dialect: 'sqlite',
   storage: './src/db/labranzas.sqlite',
-  logging: config.isProd ? false : console.log,
+  logging: process.env.NODE_ENV === 'production' ? false : console.log,
 };
 
-if (config.isProd) {
+if (process.env.NODE_ENV === 'production') {
   options.dialectOptions = {
     ssl: {
       rejectUnauthorized: false,

@@ -24,7 +24,7 @@ export const registerValidate = (values) => {
   if (!values.name) {
     errors.name = 'Required';
   } else if (values.name.includes(' ')) {
-    errors.password = 'Invalid name';
+    errors.name = 'Invalid name';
   }
 
   if (!values.email) {
@@ -48,6 +48,21 @@ export const registerValidate = (values) => {
   } else if (values.confPass.includes(' ')) {
     errors.confPass = 'Invalid password';
   }
+
+  return errors;
+};
+
+export const categoryValidate = (values) => {
+  const errors = {};
+
+  if (!values.name) {
+    errors.name = 'Required';
+  }
+
+  // ml_id: string;
+  // ml_full_name: string;
+  // ml_name: string;
+  // image: string;
 
   return errors;
 };

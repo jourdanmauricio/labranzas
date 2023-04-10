@@ -1,4 +1,4 @@
-import { TypeWithKey } from '@/types';
+import { TypeWithKey } from '@/models';
 
 // https://www.youtube.com/watch?v=axtI0lURwAw
 

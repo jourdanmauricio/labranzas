@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import { validateApiError } from '../lib/validate-api-error';
+// import { validateApiError } from '../utils/validate-api-error';
 
 export const localInterceptor = () => {
   const updateHeader = (request) => {
@@ -23,11 +23,19 @@ export const localInterceptor = () => {
       return response;
     },
     (err) => {
-      console.log('Error', err);
+      let message = '';
+
+      if (typeof err.response.data.message === 'string') {
+        message = `${err.response.status}: ${err.response.data.message}`;
+      } else {
+        message = `${err.response.status}: ${err.response.data.message.name}`;
+      }
+
+      console.log('Error Interceptor', message);
       // const errorMessage = validateApiError(error.response.status);
-      const message = err.response.status
-        ? `${err.response.status}: ${err.response.data.message}`
-        : 'Verificar !!! localInteceptor';
+      // const message = err.response.status
+      //   ? `${err.response.status}: ${err.response.data.message}`
+      //   : 'Verificar !!! localInteceptor';
 
       return Promise.reject(message);
     }

@@ -16,7 +16,7 @@ const BarMenuProfile = () => {
   const [showPersonalMenu, setShowPersonalMenu] = useState(false);
   const { data: session } = useSession();
   const personalMenuRef = createRef<HTMLButtonElement>();
-  console.log({ session });
+  // console.log({ session });
 
   useEffect(() => {
     const closeMenu = (e: MouseEvent) => {
