@@ -9,7 +9,6 @@ const credentialsAuth: NextApiHandler<User> = async (
   request: NextApiRequest,
   response: NextApiResponse
 ) => {
-  console.log('login', request.method);
   if (request.method !== 'POST') {
     response.status(405).end();
     return;
@@ -21,18 +20,15 @@ const credentialsAuth: NextApiHandler<User> = async (
 
     const user = await service.findByEmail(email);
     if (!user) {
-      console.log('findByEmail 401');
       response.status(401).end();
       return;
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log('! isMatch 401');
       response.status(401).end();
       return;
     }
     delete user.dataValues.password;
-    console.log('OK', user);
     return response.status(200).json(user);
   } catch (error) {
     console.log('errorrrrrrrr', error);

@@ -52,7 +52,7 @@ export class CategoryHttpService implements categoryservice {
     return data;
   }
 
-  //  jij
+  // Mercado Libre
 
   async searchPredictor(value: string) {
     const { data } = await axiosMl<IpredMl[]>(
@@ -60,8 +60,6 @@ export class CategoryHttpService implements categoryservice {
     );
 
     const categoriesMl = data.map((cat) => cat.category_id);
-
-    // if (data.length === 0) throw 'Intenta con otra palabra';
 
     const results = await this.getApiCategoriesMl(categoriesMl);
     return results;

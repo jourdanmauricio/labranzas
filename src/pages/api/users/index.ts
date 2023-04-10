@@ -7,9 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log('getSession');
   const session = await getSession({ req });
-  console.log('ROUTE USERS session ', session);
 
   if (!session) {
     return res.status(401).json({ message: 'Unauthorized' });

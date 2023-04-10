@@ -26,14 +26,12 @@ const Login = ({ searchParams }: Iprops) => {
   const router = useRouter();
 
   const onSubmit = async (values: FormValues) => {
-    console.log('Values', values);
     const status = await signIn('credentials', {
       redirect: true,
       email: values.email,
       password: values.password,
       callbackUrl: '/',
     });
-    console.log('status', status);
     if (status) if (status.ok) router.push(status.url as Url);
   };
 

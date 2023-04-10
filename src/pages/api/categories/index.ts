@@ -14,11 +14,9 @@ export default async function handler(
   //   return res.status(401).json({ message: 'Unauthorized' });
   // }
 
-  console.log('ROUTE CATEGORY', req.method);
   if (req.method === 'GET') {
     try {
       const categories = await service.find();
-      console.log('categories', categories);
       res.status(200).json(categories);
     } catch (error) {
       res.status(500).json({ message: error });
@@ -28,7 +26,6 @@ export default async function handler(
   if (req.method === 'POST') {
     try {
       const newCategory = await service.create(req.body);
-      console.log('category', newCategory);
       res.status(200).json(newCategory);
     } catch (error) {
       res.status(409).json({ message: error });

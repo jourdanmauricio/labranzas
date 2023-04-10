@@ -31,7 +31,6 @@ export const localInterceptor = () => {
         message = `${err.response.status}: ${err.response.data.message.name}`;
       }
 
-      console.log('Error Interceptor', message);
       // const errorMessage = validateApiError(error.response.status);
       // const message = err.response.status
       //   ? `${err.response.status}: ${err.response.data.message}`

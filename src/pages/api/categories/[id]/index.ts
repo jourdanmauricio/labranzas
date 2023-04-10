@@ -15,14 +15,10 @@ export default async function handler(
   // }
 
   const { id } = req.query;
-  // const id = 10;
-  console.log(`ROUTE: /api/categories/${id}`);
-  console.log('METHOD: ', req.method);
 
   if (req.method === 'PUT') {
     try {
       const updCategory = await service.update(id, req.body);
-      console.log('upd category', updCategory);
       res.status(200).json(updCategory);
     } catch (error) {
       res.status(404).json({ message: error });
@@ -32,7 +28,6 @@ export default async function handler(
   if (req.method === 'DELETE') {
     try {
       const delCategory = await service.delete(id);
-      console.log('del category', delCategory);
       res.status(200).json(delCategory);
     } catch (error) {
       res.status(404).json({ message: error });

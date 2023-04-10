@@ -24,7 +24,6 @@ const CatPredictor = ({ handleSelectCat }: IProps) => {
     try {
       setLoading(true);
       const cats = await categoryService.searchPredictor(value);
-      console.log('CATS PRED', cats);
       setCategories(cats);
     } catch (err) {
       dispatchNotif({

@@ -20,17 +20,11 @@ const Category = ({ category }: Iprops) => {
     handleUpdAction('view');
   };
 
-  const validateCategory = () => {
-    console.log('Validate');
-  };
-
   const handleModal = () => {
     setShowModal(true);
   };
 
   const onAddCategory = (cat: CreateIMlCatDetailDto | null) => {
-    console.log('Set cat', cat);
-    // formik.setFieldValue('id', cat.id);
     formik.setFieldValue('ml_name', cat?.ml_name);
     formik.setFieldValue('ml_id', cat?.ml_id);
     formik.setFieldValue('ml_full_name', cat?.ml_full_name);

@@ -85,7 +85,6 @@ const CategoriesProvider = ({ children }) => {
     const fetchCategories = async () => {
       try {
         const categories = await categoryService.getAll();
-        console.log('Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!1', categories);
         dispatch({ type: ACTIONS.SET_CATEGORIES, payload: categories });
       } catch (error) {
         console.log('ERRRRRRRRORRRRR', error);
@@ -96,7 +95,6 @@ const CategoriesProvider = ({ children }) => {
   }, []);
 
   const handleAddCategory = async (category) => {
-    console.log('handleAddCategory', category);
     try {
       delete category.id;
       const newCategory = await categoryService.create(category);
@@ -107,7 +105,6 @@ const CategoriesProvider = ({ children }) => {
       });
       dispatch({ type: ACTIONS.UPD_ACTION, payload: 'view' });
     } catch (err) {
-      console.log('ERROR CONTEXT ', err);
       dispatch({
         type: ACTIONS.UPD_ERROR,
         payload: { status: 'error', message: err },
@@ -120,7 +117,6 @@ const CategoriesProvider = ({ children }) => {
   };
 
   const handleDeleteCategory = async (id) => {
-    console.log('Delete from context');
     try {
       await categoryService.delete(id);
       dispatch({ type: ACTIONS.DEL_CATEGORY, payload: id });
@@ -138,7 +134,6 @@ const CategoriesProvider = ({ children }) => {
   };
 
   const handleUpdCategory = async (category) => {
-    console.log('handleUpdCategory', category);
     try {
       const updCategory = await categoryService.update(category.id, category);
       dispatch({ type: ACTIONS.UPD_CATEGORY, payload: updCategory });

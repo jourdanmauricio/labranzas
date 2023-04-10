@@ -20,7 +20,6 @@ const CatTree = ({ handleSelectCat }: IProps) => {
       setLoading(true);
       setPartialCat('');
       const catPpal = await categoryService.getApiAllCategoriesMl();
-      console.log('catPpal', catPpal);
       // catPpal.map((cat: IMlCatDetail) => (cat.children_categories = [1]));
       setCategories(catPpal);
     } catch (err) {
@@ -54,7 +53,6 @@ const CatTree = ({ handleSelectCat }: IProps) => {
       const category2 = await categoryService.getApiCategoriesMl([
         category.ml_id,
       ]);
-      console.log('Category', category);
 
       const newCategories = category2[0].children_categories.map(
         (cat: IMlCat) => cat.id
@@ -63,7 +61,6 @@ const CatTree = ({ handleSelectCat }: IProps) => {
       const categories = await categoryService.getApiCategoriesMl(
         newCategories
       );
-      console.log('Categories', categories);
       setCategories(categories);
     } catch (error) {
       console.log('error', error);
