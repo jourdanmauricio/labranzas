@@ -1,7 +1,6 @@
 import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import { useContext, useMemo, useState } from 'react';
 import CategoriesContext from '@/context/CategoriesContext';
-import { useRouter } from 'next/router';
 import { Category } from '@/models';
 
 const initialData = {
@@ -14,7 +13,6 @@ const initialData = {
 };
 
 const useCategories = () => {
-  const router = useRouter();
   const {
     categories,
     status,

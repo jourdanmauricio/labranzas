@@ -29,6 +29,12 @@ a {
   transition: width 0.8s;
 }
 
+.grid__image {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2em 2em;
+}
+
 @layer components {
   .btn-primary {
     @apply rounded py-1 px-4 text-white bg-teal-900 min-w-fit hover:bg-teal-700;
@@ -39,7 +45,7 @@ a {
   }
 
   .input-form {
-    @apply w-full rounded border border-gray-700 py-1 px-2 text-gray-700;
+    @apply w-full rounded border border-gray-700 py-1 px-2 text-gray-700 disabled:bg-slate-200;
   }
 
   .label-form {

@@ -65,9 +65,6 @@ openssl rand -base64 32
 
 sequelize db:migrate:undo --name 20230404050306-create-categories.js
 
-sequelize db:seed:undo --seed 20230311125938-clinics.js
-sequelize db:seed --seed 20230311125938-clinics.js
-
 npm run migrations:run
 
 npm run migrations:run

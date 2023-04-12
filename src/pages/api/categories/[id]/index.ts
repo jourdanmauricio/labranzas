@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 const CategoryService = require('@/db/services/category.service');
 const service = new CategoryService();
 

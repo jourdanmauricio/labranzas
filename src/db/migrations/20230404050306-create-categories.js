@@ -33,6 +33,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      alt_image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       created_at: {
         allowNull: true,
         type: DataTypes.DATE,

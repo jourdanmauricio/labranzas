@@ -5,7 +5,9 @@ export const localInterceptor = () => {
   const updateHeader = (request) => {
     const newHeaders = {
       // 'Authorization': `Bearer ${token}`;
-      'Content-Type': 'application/json',
+      'Content-Type': request.url?.includes('upload-image')
+        ? 'multipart/form-data'
+        : 'application/json',
     };
     request.headers = newHeaders;
     return request;
@@ -25,6 +27,7 @@ export const localInterceptor = () => {
     (err) => {
       let message = '';
 
+      console.log('ERRRRRRRRRRRRRRRRRRR', err);
       if (typeof err.response.data.message === 'string') {
         message = `${err.response.status}: ${err.response.data.message}`;
       } else {

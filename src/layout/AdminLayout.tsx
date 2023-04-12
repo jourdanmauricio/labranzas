@@ -8,6 +8,7 @@ import {
   FaAngleRight,
   FaTh,
   FaUserCog,
+  FaRegImages,
 } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
@@ -24,6 +25,7 @@ const links = [
   { label: 'Categorías', route: '/admin/categorias', icon: FaSitemap },
   { label: 'Productos', route: '/admin/products', icon: FaBoxOpen },
   { label: 'Perfil', route: '/admin/profile', icon: FaUserCog },
+  { label: 'media', route: '/admin/media', icon: FaRegImages },
 ];
 
 const AdminLayout = (props: IProps) => {
