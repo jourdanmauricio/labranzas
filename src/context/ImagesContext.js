@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { ImageHttpService } from '@/services/local';
+import { useNotification } from '@/commons/Notifications/NotificationProvider';
 
 const imageService = new ImageHttpService();
 
@@ -10,9 +11,8 @@ const initialState = {
   showModalDelete: false,
   showModalDetail: false,
   loading: false,
-  toggleState: 2,
+  tab: 2,
   images: [],
-  picture: null,
   message: '',
   error: '',
   status: 'success',
@@ -20,7 +20,7 @@ const initialState = {
 
 const ACTIONS = {
   SET_LOADING: 'setLoading',
-  SET_TOGGLE_STATE: 'setToggleState',
+  SET_TAB: 'setToggleState',
   SET_IMAGES: 'setImages',
   DEL_IMAGE: 'delImage',
   ADD_IMAGE: 'addImage',
@@ -41,10 +41,10 @@ const reducer = (state, action) => {
         ...state,
         loading: action.payload,
       };
-    case ACTIONS.SET_TOGGLE_STATE:
+    case ACTIONS.SET_TAB:
       return {
         ...state,
-        toggleState: action.payload,
+        tab: action.payload,
       };
     case ACTIONS.SET_IMAGES:
       return {
@@ -54,7 +54,7 @@ const reducer = (state, action) => {
       };
     case ACTIONS.DEL_IMAGE:
       const newImages = state.images.filter(
-        (image) => image.asset_id !== state.selected?.asset_id
+        (image) => image.public_id !== action.payload
       );
       return {
         ...state,
@@ -67,12 +67,8 @@ const reducer = (state, action) => {
         ...state,
         images: [action.payload, ...state.images],
         status: 'success',
-        toggleState: 2,
-      };
-    case ACTIONS.SET_PICTURE:
-      return {
-        ...state,
-        picture: action.payload,
+        tab: 2,
+        currentData: null,
       };
     case ACTIONS.SET_STATUS:
       return {
@@ -114,20 +110,14 @@ const reducer = (state, action) => {
 };
 
 const ImagesProvider = ({ children }) => {
+  const dispatchNotif = useNotification();
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const {
-    status,
-    toggleState,
-    picture,
-    images,
-    showModalDelete,
-    showModalDetail,
-    currentData,
-  } = state;
+  const { status, tab, images, showModalDelete, showModalDetail, currentData } =
+    state;
 
-  const setToggleTab = (index) => {
-    dispatch({ type: ACTIONS.SET_TOGGLE_STATE, payload: index });
+  const setTab = (index) => {
+    dispatch({ type: ACTIONS.SET_TAB, payload: index });
   };
 
   const loadImages = async () => {
@@ -151,10 +141,11 @@ const ImagesProvider = ({ children }) => {
     try {
       dispatch({ type: ACTIONS.SET_STATUS, payload: 'loading' });
       const { data } = await imageService.create(file);
-
-      dispatch({ type: ACTIONS.SET_STATUS, payload: data });
+      dispatch({ type: ACTIONS.ADD_IMAGE, payload: data.newImage });
+      dispatchNotif({ type: 'SUCCESS', message: 'Imagen agregada' });
     } catch (error) {
       console.log('Error', error);
+      dispatchNotif({ type: 'ERROR', message: 'Error agregando la imagen' });
       dispatch({ type: ACTIONS.SET_ERROR, payload: error });
     }
   };
@@ -163,21 +154,22 @@ const ImagesProvider = ({ children }) => {
     try {
       dispatch({ type: ACTIONS.SET_STATUS, payload: 'loading' });
       await imageService.delete(public_id);
+      dispatchNotif({ type: 'SUCCESS', message: 'Imagen eliminada' });
 
       dispatch({
         type: ACTIONS.DEL_IMAGE,
-        payload: state.selected?.public_id,
+        payload: public_id,
       });
     } catch (error) {
       dispatch({ type: ACTIONS.SET_ERROR, payload: error });
+      dispatchNotif({ type: 'SUCCESS', message: 'Error eliminando la imagen' });
       console.log('ERRRRORRRRR', error);
     }
   };
 
   const data = {
     status,
-    toggleState,
-    picture,
+    tab,
     images,
     showModalDelete,
     showModalDetail,
@@ -186,7 +178,7 @@ const ImagesProvider = ({ children }) => {
       dispatch({ type: ACTIONS.SET_PICTURE, payload: newImage }),
     setSelected: (selected) =>
       dispatch({ type: ACTIONS.SET_SELECTED, payload: selected }),
-    setToggleTab,
+    setTab,
     handleAddPict,
     handleDelete,
     handleCancelDelete: () => dispatch({ type: ACTIONS.CANCEL }),

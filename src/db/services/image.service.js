@@ -10,7 +10,7 @@ cloudinary.config({
 class ImageService {
   async getAllCloudinary() {
     const { resources } = await cloudinary.search
-      .expression('folder:labranzas')
+      .expression(`folder:${process.env.NEXT_PUBLIC_CLOUD_FOLDER}`)
       .sort_by('public_id', 'desc')
       .execute();
 
@@ -21,7 +21,7 @@ class ImageService {
 
   async createCloudinary(imagePath, originalname) {
     const res = await cloudinary.uploader.upload(imagePath, {
-      folder: 'labranzas',
+      folder: process.env.NEXT_PUBLIC_CLOUD_FOLDER,
       public_id: originalname,
       //  use_filename: true,
       // unique_filename: false,

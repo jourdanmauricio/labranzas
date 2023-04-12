@@ -7,7 +7,7 @@ const DeleteImage = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    handleDelete(currentData?.public_id);
+    handleDelete(currentData.public_id);
   };
   return (
     <form

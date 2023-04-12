@@ -1,12 +1,12 @@
-import { useFormik } from 'formik';
-import { FaSearch } from 'react-icons/fa';
-import Modal from '@/commons/Modal/Modal';
-import SearchCategory from '@/components/AdminCategories/SearchCategory/SearchCategory';
 import { useContext, useState } from 'react';
 import CategoriesContext from '@/context/CategoriesContext';
-import { Category, CreateIMlCatDetailDto } from '@/models';
-import { categoryValidate } from '@/utils/validate';
+import { useFormik } from 'formik';
+import Modal from '@/commons/Modal/Modal';
+import { Category, CloudinaryImage, CreateIMlCatDetailDto } from '@/models';
+import SearchCategory from '@/components/AdminCategories/SearchCategory/SearchCategory';
 import AddPicture from '@/components/AddPicture/AddPicture';
+import { categoryValidate } from '@/utils/validate';
+import { FaSearch } from 'react-icons/fa';
 
 interface Iprops {
   category: Category;
@@ -39,12 +39,9 @@ const Category = ({ category }: Iprops) => {
     onSubmit: category.id === 0 ? handleAddCategory : handleUpdCategory,
   });
 
-  const onChangeImage = () => {
-    console.log('Change');
-  };
-
-  const errorField = () => {
-    console.log('Error');
+  const onChangeImage = (image: CloudinaryImage) => {
+    formik.setFieldValue('image', image.secure_url);
+    formik.setFieldValue('alt_image', image.public_id);
   };
 
   return (
@@ -133,12 +130,7 @@ const Category = ({ category }: Iprops) => {
           )}
         </div>
 
-        <AddPicture
-          formik={formik}
-          handleChangeImage={onChangeImage}
-          error={errorField}
-          // container={category}
-        />
+        <AddPicture formik={formik} handleChangeImage={onChangeImage} />
 
         <div className="flex justify-between">
           <button onClick={onCancel} type="button" className="btn-secondary">

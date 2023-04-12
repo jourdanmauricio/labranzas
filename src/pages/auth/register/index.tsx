@@ -39,7 +39,7 @@ const Register = () => {
     );
 
     const user = await res.json();
-    console.log('user', user);
+    // console.log('user', user);
     if (user) router.push(process.env.NEXT_PUBLIC_BASE_PATH as Url);
   };
 

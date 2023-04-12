@@ -41,7 +41,6 @@ const UploadImage = ({ picture, setPicture, handleAddPict }: IProps) => {
   const handleFile = (file: any) => {
     const newImage = file;
     file.secure_url = URL.createObjectURL(file);
-    console.log('FILE SELECTED', file);
     setPicture(newImage);
   };
 

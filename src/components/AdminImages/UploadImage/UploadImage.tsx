@@ -1,10 +1,25 @@
 import Image from 'next/image';
-import { ChangeEventHandler, DragEventHandler, useState } from 'react';
+import {
+  ChangeEventHandler,
+  DragEventHandler,
+  useContext,
+  useState,
+} from 'react';
+import ImagesContext from '@/context/ImagesContext';
+import { useNotification } from '@/commons/Notifications/NotificationProvider';
 
-const UploadImage = ({ picture, setPicture, handleAddPict }) => {
+interface FileExtend extends File {
+  secure_url: string;
+}
+
+const UploadImage = () => {
   const [dragActive, setDragActive] = useState(false);
+  const [picture, setPicture] = useState<FileExtend | null>(null);
+  const dispatchNotif = useNotification();
 
-  const handleDrag = function (e) {
+  const { handleAddPict, images } = useContext(ImagesContext);
+
+  const handleDrag: DragEventHandler<HTMLDivElement> = function (e) {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -14,7 +29,7 @@ const UploadImage = ({ picture, setPicture, handleAddPict }) => {
     }
   };
 
-  const handleDrop = function (e) {
+  const handleDrop: DragEventHandler<HTMLDivElement> = function (e) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -23,7 +38,7 @@ const UploadImage = ({ picture, setPicture, handleAddPict }) => {
     }
   };
 
-  const handleChange = function (e) {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = function (e) {
     e.preventDefault();
     setDragActive(false);
     if (e.target.files && e.target.files[0]) {
@@ -31,14 +46,26 @@ const UploadImage = ({ picture, setPicture, handleAddPict }) => {
     }
   };
 
-  const handleFile = (file) => {
+  const handleFile = (file: any) => {
+    // Verifica que no exista una imagen con el mismo nombre
+    const name =
+      process.env.NEXT_PUBLIC_CLOUD_FOLDER + '/' + file.name.split('.')[0];
+    const index = images.findIndex((image: any) => image.public_id === name);
+    if (index !== -1) {
+      dispatchNotif({
+        type: 'ERROR',
+        message: 'Existe una imagen con el mismo nombre',
+      });
+      return;
+    }
     const newImage = file;
     file.secure_url = URL.createObjectURL(file);
     setPicture(newImage);
   };
 
-  const handleSubmit = () => {
-    handleAddPict(picture);
+  const handleSubmit = async () => {
+    await handleAddPict(picture);
+    setPicture(null);
   };
 
   return (

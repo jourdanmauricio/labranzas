@@ -2,6 +2,7 @@ import { FaEye, FaTrash } from 'react-icons/fa';
 import { Modal } from '@/commons/Modal/Modal';
 import DeleteImage from '../DeleteImage/DeleteImage';
 import DetailImage from '../DetailImage/DetailImage';
+import Image from 'next/image';
 
 const Gallery = ({
   images,
@@ -59,7 +60,7 @@ const Gallery = ({
                   : 'border-blue-800 shadow-[1px_1px_20px_rgba(0,0,0,0.50)]'
               }`}
             >
-              <img
+              <Image
                 src={image.secure_url}
                 alt={image.filename}
                 width="200"

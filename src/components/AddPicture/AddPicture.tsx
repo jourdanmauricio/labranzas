@@ -1,30 +1,32 @@
-// import { useModal } from '@/hooks/useModal';
 import Modal from '@/commons/Modal/Modal';
-import Media from '@/components/Media/Media';
+import Media from '@/components/AdminImages/MediaTabs/MediaTabs';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import Tooltip from '@/commons/Tooltip/Tooltip';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { ImagesProvider } from '@/context/ImagesContext';
+import { CloudinaryImage } from '../../models';
 
 interface IProps {
   formik: any;
-  handleChangeImage: any;
-  error: any;
+  handleChangeImage: (image: CloudinaryImage) => void;
 }
 
-const AddPicture = ({ formik, handleChangeImage, error }: IProps) => {
+const AddPicture = ({ formik, handleChangeImage }: IProps) => {
   const [showModal, setShowModal] = useState(false);
 
-  const handleSelect = (image: string) => {
-    // handleChangeImage('image', image);
+  const handleSelect = (image: CloudinaryImage) => {
+    handleChangeImage(image);
     setShowModal(false);
   };
 
-  // console.log('container', container);
-
-  useEffect(() => {
-    console.log(formik.getFieldProps('image').value);
-  }, [formik]);
+  // useEffect(() => {
+  //   console.log(
+  //     'Formik Image',
+  //     formik.getFieldProps('image').value,
+  //     formik.getFieldProps('image')
+  //   );
+  // }, [formik]);
 
   return (
     <>
@@ -61,7 +63,7 @@ const AddPicture = ({ formik, handleChangeImage, error }: IProps) => {
             <input
               className="input-form"
               type="text"
-              id="name"
+              id="alt_image"
               {...formik.getFieldProps('alt_image')}
             />
             {formik.errors.alt_image && formik.touched.alt_image && (
@@ -72,13 +74,13 @@ const AddPicture = ({ formik, handleChangeImage, error }: IProps) => {
           </div>
 
           <div className="mt-8">
-            <label className="label-form" htmlFor="name">
+            <label className="label-form" htmlFor="image">
               Imagen
             </label>
             <input
               className="input-form"
               type="text"
-              id="name"
+              id="image"
               {...formik.getFieldProps('image')}
               disabled
             />
@@ -90,9 +92,14 @@ const AddPicture = ({ formik, handleChangeImage, error }: IProps) => {
           </div>
         </div>
       </div>
-      {/* </div> */}
+
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <Media handleSelect={handleSelect} />
+        <ImagesProvider>
+          <Media
+            handleSelect={handleSelect}
+            handleCancel={() => setShowModal(false)}
+          />
+        </ImagesProvider>
       </Modal>
     </>
   );
