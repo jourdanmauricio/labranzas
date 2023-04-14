@@ -16,8 +16,8 @@ const CategoriesPage = () => {
     showModal,
     currentData,
     onCancelDelete,
-    closeMessage,
     onDelete,
+    closeMessage,
   } = useCategories();
 
   return (

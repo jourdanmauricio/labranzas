@@ -87,6 +87,10 @@ a {
   gap: 2em 2em;
 }
 
+.grid-pict {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
 @layer components {
   .btn-primary {
     @apply rounded py-1 px-4 text-white bg-teal-900 min-w-fit hover:bg-teal-700;

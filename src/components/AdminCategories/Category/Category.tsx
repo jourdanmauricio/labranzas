@@ -89,6 +89,7 @@ const Category = ({ category }: Iprops) => {
               )}
             </div>
             <button
+              type="button"
               onClick={handleModal}
               className="p-2 mt-4 ml-4 rounded-full hover:bg-blue-200 hover:cursor-pointer"
             >

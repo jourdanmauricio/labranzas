@@ -31,6 +31,7 @@ export class CategoryHttpService implements categoryservice {
     const { data } = await axios.get<Category[]>('/api/categories');
     return data;
   }
+
   async create(category: CreateCategoryDto) {
     const { data } = await axios.post<Category>('/api/categories', category);
     return data;
@@ -42,9 +43,16 @@ export class CategoryHttpService implements categoryservice {
     );
     return data;
   }
+
   findOne(id: Category['id']): Category | undefined {
     throw new Error('Method not implemented.');
   }
+
+  async findOneByMl(ml_id: Category['ml_id']) {
+    const { data } = await axios.get<Category>(`/api/categories/ml/${ml_id}`);
+    return data;
+  }
+
   async delete(id: Category['id']): Promise<{ id: string }> {
     const { data } = await axios.delete<{ id: string }>(
       `/api/categories/${id}`
@@ -82,12 +90,13 @@ export class CategoryHttpService implements categoryservice {
           ml_full_name: full_name,
           children_categories: data.children_categories,
         };
+
         return newCategory;
       })
     );
   }
 
-  getApiAllCategoriesMl = async () => {
+  async getApiAllCategoriesMl() {
     const categories = await axiosMl<IMlCat[]>('/sites/MLA/categories');
     const catPpal: CreateIMlCatDetailDto[] = categories.data.map((cat) => ({
       ml_id: cat.id,
@@ -96,5 +105,24 @@ export class CategoryHttpService implements categoryservice {
       children_categories: [{ id: cat.id, name: cat.name }],
     }));
     return catPpal;
-  };
+  }
+
+  // SERVICES
+  async findOrCreate(ml_id: Category['ml_id']) {
+    const category = await this.findOneByMl(ml_id);
+
+    if (!category) {
+      const catMl = await this.getApiCategoriesMl([ml_id]);
+      const newCategory = await this.create({
+        name: catMl[0].ml_name,
+        ml_id: catMl[0].ml_id,
+        ml_name: catMl[0].ml_name,
+        ml_full_name: catMl[0].ml_full_name,
+        image: '',
+      });
+
+      return newCategory;
+    }
+    return category;
+  }
 }

@@ -3,10 +3,7 @@ import MediaTabs from '@/components/AdminImages/MediaTabs/MediaTabs';
 import { ImagesProvider } from '@/context/ImagesContext';
 
 const MediaPage = () => {
-  const handleSelect = () => {
-    //
-  };
-
+  const handleSelect = () => {};
   const handleCancel = () => {};
   return (
     <AdminLayout>

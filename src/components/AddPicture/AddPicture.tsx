@@ -3,7 +3,7 @@ import Media from '@/components/AdminImages/MediaTabs/MediaTabs';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import Tooltip from '@/commons/Tooltip/Tooltip';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ImagesProvider } from '@/context/ImagesContext';
 import { CloudinaryImage } from '../../models';
 
@@ -19,14 +19,6 @@ const AddPicture = ({ formik, handleChangeImage }: IProps) => {
     handleChangeImage(image);
     setShowModal(false);
   };
-
-  // useEffect(() => {
-  //   console.log(
-  //     'Formik Image',
-  //     formik.getFieldProps('image').value,
-  //     formik.getFieldProps('image')
-  //   );
-  // }, [formik]);
 
   return (
     <>

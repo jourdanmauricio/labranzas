@@ -1,7 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react';
-import { CategoryHttpService } from '@/services/local';
-import { useRouter } from 'next/router';
 import { useNotification } from '@/commons/Notifications/NotificationProvider';
+import { CategoryHttpService } from '@/services/local';
 
 const categoryService = new CategoryHttpService();
 
@@ -68,7 +67,7 @@ function reducer(state, action) {
 }
 
 const CategoriesProvider = ({ children }) => {
-  const route = useRouter();
+  // const route = useRouter();
   const dispatchNotif = useNotification();
   const [state, dispatch] = useReducer(reducer, {
     categories: [],

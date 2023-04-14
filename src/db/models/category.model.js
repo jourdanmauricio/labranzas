@@ -47,16 +47,21 @@ const CategorySchema = {
 };
 
 class Category extends Model {
-  // static associate(models) {
-  //   //   this.hasOne(models.Customer, {
-  //   //     as: 'customer',
-  //   //     foreignKey: 'userId',
-  //   //   });
-  //   this.hasMany(models.Post, {
-  //     as: 'posts',
-  //     foreignKey: 'user_id',
-  //   });
-  // }
+  static associate(models) {
+    this.hasMany(models.Product, {
+      as: 'products',
+      foreignKey: 'category_id',
+    });
+
+    //   //   this.hasOne(models.Customer, {
+    //   //     as: 'customer',
+    //   //     foreignKey: 'userId',
+    //   //   });
+    //   this.hasMany(models.Post, {
+    //     as: 'posts',
+    //     foreignKey: 'user_id',
+    //   });
+  }
 
   static config(sequelize) {
     return {

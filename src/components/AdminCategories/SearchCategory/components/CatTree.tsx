@@ -15,6 +15,8 @@ const CatTree = ({ handleSelectCat }: IProps) => {
   const [categories, setCategories] = useState<CreateIMlCatDetailDto[]>([]);
   const [partialCat, setPartialCat] = useState('');
 
+  console.log('CatTree');
+
   const fetchData = async () => {
     try {
       setLoading(true);

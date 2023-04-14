@@ -20,6 +20,16 @@ class CategoriesService {
     return category;
   }
 
+  async findOneByMlId(ml_id) {
+    console.log('CAT SERV', ml_id);
+    const category = await models.Category.findAll({ where: { ml_id: ml_id } });
+    console.log('CATEGORY', category);
+    if (!category) {
+      throw 'Not found';
+    }
+    return category[0];
+  }
+
   async update(id, changes) {
     const user = await this.findOne(id);
     const rta = await user.update(changes);

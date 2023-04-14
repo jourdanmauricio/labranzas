@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { ChangeEventHandler, DragEventHandler, useState } from 'react';
-import { CloudinaryImage } from '@/models';
 
 interface IProps {
   picture: any;
