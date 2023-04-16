@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import ImagesContext from '@/context/ImagesContext';
 import Gallery from '@/components/AdminImages/Gallery/Gallery';
 import UploadImage from '../UploadImage/UploadImage';
-import Loader from '@/components/Loader-overlay/Loader-overlay';
+import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { FaCloudUploadAlt, FaImages } from 'react-icons/fa';
 import styles from '@/styles/Tabs.module.css';
 import { CloudinaryImage } from '@/models';

@@ -1,18 +1,22 @@
 import { createContext, useEffect, useReducer } from 'react';
-import { ProductHttpService } from '@/services/local';
+import { CategoryHttpService, ProductHttpService } from '@/services/local';
 import { useNotification } from '@/commons/Notifications/NotificationProvider';
 import { useRouter } from 'next/router';
 
 const productService = new ProductHttpService();
 const ProductsContext = createContext();
 
+const categoryService = new CategoryHttpService();
+
 const ACTIONS = {
   SET_PRODUCTS: 'setProducts',
   SET_CURRENT_DATA: 'setCurrentdata',
   UPD_ACTION: 'updAction',
   DEL_PRODUCT: 'delProduct',
+  ADD_PRODUCT: 'addProduct',
   SET_SHOW_MODAL_DELETE: 'showModalDelete',
   CANCEL: 'cancel',
+  UPD_STATUS: 'updStatus',
 };
 
 function reducer(state, action) {
@@ -25,7 +29,7 @@ function reducer(state, action) {
         status: 'success',
         message: '',
         action: 'view',
-        error: '',
+        error: null,
       };
     case ACTIONS.SET_CURRENT_DATA:
       return {
@@ -42,7 +46,20 @@ function reducer(state, action) {
         ...state,
         products: state.products.filter((prod) => prod.id !== action.payload),
         status: 'suscces',
+        message: '',
+        error: null,
       };
+    case ACTIONS.ADD_PRODUCT:
+      console.log('newProduct', action.payload);
+      return {
+        ...state,
+        status: 'success',
+        products: [...state.products, action.payload],
+        message: '',
+        action: 'view',
+        error: null,
+      };
+
     case ACTIONS.SET_SHOW_MODAL_DELETE:
       return {
         ...state,
@@ -55,6 +72,12 @@ function reducer(state, action) {
         showModalDelete: false,
         // showModalDetail: false,
       };
+    case ACTIONS.UPD_STATUS:
+      return {
+        ...state,
+        status: action.payload,
+      };
+
     default:
       return state;
   }
@@ -68,7 +91,7 @@ const ProductsProvider = ({ children }) => {
     action: 'view',
     status: 'success',
     error: null,
-    currentData: null,
+    currentData: {},
     message: '',
     showModalDelete: false,
   });
@@ -92,8 +115,10 @@ const ProductsProvider = ({ children }) => {
 
   const handleAddProduct = () => {};
   const handleUpdProduct = () => {};
+
   const handleDeleteProduct = async (id) => {
     try {
+      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
       await productService.delete(id);
       dispatch({ type: ACTIONS.DEL_PRODUCT, payload: id });
       dispatchNotif({
@@ -109,6 +134,34 @@ const ProductsProvider = ({ children }) => {
     }
   };
 
+  const handleAddProductfromMl = async (ml_id) => {
+    try {
+      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      let _ml_id = ml_id;
+      if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;
+
+      const productMl = await productService.getProductMl(_ml_id);
+      console.log('productMl', productMl);
+
+      const categoria = await categoryService.findOrCreate(
+        productMl.category_id
+      );
+
+      const newProduct = await productService.createFromMl(
+        productMl,
+        categoria.id
+      );
+      dispatch({ type: ACTIONS.ADD_PRODUCT, payload: newProduct });
+
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Producto agregado',
+      });
+    } catch (error) {
+      console.log('ERRRRR', error);
+    }
+  };
+
   const data = {
     products,
     status,
@@ -118,7 +171,11 @@ const ProductsProvider = ({ children }) => {
     showModalDelete,
     // handleAddCategory,
     handleDeleteProduct,
-    // handleUpdStatus,
+    handleUpdStatus: (status) =>
+      dispatch({
+        type: ACTIONS.UPD_STATUS,
+        payload: status,
+      }),
     handleUpdProduct,
     handleAddProduct,
     handleUpdAction: (action) =>
@@ -137,6 +194,7 @@ const ProductsProvider = ({ children }) => {
         payload: showModalDelete,
       }),
     handleCancelDelete: () => dispatch({ type: ACTIONS.CANCEL }),
+    handleAddProductfromMl,
   };
 
   return (

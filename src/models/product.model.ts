@@ -22,7 +22,7 @@ export interface IProduct extends BaseModel {
   pictures: IPicture[];
   description?: string;
   sale_terms: ITerms[] | [];
-  variations: any[];
+  variations: any[]; // IVariations[];
   video_id: string | null;
 }
 
@@ -43,7 +43,8 @@ export interface IAttribute {
   id: string;
   section: AttributeSectionValue;
   name: string;
-  value: string;
+  value_name: string;
+  show: boolean;
 }
 
 export enum AttributeSectionValue {
@@ -66,4 +67,18 @@ export interface ITerms {
   id: string;
   name: string;
   value: string;
+}
+
+export interface IVariations {
+  id: number;
+  attribute_combinations: IAttributeCombination[];
+  available_quantity: number;
+  price: number;
+  sold_quantity: number;
+  picture_ids: IPicture[];
+}
+
+export interface IAttributeCombination {
+  name: string;
+  value_name: string;
 }

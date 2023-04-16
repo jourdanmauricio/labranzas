@@ -29,6 +29,10 @@ a {
   transition: width 0.8s;
 }
 
+.transition-height {
+  transition: height 0.8s;
+}
+
 .fileover {
   animation: shake 1s;
   animation-iteration-count: infinite;

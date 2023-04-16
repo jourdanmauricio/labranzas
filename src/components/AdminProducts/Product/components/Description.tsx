@@ -5,7 +5,7 @@ const Description = ({ formik }: IProps) => {
   return (
     <div className="w-full">
       <label className="label-form" htmlFor="ml-id">
-        Título
+        Descripción
       </label>
       <textarea
         className="input-form"

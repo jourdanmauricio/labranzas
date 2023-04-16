@@ -1,5 +1,5 @@
 import { CreateIMlCatDetailDto } from '@/models';
-import Loader from '@/components/Loader-overlay/Loader-overlay';
+import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { useEffect, useState } from 'react';
 
 interface IProps {

@@ -7,6 +7,8 @@ import useProducts from './useProducts';
 import Product from '../Product/Product';
 import Modal from '@/commons/Modal/Modal';
 import ProductDelete from '../ProductDelete/ProductDelete';
+import Loader from '@/commons/Loader-overlay/Loader-overlay';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const productService = new ProductHttpService();
 const categoryService = new CategoryHttpService();
@@ -22,35 +24,23 @@ const Products = () => {
     currentData,
     onCancelDelete,
     onDelete,
+    handleAddProductfromMl,
+    handleUpdStatus,
   } = useProducts();
 
   const [ml_id, setProdMlId] = useState<string>('');
-  // const [product, setProduct] = useState<CreateProductDto | null>(null);
 
-  console.log('products PRODUCTs', typeof products);
+  console.log('PRODUCTS', products);
+
   const handleDownloadML = async () => {
-    try {
-      const productMl: IProductMl = await productService.getProductMl(ml_id);
-      console.log('Product', productMl);
-
-      const categoria: Category = await categoryService.findOrCreate(
-        productMl.category_id
-      );
-
-      const newProduct: IProduct = await productService.createFromMl(
-        productMl,
-        categoria.id
-      );
-
-      console.log('newProduct!!!!!!!!!!!!!!!!!!!!!!!!!!!!', newProduct);
-
-      // setProduct(product);
-    } catch (error) {
-      console.log('ERROR', error);
-    }
+    let _ml_id = ml_id;
+    if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;
+    handleAddProductfromMl(_ml_id);
   };
   return (
     <div>
+      <Breadcrumbs catId={currentData.id} />
+      {status === 'loading' && <Loader />}
       {action !== 'view' && <Product />}
       {action === 'view' && products && (
         <>
@@ -66,15 +56,14 @@ const Products = () => {
           <p>Ejemplo: MLA1114163236 - CAT MLA44388 - 3</p>
           <p>Ejemplo: MLA842822989 - CAT: MLA10076 - not found</p>
           <input
-            className="p-2 border "
+            className="input-form"
             type="text"
             value={ml_id}
             onChange={(e) => setProdMlId(e.target.value)}
           />
-          <button className="ml-4 p-2 border" onClick={handleDownloadML}>
+          <button className="btn-primary" onClick={handleDownloadML}>
             Download Prod ML
           </button>
-          {action}
         </>
       )}
       <Modal show={showModalDelete} onClose={onCancelDelete}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Loader from '@/components/Loader-overlay/Loader-overlay';
+import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { FaChevronRight, FaCheck } from 'react-icons/fa';
 import { CategoryHttpService } from '@/services/local';
 import { CreateIMlCatDetailDto, IMlCat, IMlCatDetail } from '@/models';

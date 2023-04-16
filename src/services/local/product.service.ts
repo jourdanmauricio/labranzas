@@ -1,14 +1,9 @@
 import {
   IProduct,
-  IAttribute,
   AttributeSectionValue,
   ICreateProductDto,
   IProductMl,
-  // CreateCategoryDto,
-  // CreateIMlCatDetailDto,
-  // IMlCat,
-  // IMlCatDetail,
-  // UpdateCategoryDto,
+  IAttributeCombination,
 } from '@/models';
 import { axiosMl } from '../mlInterceptor';
 import axios from 'axios';
@@ -24,30 +19,51 @@ export class ProductHttpService {
   }
 
   private async formatProduct(productMl: IProductMl, category_id: number) {
+    const pictures = productMl.pictures.map((pic) => ({
+      id: pic.id,
+      secure_url: pic.secure_url,
+    }));
+
     const newProduct: ICreateProductDto = {
       ...productMl,
       attributes: productMl.attributes.map((attribute) => ({
         id: attribute.id,
         name: attribute.name,
         section: AttributeSectionValue.Ficha_tecnica,
-        value: attribute.value,
+        value_name: attribute.value_name,
+        show: true,
       })),
       ml_id: productMl.id,
       sku: '',
       status: 'under_review',
       category_id,
-      pictures: productMl.pictures.map((pic) => ({
-        id: pic.id,
-        secure_url: pic.secure_url,
-      })),
+      pictures,
       thumbnail: productMl.secure_thumbnail,
       sale_terms: productMl.sale_terms.map((term) => ({
         id: term.id,
         name: term.name,
         value: term.value_name,
       })),
+      variations: productMl.variations.map((variation) => {
+        const vari = {
+          id: variation.id,
+          available_quantity: variation.available_quantity,
+          price: variation.price,
+          sold_quantity: variation.sold_quantity,
+          sku: '',
+          attribute_combinations: variation.attribute_combinations.map(
+            (comb: IAttributeCombination) => ({
+              name: comb.name,
+              value_name: comb.value_name,
+            })
+          ),
+          pictures: variation.picture_ids.map((varPic: string) =>
+            pictures.find((prodPic) => varPic === prodPic.id)
+          ),
+        };
+        return vari;
+      }),
     };
-
     return newProduct;
   }
 

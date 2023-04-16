@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Loader from '@/components/Loader-overlay/Loader-overlay';
+import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { useNotification } from '@/commons/Notifications/NotificationProvider';
 import { CategoryHttpService } from '@/services/local';
 import { CreateIMlCatDetailDto } from '@/models';

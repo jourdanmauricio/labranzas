@@ -1,59 +1,50 @@
 import Image from 'next/image';
 import Media from '@/components/AdminImages/MediaTabs/MediaTabs';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { CloudinaryImage, IPicture } from '@/models';
+import { CloudinaryImage, IPicture, IVariations } from '@/models';
 import Modal from '@/commons/Modal/Modal';
 import { ImagesProvider } from '@/context/ImagesContext';
 
 interface IProps {
-  formik: any;
+  pictures: IPicture[];
+  setPictures: (newPics: IPicture[]) => void;
 }
 
-const Images = ({ formik }: IProps) => {
+const ImagesVar = ({ pictures, setPictures }: IProps) => {
   const [showModal, setShowModal] = useState(false);
-  const [images, setImages] = useState<IPicture[]>([]);
   const dragItem = useRef<any>(null);
   const dragOverItem = useRef<any>(null);
 
-  useEffect(() => {
-    setImages(formik.getFieldProps('pictures').value);
-  }, [formik]);
-
   const handleDelete = (index: any) => {
-    let _pictures = [...images];
+    let _pictures = [...pictures];
     _pictures.splice(index, 1);
-    formik.setFieldValue('pictures', _pictures);
+    setPictures(_pictures);
   };
 
   const handleSelect = (image: CloudinaryImage) => {
     const _pictures = [
-      ...images,
+      ...pictures,
       { id: image.public_id, secure_url: image.secure_url },
     ];
-    formik.setFieldValue('pictures', _pictures);
+    setPictures(_pictures);
     setShowModal(false);
   };
 
-  // const handle drag sorting
   const handleSort = () => {
-    // Duplicate items
-    let _pictures = [...images];
-    // Remove and save the dragged item content
+    if (dragItem.current === dragOverItem.current) return;
+    let _pictures = [...pictures];
     const draggedItemContent = _pictures.splice(dragItem.current, 1)[0];
-    // Switch the position
     _pictures.splice(dragOverItem.current, 0, draggedItemContent);
-    // Reset th position ref
     dragItem.current = null;
     dragOverItem.current = null;
-    // update the actual array
-    formik.setFieldValue('pictures', _pictures);
+    setPictures(_pictures);
   };
 
   return (
     <>
       <div className="mt-4 grid gap-8 grid-pict">
-        {images.map((picture, index: number) => (
+        {pictures.map((picture, index: number) => (
           <div
             className="relative cursor-pointer rounded border border-slate-500 w-[150px] object-contain aspect-square"
             key={index}
@@ -105,4 +96,4 @@ const Images = ({ formik }: IProps) => {
   );
 };
 
-export default Images;
+export default ImagesVar;

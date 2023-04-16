@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Tabs from './components/Tabs';
-// import Loader from '@/components/Loader-overlay/Loader-overlay';
+// import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { CreateIMlCatDetailDto } from '@/models';
 
 interface IProps {

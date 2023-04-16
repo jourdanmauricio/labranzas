@@ -39,6 +39,7 @@ const useProducts = () => {
     currentData,
     showModalDelete,
     setShowModalDelete,
+    handleAddProductfromMl,
   } = useContext(ProductsContext);
 
   const PRODUCTS_COLUMNS = [
@@ -118,6 +119,8 @@ const useProducts = () => {
     currentData,
     onCancelDelete,
     onDelete,
+    handleUpdStatus,
+    handleAddProductfromMl,
   };
 };
 
