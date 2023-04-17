@@ -20,6 +20,31 @@ class CategoriesService {
     return category;
   }
 
+  async findOneByProp(prop) {
+    console.log('CAT SERV', prop);
+    const options = {
+      where: {},
+      order: [['updated_at', 'DESC']],
+    };
+
+    if (typeof prop === 'string') {
+      options.where.name = prop;
+    }
+
+    if (typeof prop === 'number') {
+      options.where.ml_id = prop;
+    }
+
+    const category = await models.Category.findAll(options);
+    console.log('CATEGORY', category);
+    if (!category) {
+      throw 'Not found';
+    }
+
+    console.log('CAT ', category[0]);
+    return category[0];
+  }
+
   async findOneByMlId(ml_id) {
     console.log('CAT SERV', ml_id);
     const category = await models.Category.findAll({ where: { ml_id: ml_id } });

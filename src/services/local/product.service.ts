@@ -4,6 +4,7 @@ import {
   ICreateProductDto,
   IProductMl,
   IAttributeCombination,
+  IUpdateProductDto,
 } from '@/models';
 import { axiosMl } from '../mlInterceptor';
 import axios from 'axios';
@@ -57,7 +58,7 @@ export class ProductHttpService {
               value_name: comb.value_name,
             })
           ),
-          pictures: variation.picture_ids.map((varPic: string) =>
+          picture_ids: variation.picture_ids.map((varPic: string) =>
             pictures.find((prodPic) => varPic === prodPic.id)
           ),
         };
@@ -75,6 +76,14 @@ export class ProductHttpService {
 
   async create(product: ICreateProductDto) {
     const { data } = await axios.post<IProduct>('/api/products', product);
+    return data;
+  }
+
+  async update(product: IUpdateProductDto) {
+    const { data } = await axios.put<IProduct>(
+      `/api/products/${product.id}`,
+      product
+    );
     return data;
   }
 

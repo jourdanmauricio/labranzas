@@ -39,7 +39,7 @@ const Products = () => {
   };
   return (
     <div>
-      <Breadcrumbs catId={currentData.id} />
+      <Breadcrumbs catId={currentData?.id} />
       {status === 'loading' && <Loader />}
       {action !== 'view' && <Product />}
       {action === 'view' && products && (

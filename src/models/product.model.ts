@@ -31,6 +31,8 @@ export interface ICreateProductDto
   sale_terms: ITerms[] | [];
 }
 
+export interface IUpdateProductDto extends Partial<IProduct> {}
+
 export interface IProductMl
   extends Omit<IProduct, 'sale_terms' | 'category_id' | 'thumbnail' | 'id'> {
   sale_terms: ISaleTerm[];
@@ -74,6 +76,7 @@ export interface IVariations {
   attribute_combinations: IAttributeCombination[];
   available_quantity: number;
   price: number;
+  sku: string;
   sold_quantity: number;
   picture_ids: IPicture[];
 }

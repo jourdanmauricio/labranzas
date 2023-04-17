@@ -17,14 +17,14 @@ export default async function handler(
 
   const { id } = req.query;
 
-  // if (req.method === 'PUT') {
-  //   try {
-  //     const updCategory = await service.update(id, req.body);
-  //     res.status(200).json(updCategory);
-  //   } catch (error) {
-  //     res.status(404).json({ message: error });
-  //   }
-  // }
+  if (req.method === 'PUT') {
+    try {
+      const updProduct = await service.update(id, req.body);
+      res.status(200).json(updProduct);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+  }
 
   if (req.method === 'DELETE') {
     try {

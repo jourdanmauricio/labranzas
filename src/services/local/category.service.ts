@@ -48,10 +48,15 @@ export class CategoryHttpService implements categoryservice {
     throw new Error('Method not implemented.');
   }
 
-  async findOneByMl(ml_id: Category['ml_id']) {
-    const { data } = await axios.get<Category>(`/api/categories/ml/${ml_id}`);
+  async findOneByProp(prop: Category['ml_id'] | Category['name']) {
+    const { data } = await axios.get<Category>(`/api/categories/ml/${prop}`);
     return data;
   }
+
+  // async findOneByName(name: Category['name']) {
+  //   const { data } = await axios.get<Category>(`/api/categories/ml/${name}`);
+  //   return data;
+  // }
 
   async delete(id: Category['id']): Promise<{ id: string }> {
     const { data } = await axios.delete<{ id: string }>(
@@ -109,19 +114,24 @@ export class CategoryHttpService implements categoryservice {
 
   // SERVICES
   async findOrCreate(ml_id: Category['ml_id']) {
-    const category = await this.findOneByMl(ml_id);
+    const category = await this.findOneByProp(ml_id);
 
     if (!category) {
       const catMl = await this.getApiCategoriesMl([ml_id]);
-      const newCategory = await this.create({
-        name: catMl[0].ml_name,
-        ml_id: catMl[0].ml_id,
-        ml_name: catMl[0].ml_name,
-        ml_full_name: catMl[0].ml_full_name,
-        image: '',
-      });
+      const cat = await this.findOneByProp(catMl[0].ml_name);
 
-      return newCategory;
+      if (!cat) {
+        const newCategory = await this.create({
+          name: catMl[0].ml_name,
+          ml_id: catMl[0].ml_id,
+          ml_name: catMl[0].ml_name,
+          ml_full_name: catMl[0].ml_full_name,
+          image: '',
+        });
+        return newCategory;
+      } else {
+        return cat;
+      }
     }
     return category;
   }

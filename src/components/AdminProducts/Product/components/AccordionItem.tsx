@@ -18,6 +18,7 @@ const AccordionItem = ({ children, title, active, onToggle }: IProps) => {
       }`}
     >
       <button
+        type="button"
         className="bg-slate-900 text-white text-left flex flex-wrap w-full justify-between items-center py-4 px-10 cursor-pointer border-none"
         onClick={onToggle}
       >

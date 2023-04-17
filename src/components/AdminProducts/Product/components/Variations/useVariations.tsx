@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IAttributeCombination, IPicture, IVariations } from '@/models';
-import DataTable, { ExpanderComponentProps } from 'react-data-table-component';
-import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
+import { ExpanderComponentProps } from 'react-data-table-component';
+import { FaEdit, FaRegTrashAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import ImagesVar from '../ImagesVar';
+import { useNotification } from '@/commons/Notifications/NotificationProvider';
 
 interface IProps {
   formik: any;
@@ -15,9 +16,12 @@ interface InewAttrib {
 }
 
 const useVariations = ({ formik }: IProps) => {
-  const [variations, setVariations] = useState<IVariations[]>([]);
+  const [newAttrib, setNewAttrib] = useState<string>('');
   const [fieldsVar, setFiledsVar] = useState<string[]>([]);
   const [newAtribComb, setNewAtribComb] = useState<InewAttrib[]>([]);
+  const [variations, setVariations] = useState<IVariations[]>([]);
+
+  const dispatchNotif = useNotification();
 
   useEffect(() => {
     // setVariations(formik.getFieldProps('variations').value);
@@ -31,14 +35,48 @@ const useVariations = ({ formik }: IProps) => {
     }
   }, [formik]);
 
-  const editData = (variation: IVariations) => {};
   const deleteData = (variation: IVariations) => {
     let _variations = variations.filter((vari) => vari.id !== variation.id);
     formik.setFieldValue('variations', _variations);
   };
+
   const newData = () => {
-    console.log('newAtribComb', newAtribComb);
-    const newId = Math.max(...variations.map((o) => o.id)) + 1;
+    // Si existe, no se agrega.
+    let _variarions: any[] = [];
+    variations.forEach((vari) => {
+      let obj = {};
+      vari.attribute_combinations.forEach((el) => {
+        obj = { ...obj, [el.name]: el.value_name };
+      });
+      _variarions.push(obj);
+    });
+
+    let newVariarion = {};
+    newAtribComb.forEach((el) => {
+      newVariarion = { ...newVariarion, [el.name]: el.value_name };
+    });
+
+    let exists = false;
+    _variarions.forEach((el) => {
+      if (JSON.stringify(el) === JSON.stringify(newVariarion)) {
+        exists = true;
+        return;
+      }
+    });
+    if (exists) {
+      dispatchNotif({
+        type: 'ERROR',
+        message: 'La variación ya existe.',
+      });
+      return;
+    }
+
+    // Calculo Next Id a partir del máximo. Si no ha vars comenzamos por 1.
+    const newId =
+      variations.length === 0
+        ? 1
+        : Math.max(...variations.map((o) => o.id)) + 1;
+
     const attribute_combinations = newAtribComb;
     const newVar = {
       id: newId,
@@ -57,6 +95,9 @@ const useVariations = ({ formik }: IProps) => {
     let _variations = [...variations];
     _variations.push(newVar);
     formik.setFieldValue('variations', _variations);
+    // Limpio controles. UX: solo limpio el último
+    const lastControl = newAtribComb[newAtribComb.length - 1];
+    onBlurAddVar(lastControl.name, '');
   };
 
   const handleChange = (name: string, value: string, id: number) => {
@@ -67,9 +108,12 @@ const useVariations = ({ formik }: IProps) => {
     formik.setFieldValue('variations', _variations);
   };
 
-  const onChangeAddVar = (name: string, value: string) => {
-    console.log('NAME', name, value);
+  const handleAddAttrib = () => {
+    setFiledsVar([...fieldsVar, newAttrib]);
+    setNewAttrib('');
+  };
 
+  const onBlurAddVar = (name: string, value: string) => {
     const exists = newAtribComb.find((attrib) => attrib.name === name);
 
     let _newAtribComb: InewAttrib[] = [];
@@ -81,15 +125,9 @@ const useVariations = ({ formik }: IProps) => {
       _newAtribComb = [...newAtribComb, { name, value_name: value }];
     }
     setNewAtribComb(_newAtribComb);
-    console.log('newAtribComb', newAtribComb);
   };
 
   const VARIATIONS_COLUMNS = [
-    {
-      name: 'ID',
-      cell: (row: IVariations) => <span>{row.id}</span>,
-      sortable: true,
-    },
     {
       name: fieldsVar.join(' / '),
       cell: (row: IVariations) =>
@@ -115,7 +153,22 @@ const useVariations = ({ formik }: IProps) => {
       ),
     },
     {
+      name: 'SKU',
+      cell: (row: IVariations) => (
+        <input
+          type="text"
+          className="input-form"
+          min="0"
+          name="sku"
+          value={row.sku}
+          onChange={(e) => handleChange(e.target.name, e.target.value, row.id)}
+        />
+      ),
+    },
+    {
       name: 'Cantidad',
+      sortable: true,
+      width: '100px',
       cell: (row: IVariations) => (
         <input
           type="number"
@@ -129,6 +182,7 @@ const useVariations = ({ formik }: IProps) => {
     },
     {
       name: 'Precio',
+      width: '110px',
       cell: (row: IVariations) => (
         // <span>{row.price}</span>,
         <input
@@ -143,7 +197,7 @@ const useVariations = ({ formik }: IProps) => {
     },
     {
       name: 'Acciones',
-      width: '120px',
+      width: '90px',
       cell: (row: IVariations) => (
         <div>
           <button
@@ -151,12 +205,6 @@ const useVariations = ({ formik }: IProps) => {
             className="table__icon table__icon--delete"
           >
             <FaRegTrashAlt />
-          </button>
-          <button
-            onClick={() => editData(row)}
-            className="ml-2 table__icon table__icon--edit"
-          >
-            <FaEdit />
           </button>
         </div>
       ),
@@ -178,13 +226,28 @@ const useVariations = ({ formik }: IProps) => {
     return <ImagesVar pictures={images} setPictures={setPictures} />;
   };
 
+  const onChangeAddAtrib = (name: string, value: string) => {
+    setNewAttrib(value);
+  };
+
+  const handleResetAttribs = () => {
+    setFiledsVar([]);
+    setNewAtribComb([]);
+  };
+
   return {
     fieldsVar,
     VARIATIONS_COLUMNS,
     variations,
     ExpandedComponent,
+    newAttrib,
+    newAtribComb,
+    setNewAttrib,
     newData,
-    onChangeAddVar,
+    onBlurAddVar,
+    handleAddAttrib,
+    onChangeAddAtrib,
+    handleResetAttribs,
   };
 };
 

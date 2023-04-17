@@ -18,8 +18,13 @@ import Variations from './components/Variations/Variations';
 
 const Product = () => {
   const [toggleState, setToggleState] = useState<number | null>(null);
-  const { currentData, action, handleAddProduct, handleUpdProduct } =
-    useContext(ProductsContext);
+  const {
+    currentData,
+    action,
+    handleAddProduct,
+    handleUpdProduct,
+    handleUpdAction,
+  } = useContext(ProductsContext);
 
   const toggleTab = (index: number) => {
     toggleState === index ? setToggleState(null) : setToggleState(index);
@@ -32,16 +37,10 @@ const Product = () => {
     // cantidad > 0 si activo
   };
 
-  const ver = (values: IProduct) => {
-    // completar category_id desde category
-    // console.log('Formik', values);
-  };
-
   const formik = useFormik({
     initialValues: currentData,
     validate: productValidate,
-    // onSubmit: action === 'new' ? handleAddProduct : handleUpdProduct,
-    onSubmit: action === 'new' ? handleAddProduct : ver,
+    onSubmit: action === 'new' ? handleAddProduct : handleUpdProduct,
   });
 
   return (
@@ -103,20 +102,30 @@ const Product = () => {
             <Variations formik={formik} />
             {/* <p>VARIACIONES</p> */}
           </AccordionItem>
-          <AccordionItem
-            onToggle={() => toggleTab(2)}
-            active={toggleState === 2}
-            title="Imágenes"
-          >
-            <Images formik={formik} />
-          </AccordionItem>
+          {formik.getFieldProps('variations').value.length === 0 && (
+            <AccordionItem
+              onToggle={() => toggleTab(2)}
+              active={toggleState === 2}
+              title="Imágenes"
+            >
+              <Images formik={formik} />
+            </AccordionItem>
+          )}
         </ul>
 
         <Description formik={formik} />
 
         <div className="mt-8 flex justify-between">
-          <button className="btn-secondary">Cancelar</button>
-          <button className="btn-primary">Ver</button>
+          <button
+            type="button"
+            onClick={() => handleUpdAction('view')}
+            className="btn-secondary"
+          >
+            Cancelar
+          </button>
+          <button type="submit" className="btn-primary">
+            Modificar
+          </button>
         </div>
       </form>
     </div>

@@ -6,7 +6,7 @@ export const listing = [
 export const status = [
   { id: 'active', name: 'Activa' },
   { id: 'paused', name: 'Pausada' },
-  { id: 'under_rewiev', name: 'Revisión' },
+  { id: 'under_review', name: 'Revisión' },
 ];
 
 export const condition = [

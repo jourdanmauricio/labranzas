@@ -13,11 +13,6 @@ export interface CreateCategoryDto
   // add fields
 }
 
-export interface CreateCategoryDto
-  extends Omit<Category, 'id' | 'created_at' | 'updated_at'> {
-  // add fields
-}
-
 // Selecciono campos
 // type Example = Pick<Category, 'ml_id' | 'ml_full_name' | 'ml_name' | 'image'>
 

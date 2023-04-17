@@ -1,7 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { CategoryHttpService, ProductHttpService } from '@/services/local';
 import { useNotification } from '@/commons/Notifications/NotificationProvider';
-import { useRouter } from 'next/router';
 
 const productService = new ProductHttpService();
 const ProductsContext = createContext();
@@ -14,6 +13,7 @@ const ACTIONS = {
   UPD_ACTION: 'updAction',
   DEL_PRODUCT: 'delProduct',
   ADD_PRODUCT: 'addProduct',
+  UPD_PRODUCT: 'updProduct',
   SET_SHOW_MODAL_DELETE: 'showModalDelete',
   CANCEL: 'cancel',
   UPD_STATUS: 'updStatus',
@@ -50,7 +50,6 @@ function reducer(state, action) {
         error: null,
       };
     case ACTIONS.ADD_PRODUCT:
-      console.log('newProduct', action.payload);
       return {
         ...state,
         status: 'success',
@@ -59,7 +58,16 @@ function reducer(state, action) {
         action: 'view',
         error: null,
       };
-
+    case ACTIONS.UPD_PRODUCT:
+      return {
+        products: state.products.map((prod) =>
+          prod.id === action.payload.id ? action.payload : prod
+        ),
+        status: 'success',
+        message: '',
+        action: 'view',
+        error: null,
+      };
     case ACTIONS.SET_SHOW_MODAL_DELETE:
       return {
         ...state,
@@ -77,7 +85,6 @@ function reducer(state, action) {
         ...state,
         status: action.payload,
       };
-
     default:
       return state;
   }
@@ -114,7 +121,23 @@ const ProductsProvider = ({ children }) => {
   }, []);
 
   const handleAddProduct = () => {};
-  const handleUpdProduct = () => {};
+  const handleUpdProduct = async (product) => {
+    try {
+      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      const updProduct = await productService.update(product);
+      dispatch({ type: ACTIONS.UPD_PRODUCT, payload: updProduct });
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Producto modificado',
+      });
+    } catch (error) {
+      console.log('ERROR CONTEXT ', err);
+      dispatchNotif({
+        type: 'Error',
+        message: 'Error modificando el producto',
+      });
+    }
+  };
 
   const handleDeleteProduct = async (id) => {
     try {
@@ -169,7 +192,6 @@ const ProductsProvider = ({ children }) => {
     message,
     currentData,
     showModalDelete,
-    // handleAddCategory,
     handleDeleteProduct,
     handleUpdStatus: (status) =>
       dispatch({
