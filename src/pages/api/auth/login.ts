@@ -10,7 +10,7 @@ const credentialsAuth: NextApiHandler<User> = async (
   response: NextApiResponse
 ) => {
   if (request.method !== 'POST') {
-    response.status(405).end();
+    response.status(405).json({ error: 'Method not allowed' });
     return;
   }
 
@@ -20,19 +20,19 @@ const credentialsAuth: NextApiHandler<User> = async (
 
     const user = await service.findByEmail(email);
     if (!user) {
-      response.status(401).end();
+      response.status(401).json({ error: 'Unauthorize' });
       return;
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      response.status(401).end();
+      response.status(401).json({ error: 'Unauthorize' });
       return;
     }
     delete user.dataValues.password;
     return response.status(200).json(user);
   } catch (error) {
     console.log('errorrrrrrrr', error);
-    response.status(401).end();
+    response.status(401).json(error);
   }
 };
 
