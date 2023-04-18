@@ -9,6 +9,8 @@ const credentialsAuth: NextApiHandler<User> = async (
   request: NextApiRequest,
   response: NextApiResponse
 ) => {
+  console.log('request.method', request.method);
+
   if (request.method !== 'POST') {
     response.status(405).json({ error: 'Method not allowed' });
     return;
