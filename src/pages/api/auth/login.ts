@@ -19,6 +19,8 @@ const credentialsAuth: NextApiHandler<User> = async (
     const password = request.body.password;
 
     const user = await service.findByEmail(email);
+
+    console.log('user', user);
     if (!user) {
       response.status(401).json({ error: 'Unauthorize' });
       return;
@@ -28,6 +30,8 @@ const credentialsAuth: NextApiHandler<User> = async (
       response.status(401).json({ error: 'Unauthorize' });
       return;
     }
+
+    console.log('isMatch', isMatch);
     delete user.dataValues.password;
     return response.status(200).json(user);
   } catch (error) {
