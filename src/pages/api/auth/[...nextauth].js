@@ -43,7 +43,10 @@ export const authOptions = {
           body: JSON.stringify(credentials),
           headers: { 'Content-Type': 'application/json' },
         });
+
+        console.log('ACCCAAAA');
         const user = await res.json();
+        console.log('ACCCAAAA', user);
 
         if (res.ok && user) {
           return user;
