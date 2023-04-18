@@ -35,16 +35,16 @@ export const authOptions = {
       async authorize(credentials, req) {
         console.log(
           'NEXTAUTH_URL',
-          `${process.env.NEXTAUTH_URL}/api/auth/login`,
-          credentials
+          `${process.env.NEXTAUTH_URL}/api/auth/login`
         );
+
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/login`, {
           method: 'POST',
           body: JSON.stringify(credentials),
           headers: { 'Content-Type': 'application/json' },
         });
 
-        console.log('ACCCAAAA');
+        console.log('ACCCAAAA', res);
         const user = await res.json();
         console.log('ACCCAAAA', user);
 
