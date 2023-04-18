@@ -1,6 +1,7 @@
 import { useEffect, useState, createRef } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const adminMenu = [
   { label: 'Perfil', route: '/admin/profile' },
@@ -39,19 +40,12 @@ const BarMenuProfile = () => {
           type="button"
         >
           {session?.user.name}
-          <svg
-            className="w-4 h-4 mx-1.5"
-            aria-hidden="true"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            ></path>
-          </svg>
+          <Image
+            src="/assets/icons/dropdown.svg"
+            alt="dropdown icon"
+            width={20}
+            height={20}
+          />
         </button>
       </div>
 
