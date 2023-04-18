@@ -59,10 +59,24 @@ export const categoryValidate = (values) => {
     errors.name = 'Required';
   }
 
-  // ml_id: string;
-  // ml_full_name: string;
-  // ml_name: string;
-  // image: string;
+  return errors;
+};
+
+export const productValidate = (values) => {
+  const errors = {};
+  if (!values.sku) {
+    errors.sku = 'Requerido';
+  } else if (values.sku.includes(' ')) {
+    errors.sku = 'Sku inválido';
+  }
+
+  if (!values.title) {
+    errors.title = 'Requerido';
+  }
+
+  // Pictures.length > 0
+  // precio > 0
+  // cantidad > 0 si activo
 
   return errors;
 };

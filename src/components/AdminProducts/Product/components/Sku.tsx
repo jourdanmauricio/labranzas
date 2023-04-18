@@ -10,7 +10,6 @@ const Sku = ({ formik }: IProps) => {
     const variations: IVariations[] = formik.getFieldProps('variations').value;
 
     if (variations.length === 0) return;
-    // if (variations[0].sku.length > 0) return;
 
     const _variations = variations.map((variation) => {
       const name = variation.attribute_combinations
@@ -33,11 +32,21 @@ const Sku = ({ formik }: IProps) => {
         type="text"
         id="ml-id"
         {...formik.getFieldProps('sku')}
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={(e) => handleChange(e.target.value.trim())}
       />
-      {formik.errors.sku && formik.touched.sku && (
-        <span className="text-xs text-rose-500">{formik.errors.sku}</span>
-      )}
+      <div className="h-0">
+        {/* {formik.errors.sku && formik.touched.sku && ( */}
+        <span
+          className={`text-xs text-rose-500 transition-opacity duration-1000 ease-in-out ${
+            formik.errors.sku && formik.touched.sku
+              ? 'opacity-100'
+              : 'opacity-0'
+          }`}
+        >
+          {formik.errors.sku}
+        </span>
+        {/* )} */}
+      </div>
     </div>
   );
 };

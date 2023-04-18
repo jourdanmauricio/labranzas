@@ -3,7 +3,6 @@ import ProductsContext from '@/context/ProductsContext';
 import { useFormik } from 'formik';
 import Title from './components/Title';
 import Category from './components/Category';
-import { IProduct } from '@/models';
 import Condition from './components/Condition';
 import Sku from './components/Sku';
 import Price from './components/Price';
@@ -15,6 +14,7 @@ import Images from './components/Images';
 import Attributes from './components/Attributes';
 import AccordionItem from './components/AccordionItem';
 import Variations from './components/Variations/Variations';
+import { productValidate } from '@/utils/validate';
 
 const Product = () => {
   const [toggleState, setToggleState] = useState<number | null>(null);
@@ -28,13 +28,6 @@ const Product = () => {
 
   const toggleTab = (index: number) => {
     toggleState === index ? setToggleState(null) : setToggleState(index);
-  };
-
-  const productValidate = () => {
-    // SKU !== null
-    // Pictures.length > 0
-    // precio > 0
-    // cantidad > 0 si activo
   };
 
   const formik = useFormik({
