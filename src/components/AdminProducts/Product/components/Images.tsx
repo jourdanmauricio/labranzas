@@ -71,7 +71,10 @@ const Images = ({ formik }: IProps) => {
               height={150}
             />
 
-            <button className="absolute top-1 right-1 p-1 cursor-pointer rounded-full bg-gray-300 hover:bg-gray-200">
+            <button
+              type="button"
+              className="absolute top-1 right-1 p-1 cursor-pointer rounded-full bg-gray-300 hover:bg-gray-200"
+            >
               <FaRegTrashAlt
                 onClick={() => handleDelete(index)}
                 color={'red'}

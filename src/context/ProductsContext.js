@@ -120,10 +120,36 @@ const ProductsProvider = ({ children }) => {
     fetchProducts();
   }, []);
 
-  const handleAddProduct = () => {};
+  const handleAddProduct = async (product) => {
+    try {
+      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      console.log('CREATE Product', product);
+      // Change category
+      if (product.category_id !== product.category.id)
+        product.category_id = parseInt(product.category.id);
+
+      const newProduct = await productService.create(product);
+      dispatch({ type: ACTIONS.ADD_PRODUCT, payload: newProduct });
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Producto creado',
+      });
+    } catch (error) {
+      console.log('ERROR CONTEXT ', err);
+      dispatchNotif({
+        type: 'Error',
+        message: 'Error creando el producto',
+      });
+    }
+  };
   const handleUpdProduct = async (product) => {
     try {
       dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      console.log('UPD Product', product);
+      // Change category
+      if (product.category_id !== product.category.id)
+        product.category_id = parseInt(product.category.id);
+
       const updProduct = await productService.update(product);
       dispatch({ type: ACTIONS.UPD_PRODUCT, payload: updProduct });
       dispatchNotif({

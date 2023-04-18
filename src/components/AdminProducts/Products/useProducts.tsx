@@ -2,6 +2,8 @@ import { useContext, useMemo } from 'react';
 import ProductsContext from '@/context/ProductsContext';
 import { IProduct } from '@/models';
 import { FaRegTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
+import Image from 'next/image';
+import { trad } from '@/config/helpTraduccion';
 
 const initialData = {
   id: 0,
@@ -45,17 +47,50 @@ const useProducts = () => {
   const PRODUCTS_COLUMNS = [
     {
       name: 'ID',
+      width: '70px',
       cell: (row: IProduct) => <span>{row.id}</span>,
       sortable: true,
     },
     {
-      name: 'ML',
+      name: 'Imagen',
+      width: '90px',
+      center: true,
+      cell: (row: IProduct) => (
+        <div className="h-[90px] object-scale-down flex items-center justify-center">
+          <Image
+            src={row.pictures[0].secure_url}
+            alt={row.pictures[0].id}
+            width={90}
+            height={90}
+            className="max-h-[90px]"
+          />
+        </div>
+      ),
+    },
+    {
+      name: 'Título',
       selector: (row: IProduct) => row.title,
       sortable: true,
     },
     {
+      name: 'SKU',
+      width: '150px',
+      center: true,
+      cell: (row: IProduct) => <span>{row.sku}</span>,
+      sortable: true,
+    },
+    {
+      name: 'Estado',
+      width: '150px',
+      center: true,
+      cell: (row: IProduct) => <span>{trad(row.status)}</span>,
+      sortable: true,
+    },
+
+    {
       name: 'Acciones',
       width: '120px',
+      center: true,
       cell: (row: IProduct) => (
         <div>
           <button

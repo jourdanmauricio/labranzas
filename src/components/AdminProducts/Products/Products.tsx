@@ -1,17 +1,11 @@
 import DataTable from 'react-data-table-component';
 import { useState } from 'react';
-import { Category, ICreateProductDto, IProduct, IProductMl } from '@/models';
-import { ProductHttpService } from '@/services/local/product.service';
-import { CategoryHttpService } from '@/services/local';
 import useProducts from './useProducts';
 import Product from '../Product/Product';
 import Modal from '@/commons/Modal/Modal';
 import ProductDelete from '../ProductDelete/ProductDelete';
 import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-
-const productService = new ProductHttpService();
-const categoryService = new CategoryHttpService();
 
 const Products = () => {
   const {
@@ -25,7 +19,6 @@ const Products = () => {
     onCancelDelete,
     onDelete,
     handleAddProductfromMl,
-    handleUpdStatus,
   } = useProducts();
 
   const [ml_id, setProdMlId] = useState<string>('');

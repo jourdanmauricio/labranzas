@@ -7,7 +7,6 @@ interface IProps {
 }
 
 const Attributes = ({ formik }: IProps) => {
-  const [showModal, setShowModal] = useState(false);
   const [newAttrib, setNewAttrib] = useState({
     attrib: '',
     value: '',
@@ -100,7 +99,7 @@ const Attributes = ({ formik }: IProps) => {
             onChange={(e) => onChangeAddAtrib(e.target.name, e.target.value)}
           />
         </div>
-        <button onClick={handleAdd} className="btn-primary mt-5" type="button">
+        <button type="button" onClick={handleAdd} className="btn-primary mt-5">
           Nuevo
         </button>
       </div>
@@ -130,11 +129,12 @@ const Attributes = ({ formik }: IProps) => {
               />
             </div>
 
-            <button className="table__icon">
+            <button type="button" className="table__icon">
               <FaTh />
             </button>
 
             <button
+              type="button"
               onClick={() => handleDelete(index)}
               className="table__icon table__icon--delete"
             >

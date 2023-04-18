@@ -3,7 +3,7 @@ import { IAttributeCombination, IPicture, IVariations } from '@/models';
 import { ExpanderComponentProps } from 'react-data-table-component';
 import { FaEdit, FaRegTrashAlt } from 'react-icons/fa';
 import Image from 'next/image';
-import ImagesVar from '../ImagesVar';
+import ImagesVar from './ImagesVar';
 import { useNotification } from '@/commons/Notifications/NotificationProvider';
 
 interface IProps {

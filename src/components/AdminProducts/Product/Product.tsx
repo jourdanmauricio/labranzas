@@ -47,7 +47,7 @@ const Product = () => {
     <div>
       <form
         onSubmit={formik.handleSubmit}
-        className="pt-1 flex flex-col gap-5"
+        className="pt-2 flex flex-col gap-5"
         noValidate
       >
         <div className="flex flex-col sm:flex-row gap-4">
@@ -124,7 +124,7 @@ const Product = () => {
             Cancelar
           </button>
           <button type="submit" className="btn-primary">
-            Modificar
+            {action === 'new' ? 'Crear' : 'Modificar'}
           </button>
         </div>
       </form>

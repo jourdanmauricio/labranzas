@@ -4,8 +4,8 @@ export const listing = [
 ];
 
 export const status = [
-  { id: 'active', name: 'Activa' },
-  { id: 'paused', name: 'Pausada' },
+  { id: 'active', name: 'Activo' },
+  { id: 'paused', name: 'Pausado' },
   { id: 'under_review', name: 'Revisión' },
 ];
 
