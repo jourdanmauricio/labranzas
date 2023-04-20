@@ -1,3 +1,4 @@
+import { ICategory } from '@/models';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 const URL_REVALIDATE = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/revalidate`;
@@ -30,10 +31,6 @@ export default async function handler(
       const products = await service.find();
       res.status(200).json(products);
     } catch (error) {
-      console.log(
-        '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!first',
-        error
-      );
       res.status(500).json({ message: error });
     }
   }
@@ -42,13 +39,22 @@ export default async function handler(
     try {
       const newCategory = await service.create(req.body);
 
-      // REVALIDATE
-      const category = await categoryService.findOne(req.body.category_id);
-      await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
-      await axios(
-        `${URL_REVALIDATE}?path=/categorias/${category.slug}`,
-        CONFIG_REVALIDATE
+      // REVALIDATE All Categories
+      const categories = await categoryService.find();
+
+      const categoriesSlugUrls = categories.map(
+        (category: ICategory) =>
+          `${URL_REVALIDATE}?path=/categorias/${category.slug}`
       );
+      const requests = categoriesSlugUrls.map((url: string) =>
+        axios.get(url, CONFIG_REVALIDATE)
+      );
+
+      await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
+
+      axios.all(requests).then((responses) => {
+        // console.log('responses', responses);
+      });
 
       res.status(200).json(newCategory);
     } catch (error) {
