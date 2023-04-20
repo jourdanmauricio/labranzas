@@ -18,6 +18,8 @@ export default async function handler(
   const query = req.query;
   const { field, value } = query;
 
+  console.log('req.method', req.method);
+
   if (req.method === 'GET') {
     try {
       const categories = await service.find(field, value);
