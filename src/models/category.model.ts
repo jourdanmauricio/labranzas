@@ -1,27 +1,29 @@
 import { BaseModel } from './base.model';
 
-export interface Category extends BaseModel {
+export interface ICategory extends BaseModel {
   name: string;
   image: string;
+  slug: string;
   ml_id: string;
   ml_full_name: string;
   ml_name: string;
+  productsCount: number;
 }
 
-export interface CreateCategoryDto
-  extends Omit<Category, 'id' | 'created_at' | 'updated_at'> {
+export interface ICreateCategoryDto
+  extends Omit<ICategory, 'id' | 'created_at' | 'updated_at'> {
   // add fields
 }
 
 // Selecciono campos
 // type Example = Pick<Category, 'ml_id' | 'ml_full_name' | 'ml_name' | 'image'>
 
-export interface UpdateCategoryDto extends Partial<CreateCategoryDto> {}
+export interface IUpdateCategoryDto extends Partial<ICreateCategoryDto> {}
 
 // Todos los campos como oblg
 // type Example2 = Required<Category>;
 
-export interface FindCategoryDto extends Readonly<Partial<Category>> {}
+export interface FindCategoryDto extends Readonly<Partial<ICategory>> {}
 
 export interface IMlCat {
   id: string;
@@ -35,7 +37,7 @@ export interface IMlCatDetail {
   children_categories: IMlCat[];
 }
 
-export interface CreateIMlCatDetailDto
+export interface ICreateIMlCatDetailDto
   extends Omit<IMlCatDetail, 'id' | 'name' | 'path_from_root'> {
   ml_id: string;
   ml_name: string;

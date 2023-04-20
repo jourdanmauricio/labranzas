@@ -9,8 +9,17 @@ import {
   FaTwitterSquare,
   FaWhatsappSquare,
 } from 'react-icons/fa';
+import { useRouter } from 'next/router';
+import { ICategory } from '@/models';
 
-const AppBar = () => {
+interface IProps {
+  categories: ICategory[];
+}
+
+const AppBar = ({ categories }: IProps) => {
+  const router = useRouter();
+  const currentPath = router.pathname;
+
   const { data: session } = useSession();
   // console.log({ session });
 
@@ -98,17 +107,58 @@ const AppBar = () => {
         </Link>
 
         <ul className="flex gap-5 text-sm">
-          <li>
-            <Link href="#">INICIO</Link>
+          <li
+            className={`p-2 transition duration-300 ease-in-out hover:bg-gray-600 hover:bg-opacity-70 hover:text-white ${
+              currentPath === '/#ofertas' ? 'bg-gray-900 text-white' : ''
+            }`}
+          >
+            <Link href="/">INICIO</Link>
           </li>
-          <li>
-            <Link href="#">PRODUCTOS</Link>
+          {/* Submenu  */}
+
+          <div className="group inline-block">
+            {/* hover:pb-3 */}
+            <li
+              className={`hover:bg-gray-600 hover:bg-opacity-70 hover:text-white p-2 transition duration-300 ease-in-out group relative flex ${
+                currentPath === '/productos' ? 'bg-gray-900 text-white' : ''
+              }`}
+            >
+              {/* className="text-gray-100 px-4" */}
+              <Link href="#">PRODUCTOS</Link>
+              <Image
+                className="ml-2"
+                src="/assets/icons/dropdown.svg"
+                alt="dropdown icon"
+                width={20}
+                height={20}
+              />
+              <div className="absolute top-9 left-0 -translate-x-1/3 grid grid-cols-3 gap-4 p-6 min-w-max bg-gray-900 bg-opacity-70 whitespace-nowrap text-white transform scale-0 group-hover:scale-100 transition duration-300 ease-in-out origin-top">
+                {categories.map((cat) => (
+                  <Link
+                    key={cat.name}
+                    className="p-2 transition duration-300 ease-in-out"
+                    href={`/categorias/${cat.slug}`}
+                  >
+                    {cat.name.toUpperCase()}
+                  </Link>
+                ))}
+              </div>
+            </li>
+          </div>
+          {/* Submenu  */}
+          <li
+            className={`p-2 transition duration-300 ease-in-out hover:bg-gray-600 hover:bg-opacity-70 hover:text-white ${
+              currentPath === '/#ofertas' ? 'bg-gray-900 text-white' : ''
+            }`}
+          >
+            <Link href="/">OFERTAS</Link>
           </li>
-          <li>
-            <Link href="#">OFERTAS</Link>
-          </li>
-          <li>
-            <Link href="#">CONTACTO</Link>
+          <li
+            className={`p-2 transition duration-300 ease-in-out hover:bg-gray-600 hover:bg-opacity-70 hover:text-gray-100 ${
+              currentPath === '/contacto' ? 'bg-gray-900 text-gray-100' : ''
+            }`}
+          >
+            <Link href="/">CONTACTO</Link>
           </li>
         </ul>
         <div className="flex gap-4">

@@ -73,7 +73,7 @@ const AddPicture = ({ formik, handleChangeImage }: IProps) => {
               className="input-form"
               type="text"
               id="image"
-              {...formik.getFieldProps('image')}
+              {...(formik.getFieldProps('image') || '')}
               disabled
             />
             {formik.errors.image && formik.touched.image && (

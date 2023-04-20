@@ -45,12 +45,12 @@ const useProducts = () => {
   } = useContext(ProductsContext);
 
   const PRODUCTS_COLUMNS = [
-    {
-      name: 'ID',
-      width: '70px',
-      cell: (row: IProduct) => <span>{row.id}</span>,
-      sortable: true,
-    },
+    // {
+    //   name: 'ID',
+    //   width: '70px',
+    //   cell: (row: IProduct) => <span>{row.id}</span>,
+    //   sortable: true,
+    // },
     {
       name: 'Imagen',
       width: '90px',
@@ -92,7 +92,7 @@ const useProducts = () => {
       width: '120px',
       center: true,
       cell: (row: IProduct) => (
-        <div>
+        <div className="flex">
           <button
             onClick={() => deleteData(row)}
             className="table__icon table__icon--delete"
@@ -101,7 +101,7 @@ const useProducts = () => {
           </button>
           <button
             onClick={() => editData(row)}
-            className="ml-2 table__icon table__icon--edit"
+            className="table__icon table__icon--edit"
           >
             <FaEdit />
           </button>

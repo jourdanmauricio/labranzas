@@ -15,9 +15,12 @@ export default async function handler(
   //   return res.status(401).json({ message: 'Unauthorized' });
   // }
 
+  const query = req.query;
+  const { field, value } = query;
+
   if (req.method === 'GET') {
     try {
-      const categories = await service.find();
+      const categories = await service.find(field, value);
       res.status(200).json(categories);
     } catch (error) {
       res.status(500).json({ message: error });

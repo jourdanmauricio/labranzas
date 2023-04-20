@@ -1,4 +1,4 @@
-import AppBar from '@/components/AppBar/AppBar';
+// import AppBar from '@/components/AppBar/AppBar';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 
@@ -17,7 +17,7 @@ const MainLayout = ({ children }: IProps) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <AppBar />
+        {/* <AppBar /> */}
 
         <main className="h-screen">{children}</main>
       </div>

@@ -15,7 +15,7 @@ body {
   scroll-behavior: smooth;
   font-family: var(--primary-font);
   background-color: #fff;
-  font-size: 16px;
+  /* font-size: 1.1rem; */
   height: 200vh;
 }
 
@@ -132,4 +132,24 @@ a {
   .table__icon--add {
     @apply text-teal-500 hover:bg-teal-50;
   }
+  .card {
+    @apply relative p-4 bg-gray-100 text-gray-900 min-h-[20rem] overflow-hidden;
+  }
+
+  .badge {
+    @apply mt-2 px-3 py-1 rounded-full text-xs bg-gray-200;
+  }
+  .product-title {
+    @apply text-base text-left h-12;
+  }
+  .discount-percent {
+    @apply bg-green-400 px-1.5 py-0.5 rounded-md text-xs text-white;
+  }
+}
+
+/* Datatable */
+.rdt_Table,
+.rdt_TableCell,
+.rdt_TableHeadRow {
+  font-size: 16px;
 }

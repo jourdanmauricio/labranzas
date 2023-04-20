@@ -15,10 +15,6 @@ const ProductSchema = {
     allowNull: true,
     defaultValue: '[]',
     get() {
-      console.log(
-        'GETTER ATTRIBUTES MODEL',
-        JSON.parse(this.getDataValue('attributes'))
-      );
       return JSON.parse(this.getDataValue('attributes'));
     },
     set(value) {
@@ -41,6 +37,10 @@ const ProductSchema = {
     type: DataTypes.NUMBER(6),
     allowNull: false,
   },
+  order: {
+    type: DataTypes.NUMBER(6),
+    allowNull: false,
+  },
   sold_quantity: {
     type: DataTypes.NUMBER(6),
     allowNull: true,
@@ -59,10 +59,6 @@ const ProductSchema = {
     allowNull: true,
     defaultValue: '[]',
     get() {
-      console.log(
-        'GETTER pictures MODEL',
-        JSON.parse(this.getDataValue('pictures'))
-      );
       return JSON.parse(this.getDataValue('pictures'));
     },
     set(value) {
@@ -86,10 +82,6 @@ const ProductSchema = {
     allowNull: true,
     defaultValue: '[]',
     get() {
-      console.log(
-        'GETTER sales MODEL',
-        JSON.parse(this.getDataValue('sale_terms'))
-      );
       return JSON.parse(this.getDataValue('sale_terms'));
     },
     set(value) {
@@ -101,10 +93,6 @@ const ProductSchema = {
     allowNull: true,
     defaultValue: '[]',
     get() {
-      console.log(
-        'GETTER variations MODEL',
-        JSON.parse(this.getDataValue('variations'))
-      );
       return JSON.parse(this.getDataValue('variations'));
     },
     set(value) {

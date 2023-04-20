@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CategoryHttpService } from '@/services/local';
-import { Category } from '@/models';
+import { ICategory } from '@/models';
 
 const categoryService = new CategoryHttpService();
 
@@ -9,7 +9,7 @@ interface IProps {
 }
 
 const Category = ({ formik }: IProps) => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {

@@ -41,6 +41,10 @@ module.exports = {
         type: DataTypes.NUMBER(6),
         allowNull: false,
       },
+      order: {
+        type: DataTypes.NUMBER(6),
+        allowNull: false,
+      },
       sold_quantity: {
         type: DataTypes.NUMBER(6),
         allowNull: true,

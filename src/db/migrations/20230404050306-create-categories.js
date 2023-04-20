@@ -17,6 +17,11 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      slug: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
       ml_id: {
         type: DataTypes.STRING,
         allowNull: true,

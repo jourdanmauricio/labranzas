@@ -1,5 +1,5 @@
 // const boom = require('@hapi/boom');
-const { models } = require('@/db/config/sequelize');
+const { models, Sequelize } = require('@/db/config/sequelize');
 
 class CategoriesService {
   async create(data) {
@@ -7,8 +7,51 @@ class CategoriesService {
     return newCategory;
   }
 
-  async find() {
-    const rta = await models.Category.findAll();
+  async find(field, value) {
+    const options = {
+      where: {},
+      // order: [[Sequelize.literal('productsCount'), 'DESC']],
+    };
+
+    switch (field) {
+      case 'cat_prods':
+        options.include = ['products'];
+        options.where['slug'] = value;
+        break;
+      case 'ml_id':
+      case 'name':
+        options.where[field] = value;
+        break;
+      case undefined:
+        options.attributes = {
+          include: [
+            [
+              Sequelize.literal(
+                `(SELECT COUNT(*) FROM "product" WHERE "product"."category_id" = "category"."id")`
+              ),
+              'productsCount',
+            ],
+          ],
+        };
+        break;
+    }
+
+    // if (field !== undefined) {
+    //   if (field === 'cat_prods') {
+    //     options.include = ['products'];
+    //     options.where['slug'] = value;
+    //   } else {
+    //     options.where[field] = value;
+    //   }
+    // }
+
+    const rta = await models.Category.findAll(options);
+
+    // console.log('RTAAAAAA', options, rta);
+
+    if (field !== undefined) {
+      return rta[0];
+    }
     return rta;
   }
 
@@ -18,41 +61,6 @@ class CategoriesService {
       throw 'Not found';
     }
     return category;
-  }
-
-  async findOneByProp(prop) {
-    console.log('CAT SERV', prop);
-    const options = {
-      where: {},
-      order: [['updated_at', 'DESC']],
-    };
-
-    if (typeof prop === 'string') {
-      options.where.name = prop;
-    }
-
-    if (typeof prop === 'number') {
-      options.where.ml_id = prop;
-    }
-
-    const category = await models.Category.findAll(options);
-    console.log('CATEGORY', category);
-    if (!category) {
-      throw 'Not found';
-    }
-
-    console.log('CAT ', category[0]);
-    return category[0];
-  }
-
-  async findOneByMlId(ml_id) {
-    console.log('CAT SERV', ml_id);
-    const category = await models.Category.findAll({ where: { ml_id: ml_id } });
-    console.log('CATEGORY', category);
-    if (!category) {
-      throw 'Not found';
-    }
-    return category[0];
   }
 
   async update(id, changes) {

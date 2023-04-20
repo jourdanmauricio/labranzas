@@ -30,6 +30,7 @@ const Products = () => {
     if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;
     handleAddProductfromMl(_ml_id);
   };
+
   return (
     <div>
       <Breadcrumbs catId={currentData?.id} />

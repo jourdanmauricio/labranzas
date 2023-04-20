@@ -2,14 +2,14 @@ import { useContext, useState } from 'react';
 import CategoriesContext from '@/context/CategoriesContext';
 import { useFormik } from 'formik';
 import Modal from '@/commons/Modal/Modal';
-import { Category, CloudinaryImage, CreateIMlCatDetailDto } from '@/models';
+import { ICategory, CloudinaryImage, ICreateIMlCatDetailDto } from '@/models';
 import SearchCategory from '@/components/AdminCategories/SearchCategory/SearchCategory';
 import AddPicture from '@/components/AddPicture/AddPicture';
 import { categoryValidate } from '@/utils/validate';
 import { FaSearch } from 'react-icons/fa';
 
 interface Iprops {
-  category: Category;
+  category: ICategory;
 }
 
 const Category = ({ category }: Iprops) => {
@@ -25,11 +25,18 @@ const Category = ({ category }: Iprops) => {
     setShowModal(true);
   };
 
-  const onAddCategory = (cat: CreateIMlCatDetailDto | null) => {
+  const onAddCategory = (cat: ICreateIMlCatDetailDto | null) => {
     formik.setFieldValue('ml_name', cat?.ml_name);
     formik.setFieldValue('ml_id', cat?.ml_id);
     formik.setFieldValue('ml_full_name', cat?.ml_full_name);
-    if (formik.values.name === '') formik.setFieldValue('name', cat?.ml_name);
+    if (formik.values.name === '') {
+      formik.setFieldValue('name', cat?.ml_name);
+      formik.setFieldValue(
+        'slug',
+        cat?.ml_name.replaceAll(' ', '-').toLowerCase()
+      );
+    }
+
     setShowModal(false);
   };
 
@@ -128,6 +135,22 @@ const Category = ({ category }: Iprops) => {
           />
           {formik.errors.name && formik.touched.name && (
             <span className="text-xs text-rose-500">{formik.errors.name}</span>
+          )}
+        </div>
+
+        <div>
+          <label className="label-form" htmlFor="slug">
+            Slug
+          </label>
+          <input
+            className="input-form"
+            type="text"
+            id="slug"
+            {...formik.getFieldProps('slug')}
+            disabled
+          />
+          {formik.errors.slug && formik.touched.slug && (
+            <span className="text-xs text-rose-500">{formik.errors.slug}</span>
           )}
         </div>
 

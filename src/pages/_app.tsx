@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app';
 import { localInterceptor } from '../services/localInterceptor';
 import NotificationProvider from '@/commons/Notifications/NotificationProvider';
 
-import { Roboto, Poppins } from 'next/font/google';
+import { Roboto, Poppins, Mulish } from 'next/font/google';
 
 const roboto = Roboto({
   weight: ['400', '700'],
@@ -18,6 +18,12 @@ const poppins = Poppins({
   subsets: ['latin'],
 });
 
+const mulish = Mulish({
+  weight: ['400', '700'],
+  style: ['normal'],
+  subsets: ['latin'],
+});
+
 localInterceptor();
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -25,8 +31,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <style jsx global>{`
         :root {
-          --primary-font: ${poppins.style.fontFamily};
+          --primary-font: ${mulish.style.fontFamily};
           --secondary-font: ${roboto.style.fontFamily};
+          --title-font: ${poppins.style.fontFamily};
         }
       `}</style>
       <SessionProvider session={pageProps.session}>

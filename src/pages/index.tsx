@@ -1,36 +1,19 @@
+import axios from 'axios';
 import Slider from '@/components/elements/Slider';
 import MainLayout from '@/layout/MainLayout';
-import Image from 'next/image';
+import AppBar from '@/components/AppBar/AppBar';
+import { ICategory } from '@/models';
 
-export default function Home() {
+interface IProps {
+  categories: ICategory[];
+}
+
+export default function HomePage({ categories }: IProps) {
   return (
     <>
       <MainLayout>
-        {/* <section className="relative w-full overflow-hidden">
-          <div className="whitespace-nowrap">
-            <Image
-              className="w-full inline-block m-0 whitespace-normal"
-              src="/assets/images/slider-1_opt.jpg"
-              alt="Image-1"
-              width={1440}
-              height={600}
-            />
-            <Image
-              className="w-full inline-block m-0 whitespace-normal"
-              src="/assets/images/slider-2_opt.jpg"
-              alt="Image-2"
-              width={1440}
-              height={600}
-            />
-            <Image
-              className="w-full inline-block m-0 whitespace-normal"
-              src="/assets/images/slider-3_opt.jpg"
-              alt="Image-3"
-              width={1440}
-              height={600}
-            />
-          </div>
-        </section> */}
+        <AppBar categories={categories} />
+
         <Slider
           images={['slider-1_opt.jpg', 'slider-2_opt.jpg', 'slider-3_opt.jpg']}
           autoPlay={true}
@@ -39,4 +22,23 @@ export default function Home() {
       </MainLayout>
     </>
   );
+}
+
+export async function getStaticProps() {
+  try {
+    const API_CATEGORIES = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/categories`;
+    const { data } = await axios(API_CATEGORIES);
+
+    const categories = data.filter((cat: ICategory) => cat.productsCount > 0);
+
+    console.log('responseCategories', categories);
+
+    return {
+      props: {
+        categories,
+      },
+    };
+  } catch (error) {
+    console.log('ERROR', error);
+  }
 }

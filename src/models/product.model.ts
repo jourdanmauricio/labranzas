@@ -12,7 +12,8 @@ export interface IProduct extends BaseModel {
   status: ProdStatus;
   sold_quantity?: number;
   seller_id?: number;
-  sku?: string;
+  sku: string;
+  order: number;
   listing_type_id: ListingType;
   thumbnail: string;
   category_id: number;

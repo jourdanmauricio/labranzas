@@ -1,11 +1,12 @@
 import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import { useContext, useMemo, useState } from 'react';
 import CategoriesContext from '@/context/CategoriesContext';
-import { Category } from '@/models';
+import { ICategory } from '@/models';
 
 const initialData = {
   id: 0,
   name: '',
+  slug: '',
   ml_id: '',
   ml_name: '',
   ml_full_name: '',
@@ -22,10 +23,10 @@ const useCategories = () => {
     handleUpdStatus,
     handleUpdAction,
   } = useContext(CategoriesContext);
-  const [currentData, setCurrentData] = useState<Category>(initialData);
+  const [currentData, setCurrentData] = useState<ICategory>(initialData);
   const [showModal, setShowModal] = useState(false);
 
-  const deleteData = (row: Category) => {
+  const deleteData = (row: ICategory) => {
     setCurrentData(row);
     setShowModal(true);
   };
@@ -40,7 +41,7 @@ const useCategories = () => {
     setShowModal(false);
   };
 
-  const editData = (row: Category) => {
+  const editData = (row: ICategory) => {
     setCurrentData(row);
     handleUpdAction('edit');
   };
@@ -53,7 +54,7 @@ const useCategories = () => {
   const CATEGORIES_COLUMNS = [
     {
       name: 'Categoría',
-      cell: (row: Category) => (
+      cell: (row: ICategory) => (
         <span>
           {row.id} - {row.name}
         </span>
@@ -63,13 +64,13 @@ const useCategories = () => {
     {
       name: 'ML',
       width: '160px',
-      selector: (row: Category) => row.ml_name,
+      selector: (row: ICategory) => row.ml_name,
       sortable: true,
     },
     {
       name: 'Acciones',
       width: '120px',
-      cell: (row: Category) => (
+      cell: (row: ICategory) => (
         <div>
           <button
             onClick={() => deleteData(row)}

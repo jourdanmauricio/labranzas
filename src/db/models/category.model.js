@@ -14,6 +14,11 @@ const CategorySchema = {
     allowNull: false,
     unique: true,
   },
+  slug: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
   ml_id: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -34,6 +39,10 @@ const CategorySchema = {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  // productsCount: {
+  //   type: DataTypes.NUMBER,
+  //   allowNull: true,
+  // },
   created_at: {
     allowNull: true,
     type: DataTypes.DATE,

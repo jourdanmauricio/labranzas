@@ -123,7 +123,6 @@ const ProductsProvider = ({ children }) => {
   const handleAddProduct = async (product) => {
     try {
       dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
-      console.log('CREATE Product', product);
       // Change category
       if (product.category_id !== product.category.id)
         product.category_id = parseInt(product.category.id);
@@ -145,7 +144,6 @@ const ProductsProvider = ({ children }) => {
   const handleUpdProduct = async (product) => {
     try {
       dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
-      console.log('UPD Product', product);
       // Change category
       if (product.category_id !== product.category.id)
         product.category_id = parseInt(product.category.id);
@@ -164,7 +162,6 @@ const ProductsProvider = ({ children }) => {
       });
     }
   };
-
   const handleDeleteProduct = async (id) => {
     try {
       dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
@@ -182,7 +179,6 @@ const ProductsProvider = ({ children }) => {
       });
     }
   };
-
   const handleAddProductfromMl = async (ml_id) => {
     try {
       dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
@@ -190,7 +186,6 @@ const ProductsProvider = ({ children }) => {
       if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;
 
       const productMl = await productService.getProductMl(_ml_id);
-      console.log('productMl', productMl);
 
       const categoria = await categoryService.findOrCreate(
         productMl.category_id
@@ -198,7 +193,8 @@ const ProductsProvider = ({ children }) => {
 
       const newProduct = await productService.createFromMl(
         productMl,
-        categoria.id
+        categoria.id,
+        products.length + 1
       );
       dispatch({ type: ACTIONS.ADD_PRODUCT, payload: newProduct });
 

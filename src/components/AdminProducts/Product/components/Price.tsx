@@ -5,13 +5,13 @@ interface IProps {
 const Price = ({ formik }: IProps) => {
   return (
     <div className="w-full">
-      <label className="label-form" htmlFor="ml-id">
+      <label className="label-form" htmlFor="price">
         Precio
       </label>
       <input
         className="input-form"
         type="number"
-        id="ml-id"
+        id="price"
         {...formik.getFieldProps('price')}
       />
       {formik.errors.price && formik.touched.price && (

@@ -70,7 +70,6 @@ export class ProductHttpService {
 
   async getAll() {
     const { data } = await axios.get<IProduct[]>('/api/products');
-    console.log('Data', data);
     return data;
   }
 
@@ -110,8 +109,14 @@ export class ProductHttpService {
 
   // SERVICES
 
-  async createFromMl(productMl: IProductMl, category_id: number) {
-    const product = await this.formatProduct(productMl, category_id);
+  async createFromMl(
+    productMl: IProductMl,
+    category_id: number,
+    order: number
+  ) {
+    console.log('ORDER', order);
+    let product = await this.formatProduct(productMl, category_id);
+    product = { ...product, order };
 
     const newProduct = await this.create(product);
     return newProduct;
