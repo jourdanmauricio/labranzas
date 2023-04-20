@@ -2,11 +2,11 @@ import AppBar from '@/components/AppBar/AppBar';
 import SearchFilterOrder from '@/components/elements/SearchFilterOrder';
 import MainLayout from '@/layout/MainLayout';
 import { ICategory, IProduct } from '@/models';
-import axios from 'axios';
 import Link from 'next/link';
 import { useState } from 'react';
-import Product from '../../components/AdminProducts/Product/Product';
 import ProductCard from '@/components/elements/ProductCard';
+const CategoryService = require('@/db/services/category.service');
+const service = new CategoryService();
 
 interface IProps {
   products: IProduct[];
@@ -101,26 +101,28 @@ export const getStaticProps = async ({
   }
 
   try {
-    const API_PRODUCTS = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/categories?field=cat_prods&value=${slug}`;
-    const responseProducts = await axios(API_PRODUCTS);
+    console.log('getStaticProps SLUG');
+    // Categories
+    const responseCategories = await service.find();
+    const respCategories = responseCategories.map((cat: any) => cat.dataValues);
+    const categories = respCategories.filter(
+      (cat: ICategory) => cat.productsCount > 0
+    );
 
-    const API_CATEGORIES = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/categories`;
-    const { data } = await axios(API_CATEGORIES);
-
-    const categories = data.filter((cat: ICategory) => cat.productsCount > 0);
-
-    console.log('responseCategories', categories);
-    console.log('responseProducts', responseProducts.data);
-
-    const products = responseProducts.data.products.sort(
+    // Products
+    const responseProducts = await service.find('cat_prods', slug);
+    const respProducts = responseProducts.dataValues.products.map(
+      (product: any) => product.dataValues
+    );
+    const products = respProducts.sort(
       (a: IProduct, b: IProduct) => a.order - b.order
     );
 
     return {
       props: {
-        products,
+        products: JSON.parse(JSON.stringify(products)),
         categories,
-        category_id: responseProducts.data.products[0].category_id,
+        category_id: products[0].category_id,
       },
     };
   } catch (error) {
@@ -131,10 +133,14 @@ export const getStaticProps = async ({
 };
 
 export const getStaticPaths = async () => {
-  const API_CATEGORIES = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/categories`;
-  const responseCategories = await axios(API_CATEGORIES);
+  // Categories
+  const responseCategories = await service.find();
+  const respCategories = responseCategories.map((cat: any) => cat.dataValues);
+  const categories = respCategories.filter(
+    (cat: ICategory) => cat.productsCount > 0
+  );
 
-  const paths = responseCategories.data.map((category: ICategory) => ({
+  const paths = categories.map((category: ICategory) => ({
     params: {
       slug: category.slug,
     },

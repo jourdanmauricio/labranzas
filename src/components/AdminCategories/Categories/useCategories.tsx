@@ -11,6 +11,7 @@ const initialData = {
   ml_name: '',
   ml_full_name: '',
   image: '',
+  alt_image: '',
   productsCount: 0,
 };
 

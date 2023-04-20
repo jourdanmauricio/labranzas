@@ -3,6 +3,7 @@ const { models, Sequelize } = require('@/db/config/sequelize');
 
 class CategoriesService {
   async create(data) {
+    console.log('data category ', data);
     const newCategory = await models.Category.create(data);
     return newCategory;
   }
@@ -36,20 +37,7 @@ class CategoriesService {
         break;
     }
 
-    // if (field !== undefined) {
-    //   if (field === 'cat_prods') {
-    //     options.include = ['products'];
-    //     options.where['slug'] = value;
-    //   } else {
-    //     options.where[field] = value;
-    //   }
-    // }
-
-    console.log('RTAAAAAAAAAAAAA');
-
     const rta = await models.Category.findAll(options);
-
-    console.log('RTAAAAAAAAAAAAA', options, rta);
 
     if (field !== undefined) {
       return rta[0];

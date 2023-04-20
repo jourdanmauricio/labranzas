@@ -79,7 +79,7 @@ class Category extends Model {
       modelName: 'Category',
       timestamps: false,
       defaultScope: {
-        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        attributes: { exclude: ['created_at', 'updated_at'] },
       },
     };
   }

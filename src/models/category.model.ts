@@ -3,6 +3,7 @@ import { BaseModel } from './base.model';
 export interface ICategory extends BaseModel {
   name: string;
   image: string;
+  alt_image: string;
   slug: string;
   ml_id: string;
   ml_full_name: string;
@@ -11,7 +12,10 @@ export interface ICategory extends BaseModel {
 }
 
 export interface ICreateCategoryDto
-  extends Omit<ICategory, 'id' | 'created_at' | 'updated_at'> {
+  extends Omit<
+    ICategory,
+    'id' | 'productsCount' | 'created_at' | 'updated_at'
+  > {
   // add fields
 }
 
