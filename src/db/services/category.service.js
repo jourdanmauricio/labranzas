@@ -45,6 +45,8 @@ class CategoriesService {
     //   }
     // }
 
+    console.log('RTAAAAAAAAAAAAA');
+
     const rta = await models.Category.findAll(options);
 
     console.log('RTAAAAAAAAAAAAA', options, rta);
