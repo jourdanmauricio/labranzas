@@ -47,7 +47,7 @@ class CategoriesService {
 
     const rta = await models.Category.findAll(options);
 
-    // console.log('RTAAAAAA', options, rta);
+    console.log('RTAAAAAAAAAAAAA', options, rta);
 
     if (field !== undefined) {
       return rta[0];
