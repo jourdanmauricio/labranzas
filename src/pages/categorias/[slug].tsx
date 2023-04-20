@@ -17,8 +17,6 @@ interface IProps {
 const CategoryPage = ({ products, categories, category_id }: IProps) => {
   const [searchText, setSearchText] = useState('');
   const [order, setOrder] = useState('Ordenar por');
-  console.log('products', products);
-  console.log('category_id', category_id);
 
   // const filterProducts: IProduct[] = products.filter(
   //   (item) =>

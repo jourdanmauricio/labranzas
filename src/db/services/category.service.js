@@ -3,7 +3,6 @@ const { models, Sequelize } = require('@/db/config/sequelize');
 
 class CategoriesService {
   async create(data) {
-    console.log('data category ', data);
     const newCategory = await models.Category.create(data);
     return newCategory;
   }

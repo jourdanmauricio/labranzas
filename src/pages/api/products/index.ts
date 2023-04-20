@@ -7,6 +7,9 @@ const CONFIG_REVALIDATE = {
   },
 };
 
+const CategoryService = require('@/db/services/category.service');
+const categoryService = new CategoryService();
+
 const ProductService = require('@/db/services/product.service');
 const service = new ProductService();
 
@@ -22,19 +25,9 @@ export default async function handler(
   //   return res.status(401).json({ message: 'Unauthorized' });
   // }
 
-  // if (req.method === 'GET') {
-  //   try {
-  //     const categories = await service.find();
-  //     res.status(200).json(categories);
-  //   } catch (error) {
-  //     res.status(500).json({ message: error });
-  //   }
-  // }
-
   if (req.method === 'GET') {
     try {
       const products = await service.find();
-      console.log('products', products[0]);
       res.status(200).json(products);
     } catch (error) {
       console.log(
@@ -48,11 +41,14 @@ export default async function handler(
   if (req.method === 'POST') {
     try {
       const newCategory = await service.create(req.body);
+
+      // REVALIDATE
+      const category = await categoryService.findOne(req.body.category_id);
       await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
-      // await axios(
-      //   `${URL_REVALIDATE}?path=/categorias/${req.body.slug}`,
-      //   CONFIG_REVALIDATE
-      // );
+      await axios(
+        `${URL_REVALIDATE}?path=/categorias/${category.slug}`,
+        CONFIG_REVALIDATE
+      );
 
       res.status(200).json(newCategory);
     } catch (error) {

@@ -56,7 +56,6 @@ const Attributes = ({ formik }: IProps) => {
   };
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log('change', e.target.name, e.target.value);
     let _attributes = attributes.map((attrib) =>
       attrib.name === e.target.name
         ? { ...attrib, value_name: e.target.value }
@@ -66,7 +65,6 @@ const Attributes = ({ formik }: IProps) => {
   };
 
   const onChangeAddAtrib = (name: string, value: string) => {
-    console.log('name', name, value);
     setNewAttrib({ ...newAttrib, [name]: value });
   };
 

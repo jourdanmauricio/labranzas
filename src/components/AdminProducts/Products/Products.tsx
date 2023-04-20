@@ -23,8 +23,6 @@ const Products = () => {
 
   const [ml_id, setProdMlId] = useState<string>('');
 
-  console.log('PRODUCTS', products);
-
   const handleDownloadML = async () => {
     let _ml_id = ml_id;
     if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;

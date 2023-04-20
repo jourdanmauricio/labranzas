@@ -12,10 +12,7 @@ const SearchCategory = ({ onAddCategory, onCancel }: IProps) => {
   const [catSel, setCalSel] = useState<ICreateIMlCatDetailDto | null>(null);
   // const [loading, setLoading] = useState(false);
 
-  console.log('SearchCategory');
-
   const handleSelectCat = (categorySel: ICreateIMlCatDetailDto | null) => {
-    console.log('handleSelectCat');
     setCalSel(categorySel);
   };
 

@@ -13,7 +13,6 @@ export default handlers.get(async (req, res) => {
   try {
     const user = await service.findByEmail(email);
     if (!user) {
-      console.log('findByEmail 401');
       res.status(200).json({ message: 'Completa tu perfil' });
       return;
     } else {
