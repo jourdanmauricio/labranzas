@@ -4,11 +4,13 @@ import axios from 'axios';
 export const localInterceptor = () => {
   const updateHeader = (request) => {
     const newHeaders = {
+      ...request.headers,
       // 'Authorization': `Bearer ${token}`;
       'Content-Type': request.url?.includes('upload-image')
         ? 'multipart/form-data'
         : 'application/json',
     };
+
     request.headers = newHeaders;
     return request;
   };
