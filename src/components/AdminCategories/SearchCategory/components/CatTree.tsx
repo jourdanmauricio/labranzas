@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { FaChevronRight, FaCheck } from 'react-icons/fa';
 import { CategoryHttpService } from '@/services/local';
-import { CreateIMlCatDetailDto, IMlCat, IMlCatDetail } from '@/models';
+import { ICreateIMlCatDetailDto, IMlCat } from '@/models';
 
 interface IProps {
-  handleSelectCat: (categorySel: CreateIMlCatDetailDto | null) => void;
+  handleSelectCat: (categorySel: ICreateIMlCatDetailDto | null) => void;
 }
 
 const categoryService = new CategoryHttpService();
 
 const CatTree = ({ handleSelectCat }: IProps) => {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<CreateIMlCatDetailDto[]>([]);
+  const [categories, setCategories] = useState<ICreateIMlCatDetailDto[]>([]);
   const [partialCat, setPartialCat] = useState('');
 
   console.log('CatTree');
@@ -40,7 +40,7 @@ const CatTree = ({ handleSelectCat }: IProps) => {
     fetchData();
   };
 
-  async function handleSelCat(category: CreateIMlCatDetailDto) {
+  async function handleSelCat(category: ICreateIMlCatDetailDto) {
     if (category.children_categories.length === 0) {
       handleSelectCat(category);
     }

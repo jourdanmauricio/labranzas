@@ -132,6 +132,7 @@ export class CategoryHttpService implements categoryservice {
           ml_name: catMl[0].ml_name,
           ml_full_name: catMl[0].ml_full_name,
           image: '',
+          productsCount: 0,
         });
         return newCategory;
       } else {

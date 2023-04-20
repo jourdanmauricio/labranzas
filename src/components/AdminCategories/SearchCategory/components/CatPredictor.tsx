@@ -2,17 +2,17 @@ import { useState } from 'react';
 import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { useNotification } from '@/commons/Notifications/NotificationProvider';
 import { CategoryHttpService } from '@/services/local';
-import { CreateIMlCatDetailDto } from '@/models';
+import { ICreateIMlCatDetailDto } from '@/models';
 
 interface IProps {
-  handleSelectCat: (categorySel: CreateIMlCatDetailDto | null) => void;
+  handleSelectCat: (categorySel: ICreateIMlCatDetailDto | null) => void;
 }
 
 const categoryService = new CategoryHttpService();
 
 const CatPredictor = ({ handleSelectCat }: IProps) => {
   const [description, setDescription] = useState('');
-  const [categories, setCategories] = useState<CreateIMlCatDetailDto[]>([]);
+  const [categories, setCategories] = useState<ICreateIMlCatDetailDto[]>([]);
   const [loading, setLoading] = useState(false);
   const dispatchNotif = useNotification();
 

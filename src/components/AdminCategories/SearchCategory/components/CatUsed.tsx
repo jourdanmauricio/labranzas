@@ -1,14 +1,14 @@
-import { CreateIMlCatDetailDto } from '@/models';
+import { ICreateIMlCatDetailDto } from '@/models';
 import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import { useEffect, useState } from 'react';
 
 interface IProps {
-  handleSelectCat: (categorySel: CreateIMlCatDetailDto | null) => void;
+  handleSelectCat: (categorySel: ICreateIMlCatDetailDto | null) => void;
 }
 
 const CatUsed = ({ handleSelectCat }: IProps) => {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<CreateIMlCatDetailDto[]>([]);
+  const [categories, setCategories] = useState<ICreateIMlCatDetailDto[]>([]);
   const handleReset = () => {
     handleSelectCat(null);
   };

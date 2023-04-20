@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import Tabs from './components/Tabs';
 // import Loader from '@/commons/Loader-overlay/Loader-overlay';
-import { CreateIMlCatDetailDto } from '@/models';
+import { ICreateIMlCatDetailDto } from '@/models';
 
 interface IProps {
-  onAddCategory: (catSel: CreateIMlCatDetailDto | null) => void;
+  onAddCategory: (catSel: ICreateIMlCatDetailDto | null) => void;
   onCancel: () => void;
 }
 
 const SearchCategory = ({ onAddCategory, onCancel }: IProps) => {
-  const [catSel, setCalSel] = useState<CreateIMlCatDetailDto | null>(null);
+  const [catSel, setCalSel] = useState<ICreateIMlCatDetailDto | null>(null);
   // const [loading, setLoading] = useState(false);
 
   console.log('SearchCategory');
 
-  const handleSelectCat = (categorySel: CreateIMlCatDetailDto | null) => {
+  const handleSelectCat = (categorySel: ICreateIMlCatDetailDto | null) => {
     console.log('handleSelectCat');
     setCalSel(categorySel);
   };

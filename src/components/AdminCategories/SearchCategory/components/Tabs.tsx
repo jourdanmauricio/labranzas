@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { FaSearchPlus, FaSearchLocation, FaSearch } from 'react-icons/fa';
-import { CreateIMlCatDetailDto } from '@/models';
+import { ICreateIMlCatDetailDto } from '@/models';
 import CatPredictor from './CatPredictor';
 import CatTree from './CatTree';
 import CatUsed from './CatUsed';
 import styles from '@/styles/Tabs.module.css';
 
 interface IProps {
-  handleSelectCat: (categorySel: CreateIMlCatDetailDto | null) => void;
+  handleSelectCat: (categorySel: ICreateIMlCatDetailDto | null) => void;
 }
 
 const Tabs = ({ handleSelectCat }: IProps) => {
