@@ -145,6 +145,9 @@ a {
   .discount-percent {
     @apply bg-green-400 px-1.5 py-0.5 rounded-md text-xs text-white;
   }
+  .button-primary {
+    @apply bg-gray-700/80 hover:bg-gray-700/90 px-2 py-2 rounded-md text-white tracking-wider transition;
+  }
 }
 
 /* Datatable */

@@ -20,6 +20,7 @@ export interface IProduct extends BaseModel {
   condition: Condition;
   permalink: string;
   title: string;
+  slug: string;
   pictures: IPicture[];
   description?: string;
   sale_terms: ITerms[] | [];

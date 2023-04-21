@@ -29,7 +29,7 @@ IProps) => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <FaSearch />
+        <FaSearch className="absolute text-lg right-0 w-8 rotate-90" />
         {/* <Icon
           icon="mdi:search"
           className="absolute text-lg right-0 w-8 rotate-90"

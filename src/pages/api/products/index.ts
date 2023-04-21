@@ -1,6 +1,7 @@
 import { ICategory } from '@/models';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+
 const URL_REVALIDATE = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/revalidate`;
 const CONFIG_REVALIDATE = {
   headers: {

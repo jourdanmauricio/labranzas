@@ -16,6 +16,7 @@ import AccordionItem from './components/AccordionItem';
 import Variations from './components/Variations/Variations';
 import { productValidate } from '@/utils/validate';
 import Order from './components/Order';
+import Slug from './components/Slug';
 
 const Product = () => {
   const [toggleState, setToggleState] = useState<number | null>(null);
@@ -54,6 +55,15 @@ const Product = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
+          <div className="w-full sm:w-3/4">
+            <Slug formik={formik} />
+          </div>
+          <div className="w-full sm:w-1/4">
+            <Order formik={formik} />
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4">
           <div className="w-full sm:w-1/2">
             <Category formik={formik} />
           </div>
@@ -78,15 +88,6 @@ const Product = () => {
           <div className="w-full sm:w-1/2">
             <Quantity formik={formik} />
           </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="w-full sm:w-1/2">
-            <Order formik={formik} />
-          </div>
-          {/* <div className="w-full sm:w-1/2">
-            <Quantity formik={formik} />
-          </div> */}
         </div>
 
         <ul className="list-none">

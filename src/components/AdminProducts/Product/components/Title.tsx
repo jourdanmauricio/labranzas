@@ -4,13 +4,13 @@ interface IProps {
 const Title = ({ formik }: IProps) => {
   return (
     <div className="w-full">
-      <label className="label-form" htmlFor="ml-id">
+      <label className="label-form" htmlFor="title">
         Título
       </label>
       <input
         className="input-form"
         type="text"
-        id="ml-id"
+        id="title"
         {...formik.getFieldProps('title')}
       />
       {formik.errors.title && formik.touched.title && (

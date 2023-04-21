@@ -191,10 +191,19 @@ const ProductsProvider = ({ children }) => {
         productMl.category_id
       );
 
+      const maxSku = Math.max(
+        ...products
+          .filter((product) => product.sku.includes('ML-'))
+          .map((product) => parseInt(product.sku.split('-')[1]))
+      );
+
+      const sku = maxSku === -Infinity ? 'ML-1' : `ML-${maxSku + 1}`;
+
       const newProduct = await productService.createFromMl(
         productMl,
         categoria.id,
-        products.length + 1
+        products.length + 1,
+        sku
       );
       dispatch({ type: ACTIONS.ADD_PRODUCT, payload: newProduct });
 

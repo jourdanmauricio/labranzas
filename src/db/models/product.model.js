@@ -25,6 +25,10 @@ const ProductSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  slug: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   sku: {
     type: DataTypes.STRING(30),
     allowNull: false,

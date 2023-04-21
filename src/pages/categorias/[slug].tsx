@@ -18,11 +18,11 @@ const CategoryPage = ({ products, categories, category_id }: IProps) => {
   const [searchText, setSearchText] = useState('');
   const [order, setOrder] = useState('Ordenar por');
 
-  // const filterProducts: IProduct[] = products.filter(
-  //   (item) =>
-  //     item.title.toLowerCase().includes(searchText.toLowerCase()) ||
-  //     item.sku.toLowerCase().includes(searchText.toLowerCase())
-  // );
+  const filterProducts: IProduct[] = products.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchText.toLowerCase()) ||
+      item.sku.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   // const orderProducts: IProduct[] = filterProducts.sort((a, b) => {
   //   switch (order) {
@@ -72,7 +72,7 @@ const CategoryPage = ({ products, categories, category_id }: IProps) => {
             // feature={catName}
           />
           <div className="text-center p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 place-items-center">
-            {products.map((product) => (
+            {filterProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

@@ -36,6 +36,7 @@ export class ProductHttpService {
       })),
       ml_id: productMl.id,
       sku: '',
+      slug: productMl.title.trim().replaceAll(' ', '-').toLowerCase(),
       status: 'under_review',
       category_id,
       pictures,
@@ -98,13 +99,16 @@ export class ProductHttpService {
       `/items?ids=${ml_id}&attributes=attributes,available_quantity,category_id,condition,id,listing_type_id,permalink,pictures,price,sale_terms,secure_thumbnail,seller_id,sold_quantity,status,title,variations,video_id`
     );
 
-    const desc = await axiosMl.get(`/items/${ml_id}/description`);
-
-    const product = {
-      ...data[0].body,
-      description: desc.data.plain_text || '',
-    };
-    return product;
+    try {
+      const desc = await axiosMl.get(`/items/${ml_id}/description`);
+      return {
+        ...data[0].body,
+        description: desc.data.plain_text || '',
+      };
+    } catch (error) {
+      console.log('DESCCCCCCC', error);
+      return { ...data[0].body, description: '' };
+    }
   }
 
   // SERVICES
@@ -112,11 +116,11 @@ export class ProductHttpService {
   async createFromMl(
     productMl: IProductMl,
     category_id: number,
-    order: number
+    order: number,
+    sku: string
   ) {
-    console.log('ORDER', order);
     let product = await this.formatProduct(productMl, category_id);
-    product = { ...product, order };
+    product = { ...product, order, sku };
 
     const newProduct = await this.create(product);
     return newProduct;
