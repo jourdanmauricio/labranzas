@@ -10,7 +10,7 @@ export interface IProduct extends BaseModel {
   available_quantity: number;
   price: number;
   status: ProdStatus;
-  sold_quantity?: number;
+  sold_quantity: number;
   seller_id?: number;
   sku: string;
   order: number;
@@ -79,6 +79,7 @@ export interface IVariations {
   available_quantity: number;
   price: number;
   sku: string;
+  // order: number;
   sold_quantity: number;
   picture_ids: IPicture[];
 }

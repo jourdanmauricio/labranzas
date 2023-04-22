@@ -1,20 +1,21 @@
-import AppBar from '@/components/AppBar/AppBar';
-import SearchFilterOrder from '@/components/elements/SearchFilterOrder';
-import MainLayout from '@/layout/MainLayout';
-import { ICategory, IProduct } from '@/models';
 import Link from 'next/link';
 import { useState } from 'react';
+import MainLayout from '@/layout/MainLayout';
+import AppBar from '@/components/AppBar/AppBar';
+import SearchFilterOrder from '@/components/elements/SearchFilterOrder';
 import ProductCard from '@/components/elements/ProductCard';
+import { ICategory, IProduct } from '@/models';
+
 const CategoryService = require('@/db/services/category.service');
 const service = new CategoryService();
 
 interface IProps {
   products: IProduct[];
   categories: ICategory[];
-  category_id: number;
+  category: ICategory;
 }
 
-const CategoryPage = ({ products, categories, category_id }: IProps) => {
+const CategoryPage = ({ products, categories, category }: IProps) => {
   const [searchText, setSearchText] = useState('');
   const [order, setOrder] = useState('Ordenar por');
 
@@ -24,16 +25,16 @@ const CategoryPage = ({ products, categories, category_id }: IProps) => {
       item.sku.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  // const orderProducts: IProduct[] = filterProducts.sort((a, b) => {
-  //   switch (order) {
-  //     case 'INITIAL':
-  //       return filterProducts;
-  //     case 'MIN-VALUE':
-  //       return parseFloat(a.price) - parseFloat(b.price);
-  //     case 'MAX-VALUE':
-  //       return parseFloat(b.price) - parseFloat(a.price);
-  //   }
-  // });
+  const orderProducts = () => {
+    if (order === 'INITIAL') return filterProducts;
+    if (order === 'MIN-VALUE')
+      return filterProducts.sort((a, b) => +a.price - +b.price);
+    if (order === 'MAX-VALUE')
+      return filterProducts.sort((a, b) => +b.price - +a.price);
+    if (order === 'FEATURED')
+      return filterProducts.sort((a, b) => +b.sold_quantity - +a.sold_quantity);
+    return filterProducts;
+  };
 
   return (
     <MainLayout>
@@ -44,18 +45,18 @@ const CategoryPage = ({ products, categories, category_id }: IProps) => {
             <li className="h-12 my-4 border-t border-b flex justify-center items-center  border-gray-300">
               <span className="text-xl ">Categorías</span>
             </li>
-            {categories.map((category: ICategory) => (
+            {categories.map((cat: ICategory) => (
               <li
                 className={`hover:bg-gray-300 transition duration-300 ease-in-out ${
-                  category.id === category_id ? 'underline' : ''
+                  cat.id === category.id ? 'underline' : ''
                 }`}
-                key={category.id}
+                key={cat.id}
               >
                 <Link
                   className="p-2 block whitespace-nowrap"
-                  href={`/categorias/${category.slug}`}
+                  href={`/categorias/${cat.slug}`}
                 >
-                  {category.name} ({category.productsCount})
+                  {cat.name} ({cat.productsCount})
                 </Link>
               </li>
             ))}
@@ -64,15 +65,15 @@ const CategoryPage = ({ products, categories, category_id }: IProps) => {
         <main className="py-4 w-full">
           <SearchFilterOrder
             searchText={searchText}
-            setSearchText={setSearchText}
             order={order}
-            setOrder={setOrder}
             total={products.length}
-            // partial={filterProducts.length}
-            // feature={catName}
+            partial={filterProducts.length}
+            feature={category.name}
+            setSearchText={setSearchText}
+            setOrder={setOrder}
           />
           <div className="text-center p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 place-items-center">
-            {filterProducts.map((product) => (
+            {orderProducts().map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -99,7 +100,6 @@ export const getStaticProps = async ({
   }
 
   try {
-    console.log('getStaticProps SLUG');
     // Categories
     const responseCategories = await service.find();
     const respCategories = responseCategories.map((cat: any) => cat.dataValues);
@@ -116,11 +116,16 @@ export const getStaticProps = async ({
       (a: IProduct, b: IProduct) => a.order - b.order
     );
 
+    // Category
+    const category = categories.find(
+      (cat: ICategory) => cat.id === products[0].category_id
+    );
+
     return {
       props: {
         products: JSON.parse(JSON.stringify(products)),
         categories,
-        category_id: products[0].category_id,
+        category: category,
       },
     };
   } catch (error) {

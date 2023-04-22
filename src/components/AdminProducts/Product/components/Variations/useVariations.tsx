@@ -182,7 +182,7 @@ const useVariations = ({ formik }: IProps) => {
     },
     {
       name: 'Precio',
-      width: '110px',
+      width: '140px',
       cell: (row: IVariations) => (
         // <span>{row.price}</span>,
         <input

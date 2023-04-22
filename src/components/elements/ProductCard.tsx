@@ -1,4 +1,3 @@
-// import { Icon } from '@iconify/react';
 // import { useStore } from '@nanostores/react';
 // import {
 //   addFavoriteItem,
@@ -8,6 +7,8 @@
 // } from '@/stores/favorites';
 import { IProduct } from '@/models';
 import Image from 'next/image';
+import Link from 'next/link';
+import { FaEye, FaHeart } from 'react-icons/fa';
 
 interface IProps {
   product: IProduct;
@@ -28,32 +29,34 @@ const ProductCard = ({ product }: IProps) => {
   //       });
   // };
   return (
-    <div className="card">
+    <div className="card w-full max-w-sm">
       <div className="bg-white py-6 flex justify-center items-center">
         <Image
-          width={192}
-          height={192}
-          className="object-cover hover:scale-110 transition-all duration-500 ease-in-out transform"
+          width={230}
+          height={230}
+          className="object-cover hover:scale-105 transition-all duration-500 ease-in-out transform"
           src={product.thumbnail.replace('I', 'C')}
           alt=""
         />
       </div>
 
-      {/* <div className="absolute top-1 right-6 mt-5 flex flex-col gap-3">
-        <button onClick={handleClick} className="button-icon">
-          <Icon
+      <div className="absolute top-1 right-6 mt-5 flex flex-col gap-3">
+        <button className="button-icon">
+          {/* onClick={handleClick} */}
+          <FaHeart className="w-6 h-6 opacity-50" />
+          {/* <Icon
             className={`w-6 h-6 opacity-50 ${
               isFavorite(product.id) ? 'text-purple-500' : 'text-gray-400'
             }`}
-            icon="mdi:cards-heart"
-          />
+            icon="mdi:cards-heart" /> */}
         </button>
-        <button className="button-icon">
-          <Icon className="w-6 h-6 opacity-50" icon="mdi:eye" />
-        </button>
-      </div> */}
+        <Link href={`/productos/${product.slug}`} className="button-icon">
+          <FaEye className="w-6 h-6 opacity-50" />
+          {/* <Icon className="w-6 h-6 opacity-50" icon="mdi:eye" /> */}
+        </Link>
+      </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 px-3">
         <div className="flex items-center gap-2">
           <span className="badge">Stock ready</span>
           <span className="badge">Oficial store</span>
@@ -68,8 +71,8 @@ const ProductCard = ({ product }: IProps) => {
           <span className="discount-percent">20% off</span>
           <span>${product.price}</span>
         </div>
-        <button className="button-primary">Agregar al carrito</button>
       </div>
+      <button className="button-primary w-full mt-3">Agregar al carrito</button>
     </div>
   );
 };

@@ -133,7 +133,7 @@ a {
     @apply text-teal-500 hover:bg-teal-50;
   }
   .card {
-    @apply relative p-4 bg-gray-100 text-gray-900 min-h-[20rem] overflow-hidden;
+    @apply relative p-4  text-gray-900 min-h-[20rem] overflow-hidden;
   }
 
   .badge {
@@ -147,6 +147,9 @@ a {
   }
   .button-primary {
     @apply bg-gray-700/80 hover:bg-gray-700/90 px-2 py-2 rounded-md text-white tracking-wider transition;
+  }
+  .button-icon {
+    @apply w-8 h-8 flex justify-center items-center rounded-md bg-gray-300/60 hover:bg-gray-300/80 transition;
   }
 }
 

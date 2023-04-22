@@ -8,16 +8,28 @@ class ProductService {
     return newProduct;
   }
 
-  async find() {
-    console.log('FindAll Products');
-    const rta = await models.Product.findAll({
+  async find(field, value) {
+    console.log('Find Products');
+    const options = {
       // include: ['category'], , attributes: ['id', 'name']
       include: {
         as: 'category',
         model: models.Category,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'slug'],
       },
-    });
+      where: {},
+      // order: [[Sequelize.literal('productsCount'), 'DESC']],
+    };
+
+    if (field) {
+      options.where[field] = value;
+    }
+
+    const rta = await models.Product.findAll(options);
+
+    if (field) {
+      return rta[0];
+    }
     return rta;
   }
 

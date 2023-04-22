@@ -24,13 +24,13 @@ const Sku = ({ formik }: IProps) => {
 
   return (
     <div className="w-full">
-      <label className="label-form" htmlFor="ml-id">
+      <label className="label-form" htmlFor="sku">
         SKU
       </label>
       <input
         className="input-form"
         type="text"
-        id="ml-id"
+        id="sku"
         {...formik.getFieldProps('sku')}
         onChange={(e) => handleChange(e.target.value.trim())}
       />

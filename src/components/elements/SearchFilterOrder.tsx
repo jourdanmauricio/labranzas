@@ -1,25 +1,24 @@
-// import { Icon } from '@iconify/react';
 import { FaSearch } from 'react-icons/fa';
 
 interface IProps {
   searchText: string;
-  setSearchText: (searchText: string) => void;
   order: string;
-  setOrder: (order: string) => void;
   total: number;
-  // partial: number;
-  // feature: string;
+  partial: number;
+  feature: string;
+  setSearchText: (searchText: string) => void;
+  setOrder: (order: string) => void;
 }
 
 const SearchFilterOrder = ({
   searchText,
-  setSearchText,
   order,
-  setOrder,
   total,
-}: // partial,
-// feature,
-IProps) => {
+  partial,
+  feature,
+  setSearchText,
+  setOrder,
+}: IProps) => {
   return (
     <article className="h-12 p-1 sm:px-3 text-sm text-gray-700 flex items-center justify-between border-t border-b border-gray-300">
       <div className="flex justify-end items-center relative">
@@ -30,10 +29,6 @@ IProps) => {
           onChange={(e) => setSearchText(e.target.value)}
         />
         <FaSearch className="absolute text-lg right-0 w-8 rotate-90" />
-        {/* <Icon
-          icon="mdi:search"
-          className="absolute text-lg right-0 w-8 rotate-90"
-        /> */}
       </div>
       <div>
         <select
@@ -45,10 +40,11 @@ IProps) => {
           <option value="INITIAL">Ordenar por</option>
           <option value="MIN-VALUE">Menor precio</option>
           <option value="MAX-VALUE">Mayor precio</option>
+          <option value="FEATURED">Destacados</option>
         </select>
       </div>
       <p className="hidden sm:inline-block">
-        {/* {feature} {partial} de {total} */}
+        {feature}: {partial} de {total}
       </p>
     </article>
   );
