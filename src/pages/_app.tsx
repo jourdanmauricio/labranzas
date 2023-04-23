@@ -3,6 +3,7 @@ import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { localInterceptor } from '../services/localInterceptor';
 import NotificationProvider from '@/commons/Notifications/NotificationProvider';
+import { FavoritesProvider } from '@/context/FavoritesContext';
 
 import { Roboto, Poppins, Mulish } from 'next/font/google';
 
@@ -38,7 +39,9 @@ export default function App({ Component, pageProps }: AppProps) {
       `}</style>
       <SessionProvider session={pageProps.session}>
         <NotificationProvider>
-          <Component {...pageProps} />
+          <FavoritesProvider>
+            <Component {...pageProps} />
+          </FavoritesProvider>
         </NotificationProvider>
       </SessionProvider>
     </>

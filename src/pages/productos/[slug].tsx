@@ -1,4 +1,5 @@
 import AppBar from '@/components/AppBar/AppBar';
+import { trad } from '@/config/helpTraduccion';
 import MainLayout from '@/layout/MainLayout';
 import { ICategory, IPicture, IProduct } from '@/models';
 import Image from 'next/image';
@@ -19,30 +20,37 @@ const ProductDetail = ({ categories, product }: IProps) => {
   return (
     <MainLayout>
       <AppBar categories={categories} />
-      {typeof JSON.parse(JSON.stringify(product.attributes))}
-      {product.attributes[0].name}
-      <div className="flex flex-col m-6 gap-2">
-        <div className="relative h-[300px] w-[300px] sm:h-[400px] sm:w-[400px]">
-          <Image
-            src={product.pictures[0].secure_url}
-            // className="object-cover hover:scale-105 transition-all duration-500 ease-in-out transform"
-            className="object-contain block"
-            alt={product.title}
-            fill
-          />
+      <div className="flex">
+        <div className="flex flex-col m-6 gap-2">
+          <div className="relative h-[300px] w-[300px] sm:h-[400px] sm:w-[400px]">
+            <Image
+              src={product.pictures[0].secure_url}
+              // className="object-cover hover:scale-105 transition-all duration-500 ease-in-out transform"
+              className="object-contain block"
+              alt={product.title}
+              fill
+            />
+          </div>
+          <div className="max-w-[400px] flex-wrap flex justify-between gap-1 ">
+            {product.pictures.map((pic: IPicture) => (
+              <div key={pic.id} className="relative mx-6 h-[80px] w-[80px]">
+                <Image
+                  src={pic.secure_url}
+                  // className="object-cover hover:scale-105 transition-all duration-500 ease-in-out transform"
+                  className="object-contain"
+                  alt={product.title}
+                  fill
+                />
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex">
-          {product.pictures.map((pic: IPicture) => (
-            <div key={pic.id} className="relative mx-6 h-[50px] w-[50px]">
-              <Image
-                src={pic.secure_url}
-                // className="object-cover hover:scale-105 transition-all duration-500 ease-in-out transform"
-                className="object-contain"
-                alt={product.title}
-                fill
-              />
-            </div>
-          ))}
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold pt-20 pb-8">{product.title}</h1>
+          <span className="text-sm text-gray-500">
+            {trad(product.condition)} | {product.available_quantity} vendidos
+          </span>
+          <p className="text-xl py-2">${product.price}</p>
         </div>
       </div>
     </MainLayout>

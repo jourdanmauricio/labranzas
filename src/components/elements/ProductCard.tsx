@@ -1,33 +1,36 @@
-// import { useStore } from '@nanostores/react';
-// import {
-//   addFavoriteItem,
-//   favoritesItems,
-//   isFavorite,
-//   removeFavoriteItem,
-// } from '@/stores/favorites';
 import { IProduct } from '@/models';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useContext, useEffect, useState } from 'react';
 import { FaEye, FaHeart } from 'react-icons/fa';
+import FavoritesContext from '@/context/FavoritesContext';
 
 interface IProps {
   product: IProduct;
 }
 
 const ProductCard = ({ product }: IProps) => {
-  // const favorites = useStore(favoritesItems);
+  const [color, setColor] = useState('text-gray-400');
+  const { isFavorite, delFavorite, addFavorite } = useContext(FavoritesContext);
 
-  // const handleClick = () => {
-  //   isFavorite(product.id)
-  //     ? removeFavoriteItem(product.id)
-  //     : addFavoriteItem({
-  //         id: product.id,
-  //         title: product.title,
-  //         price: product.price,
-  //         seller_custom_field: product.seller_custom_field,
-  //         thumbnail: product.thumbnail,
-  //       });
-  // };
+  useEffect(() => {
+    isFavorite(product.id)
+      ? setColor('text-purple-500')
+      : setColor('text-gray-400');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFavorite(product.id)]);
+
+  const handleClick = () => {
+    isFavorite(product.id)
+      ? delFavorite(product.id)
+      : addFavorite({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          seller_custom_field: product.sku,
+          thumbnail: product.thumbnail,
+        });
+  };
   return (
     <div className="card w-full max-w-sm">
       <div className="bg-white py-6 flex justify-center items-center">
@@ -42,13 +45,17 @@ const ProductCard = ({ product }: IProps) => {
 
       <div className="absolute top-1 right-6 mt-5 flex flex-col gap-3">
         <button className="button-icon">
-          {/* onClick={handleClick} */}
-          <FaHeart className="w-6 h-6 opacity-50" />
-          {/* <Icon
+          {/* <FaHeart
+            onClick={handleClick}
             className={`w-6 h-6 opacity-50 ${
               isFavorite(product.id) ? 'text-purple-500' : 'text-gray-400'
             }`}
-            icon="mdi:cards-heart" /> */}
+          /> */}
+
+          <FaHeart
+            onClick={handleClick}
+            className={`w-6 h-6 opacity-50 ${color}`}
+          />
         </button>
         <Link href={`/productos/${product.slug}`} className="button-icon">
           <FaEye className="w-6 h-6 opacity-50" />

@@ -134,7 +134,7 @@ const ProductsProvider = ({ children }) => {
         message: 'Producto creado',
       });
     } catch (error) {
-      console.log('ERROR CONTEXT ', err);
+      console.log('ERROR CONTEXT ', error);
       dispatchNotif({
         type: 'Error',
         message: 'Error creando el producto',
@@ -155,7 +155,7 @@ const ProductsProvider = ({ children }) => {
         message: 'Producto modificado',
       });
     } catch (error) {
-      console.log('ERROR CONTEXT ', err);
+      console.log('ERROR CONTEXT ', error);
       dispatchNotif({
         type: 'Error',
         message: 'Error modificando el producto',
