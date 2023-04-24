@@ -27,7 +27,8 @@ const ProductCard = ({ product }: IProps) => {
           id: product.id,
           title: product.title,
           price: product.price,
-          seller_custom_field: product.sku,
+          sku: product.sku,
+          slug: product.slug,
           thumbnail: product.thumbnail,
         });
   };

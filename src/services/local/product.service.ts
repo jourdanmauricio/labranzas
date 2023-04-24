@@ -106,7 +106,6 @@ export class ProductHttpService {
         description: desc.data.plain_text || '',
       };
     } catch (error) {
-      console.log('DESCCCCCCC', error);
       return { ...data[0].body, description: '' };
     }
   }

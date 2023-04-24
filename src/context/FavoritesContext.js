@@ -3,6 +3,7 @@ import { useState } from 'react';
 const FavoritesContext = createContext();
 
 const FavoritesProvider = ({ children }) => {
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [favorites, setFavorites] = useState(() => {
     return typeof window !== 'undefined'
       ? JSON.parse(window.localStorage.getItem('favorites')) ?? []
@@ -11,6 +12,8 @@ const FavoritesProvider = ({ children }) => {
 
   const value = {
     favorites,
+    isFavoritesOpen,
+    showFavorites: () => setIsFavoritesOpen(!isFavoritesOpen),
     addFavorite: (product) => {
       const newFavorites = [...favorites, product];
       setFavorites(newFavorites);

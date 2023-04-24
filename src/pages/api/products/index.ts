@@ -53,7 +53,7 @@ export default async function handler(
 
       await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
 
-      axios.all(requests).then((responses) => {
+      axios.all(requests).then(() => {
         // console.log('responses', responses);
       });
 

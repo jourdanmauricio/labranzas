@@ -1,16 +1,20 @@
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import BarMenuProfile from '../BarMenuProfile/BarMenuProfile';
+
 import Image from 'next/image';
 import {
   FaEnvelope,
   FaFacebook,
   FaInstagramSquare,
+  FaShoppingCart,
   FaTwitterSquare,
   FaWhatsappSquare,
 } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { ICategory } from '@/models';
+import FavoritesButton from './FavoritesButton';
+import FavoritesFlyout from '../Favorites/FavoritesFlyout';
 
 interface IProps {
   categories: ICategory[];
@@ -100,7 +104,6 @@ const AppBar = ({ categories }: IProps) => {
           {/* )} */}
         </div>
       </div>
-
       <div className="sticky top-0 z-50 flex justify-between items-center gap-5 px-10 bg-gradient-to-b from-purple-50 to-purple-200 text-gray-700 p-2 shadow-[0_4px_9px_0px_rgba(0,0,0,0.5)]">
         <Link className="text-sky-600 hover:text-sky-700 text-2xl" href={'/'}>
           Labranzas
@@ -161,20 +164,12 @@ const AppBar = ({ categories }: IProps) => {
             <Link href="/">CONTACTO</Link>
           </li>
         </ul>
-        <div className="flex gap-4">
-          <Image
-            src="/assets/icons/favorite.svg"
-            alt="Open cart"
-            width={20}
-            height={20}
-          />
+        <div className="flex gap-8">
+          <FavoritesButton />
 
-          <Image
-            src="/assets/icons/cart.svg"
-            alt="Open cart"
-            width={20}
-            height={20}
-          />
+          <div className="relative hover:bg-pink-200 p-2 rounded-full cursor-pointer">
+            <FaShoppingCart className="text-teal-500 text-xl" />
+          </div>
           {session?.user ? (
             <BarMenuProfile />
           ) : (
@@ -195,6 +190,7 @@ const AppBar = ({ categories }: IProps) => {
           )}
         </div>
       </div>
+      <FavoritesFlyout />
     </>
   );
 };

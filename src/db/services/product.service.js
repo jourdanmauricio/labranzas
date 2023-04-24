@@ -1,5 +1,6 @@
-// const boom = require('@hapi/boom');
 const { models } = require('@/db/config/sequelize');
+// const boom = require('@hapi/boom');
+// const { models } = require('@/db/config/sequelize');
 
 class ProductService {
   async create(data) {
@@ -10,25 +11,36 @@ class ProductService {
 
   async find(field, value) {
     console.log('Find Products');
-    const options = {
-      // include: ['category'], , attributes: ['id', 'name']
+    let options = {
       include: {
         as: 'category',
         model: models.Category,
         attributes: ['id', 'name', 'slug'],
       },
       where: {},
-      // order: [[Sequelize.literal('productsCount'), 'DESC']],
     };
 
     if (field) {
-      options.where[field] = value;
+      // Mas vendidos
+      if (field === 'best-selling') {
+        options = {
+          ...options,
+          order: [['sold_quantity', 'DESC']],
+          limit: value ?? 6,
+        };
+      } else {
+        options.where[field] = value;
+      }
     }
 
     const rta = await models.Product.findAll(options);
 
     if (field) {
-      return rta[0];
+      if (field !== 'best-selling') {
+        return rta[0];
+      } else {
+        return rta;
+      }
     }
     return rta;
   }
