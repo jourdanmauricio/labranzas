@@ -5,7 +5,7 @@ import Modal from '@/commons/Modal/Modal';
 import { ICategory, CloudinaryImage, ICreateIMlCatDetailDto } from '@/models';
 import SearchCategory from '@/components/AdminCategories/SearchCategory/SearchCategory';
 import AddPicture from '@/components/AddPicture/AddPicture';
-import { categoryValidate } from '@/utils/validate';
+import { categoryValidate } from '@/utils';
 import { FaSearch } from 'react-icons/fa';
 
 interface Iprops {

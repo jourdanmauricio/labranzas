@@ -1,6 +1,7 @@
 // import AppBar from '@/components/AppBar/AppBar';
 import Head from 'next/head';
 import { ReactNode } from 'react';
+import Footer from '@/components/Footer/Footer';
 
 interface IProps {
   children: ReactNode;
@@ -19,7 +20,9 @@ const MainLayout = ({ children }: IProps) => {
 
         {/* <AppBar /> */}
 
-        <main className="h-screen">{children}</main>
+        <main>{children}</main>
+
+        <Footer />
       </div>
     </>
   );

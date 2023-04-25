@@ -6,7 +6,7 @@ import { HiAtSymbol, HiFingerPrint } from 'react-icons/hi';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useFormik } from 'formik';
-import { loginValidate } from '@/utils/validate';
+import { loginValidate } from '@/utils';
 import { useRouter } from 'next/router';
 import { Url } from 'next/dist/shared/lib/router/router';
 import AuthLayout from '@/components/AuthLayout/AuthLayout';

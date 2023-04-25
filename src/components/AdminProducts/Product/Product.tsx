@@ -14,7 +14,7 @@ import Images from './components/Images';
 import Attributes from './components/Attributes';
 import AccordionItem from './components/AccordionItem';
 import Variations from './components/Variations/Variations';
-import { productValidate } from '@/utils/validate';
+import { productValidate } from '@/utils';
 import Order from './components/Order';
 import Slug from './components/Slug';
 

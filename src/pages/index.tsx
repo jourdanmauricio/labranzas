@@ -18,7 +18,7 @@ interface IProps {
 const services = [
   {
     id: 1,
-    image: '/assets/icons/truck.png',
+    image: '/assets/icons/truck-1.png',
     alt_image: 'Envíos a todo el país',
     title: 'Envíos a todo el país',
     text: 'Envios Super Economicos a CABA y GBA. Tambien enviamos a todo el pais con codigo de seguimiento.',
@@ -50,7 +50,7 @@ export default function HomePage({ categories, bestSellers }: IProps) {
           showButtons={true}
         />
         {/* Servicios */}
-        <section className="bg-slate-50 my-8">
+        <section className="bg-slate-50 my-16">
           <div className="mx-auto flex justify-center items-center gap-8 flex-row flex-wrap">
             {services.map((sevice) => (
               <div

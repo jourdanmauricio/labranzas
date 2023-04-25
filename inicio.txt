@@ -54,7 +54,7 @@ Agregar al package.json
 "migrations:delete": "sequelize-cli db:migrate:undo:all",
 "seeders:generate": "sequelize seed:generate --name",
 "seeders:runAll": "sequelize-cli db:seed:all",
-"seeders:run": "sequelize-cli db:seed --seed 20221130125351-settings.js"
+sequelize-cli db:seed --seed 20221130125351-settings.js
 
 $ npm run migrations:run
 $ npm run seeders:runAll
