@@ -1,7 +1,6 @@
-import AppBar from '@/components/AppBar/AppBar';
 import { trad } from '@/config/helpTraduccion';
 import MainLayout from '@/layout/MainLayout';
-import { ICategory, IPicture, IProduct } from '@/models';
+import { ICategory, IContact, IPicture, IProduct } from '@/models';
 import Image from 'next/image';
 
 const CategoryService = require('@/db/services/category.service');
@@ -10,16 +9,19 @@ const categoryService = new CategoryService();
 const ProductService = require('@/db/services/product.service');
 const productService = new ProductService();
 
+const SettingService = require('@/db/services/setting.service');
+const settingService = new SettingService();
+
 interface IProps {
   product: IProduct;
   categories: ICategory[];
+  contact: IContact;
 }
 
-const ProductDetail = ({ categories, product }: IProps) => {
+const ProductDetail = ({ categories, product, contact }: IProps) => {
   console.log('PRODUCT', product);
   return (
-    <MainLayout>
-      <AppBar categories={categories} />
+    <MainLayout categories={categories} contact={contact}>
       <div className="flex">
         <div className="flex flex-col m-6 gap-2">
           <div className="relative h-[300px] w-[300px] sm:h-[400px] sm:w-[400px]">
@@ -94,10 +96,21 @@ export const getStaticProps = async ({
     product.created_at = Math.floor(product.created_at / 1000);
     product.updated_at = Math.floor(product.updated_at / 1000);
 
+    // contactData;
+    const responseContact = await settingService.find('type', 'contactData');
+    const respContact = responseContact.map(
+      (setting: any) => setting.dataValues
+    );
+    const contact = respContact.reduce(
+      (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
+      {}
+    );
+
     return {
       props: {
         product,
         categories,
+        contact,
       },
     };
   } catch (error) {

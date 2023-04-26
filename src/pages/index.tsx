@@ -1,11 +1,14 @@
-import Slider from '@/components/elements/Slider';
+import Slider from '@/commons/Slider/Slider';
 import MainLayout from '@/layout/MainLayout';
-import AppBar from '@/components/AppBar/AppBar';
-import { ICategory, IProduct } from '@/models';
+import { ICategory, IContact, IMetadata, IProduct } from '@/models';
 import ProductCard from '@/components/elements/ProductCard';
 import Image from 'next/image';
+
+const SettingService = require('@/db/services/setting.service');
+const settingService = new SettingService();
+
 const CategoryService = require('@/db/services/category.service');
-const service = new CategoryService();
+const categoryService = new CategoryService();
 
 const ProductService = require('@/db/services/product.service');
 const productService = new ProductService();
@@ -13,6 +16,8 @@ const productService = new ProductService();
 interface IProps {
   categories: ICategory[];
   bestSellers: IProduct[];
+  metadata: IMetadata;
+  contact: IContact;
 }
 
 const services = [
@@ -39,16 +44,40 @@ const services = [
   },
 ];
 
-export default function HomePage({ categories, bestSellers }: IProps) {
+const imagesCarousel = [
+  {
+    id: 1,
+    image: 'slider-1_opt.jpg',
+    alt_image: 'Super descuentos abonando en efectivo',
+    text: '15% off abonando en efectivo / transferencia',
+    order: 1,
+  },
+  {
+    id: 2,
+    image: 'slider-2_opt.jpg',
+    alt_image: 'Envíos',
+    text: 'Envíos a todo el país',
+    order: 2,
+  },
+  {
+    id: 3,
+    image: 'slider-3_opt.jpg',
+    alt_image: 'Centos de mesa y souvenirs',
+    text: 'Centros de mesa y souvenirs para que tu evento sea único',
+    order: 3,
+  },
+];
+
+export default function HomePage({
+  categories,
+  bestSellers,
+  metadata,
+  contact,
+}: IProps) {
   return (
     <>
-      <MainLayout>
-        <AppBar categories={categories} />
-        <Slider
-          images={['slider-1_opt.jpg', 'slider-2_opt.jpg', 'slider-3_opt.jpg']}
-          autoPlay={true}
-          showButtons={true}
-        />
+      <MainLayout categories={categories} contact={contact}>
+        <Slider images={imagesCarousel} autoPlay={true} showButtons={true} />
         {/* Servicios */}
         <section className="bg-slate-50 my-16">
           <div className="mx-auto flex justify-center items-center gap-8 flex-row flex-wrap">
@@ -77,7 +106,7 @@ export default function HomePage({ categories, bestSellers }: IProps) {
           </div>
         </section>
         {/* Los más vendidos */}
-        <div className="relative my-10 mx-20">
+        <div className="relative my-10 mx-5 sm:mx-20">
           <span className="absolute -top-3 left-3 bg-slate-50 px-2">
             Los más vendidos
           </span>
@@ -94,8 +123,28 @@ export default function HomePage({ categories, bestSellers }: IProps) {
 
 export async function getStaticProps() {
   try {
+    // Metadata
+    const responseMatadata = await settingService.find('type', 'metaData');
+    const respMatadata = responseMatadata.map(
+      (setting: any) => setting.dataValues
+    );
+    const metadata = respMatadata.reduce(
+      (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
+      {}
+    );
+
+    // contactData;
+    const responseContact = await settingService.find('type', 'contactData');
+    const respContact = responseContact.map(
+      (setting: any) => setting.dataValues
+    );
+    const contact = respContact.reduce(
+      (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
+      {}
+    );
+
     // Categories
-    const responseCategories = await service.find();
+    const responseCategories = await categoryService.find();
     const respCategories = responseCategories.map((cat: any) => cat.dataValues);
     const categories = respCategories.filter(
       (cat: ICategory) => cat.productsCount > 0
@@ -109,6 +158,8 @@ export async function getStaticProps() {
       props: {
         categories,
         bestSellers: JSON.parse(JSON.stringify(bestSellers)),
+        metadata,
+        contact,
       },
     };
   } catch (error) {

@@ -22,7 +22,7 @@ const FavoritesFlyout = () => {
 
   return (
     <aside
-      className={`absolute z-10 p-2 bg-gray-50 top-18 right-0 border-2 h-screen overflow-y-auto transition duration-300 ease-in-out origin-top-right ${
+      className={`absolute z-10 p-2 bg-gray-50 top-[53px] right-0 border-2 h-screen overflow-y-auto transition duration-300 ease-in-out origin-top-right ${
         isFavoritesOpen ? 'scale-100' : 'scale-0'
       }`}
     >

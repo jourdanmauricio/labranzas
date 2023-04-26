@@ -1,19 +1,22 @@
 import { useContext, useEffect, useState } from 'react';
 import FavoriteItem from '@/components/Favorites/FavoriteItem';
-import { ICategory, IProduct } from '@/models';
+import { ICategory, IContact, IProduct } from '@/models';
 import MainLayout from '@/layout/MainLayout';
-import AppBar from '@/components/AppBar/AppBar';
 import FavoritesContext from '@/context/FavoritesContext';
 import SearchFilterOrder from '@/components/elements/SearchFilterOrder';
 
 const CategoryService = require('@/db/services/category.service');
 const service = new CategoryService();
 
+const SettingService = require('@/db/services/setting.service');
+const settingService = new SettingService();
+
 interface IProps {
   categories: ICategory[];
+  contact: IContact;
 }
 
-const Favoritos = ({ categories }: IProps) => {
+const Favoritos = ({ categories, contact }: IProps) => {
   const [_favorites, _setFavorites] = useState([]);
   const { favorites } = useContext(FavoritesContext);
   const [searchText, setSearchText] = useState('');
@@ -42,9 +45,7 @@ const Favoritos = ({ categories }: IProps) => {
 
   return (
     <>
-      <MainLayout>
-        <AppBar categories={categories} />
-
+      <MainLayout categories={categories} contact={contact}>
         <h1 className="pt-10 text-3xl text-gray-800 text-center">Favoritos</h1>
 
         <section className="p-4 sm:p-10">
@@ -83,9 +84,20 @@ export async function getStaticProps() {
       (cat: ICategory) => cat.productsCount > 0
     );
 
+    // contactData;
+    const responseContact = await settingService.find('type', 'contactData');
+    const respContact = responseContact.map(
+      (setting: any) => setting.dataValues
+    );
+    const contact = respContact.reduce(
+      (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
+      {}
+    );
+
     return {
       props: {
         categories,
+        contact,
       },
     };
   } catch (error) {

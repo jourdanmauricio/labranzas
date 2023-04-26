@@ -17,12 +17,10 @@ module.exports = {
         type: {
           allowNull: false,
           type: DataTypes.STRING,
-          //unique: 'settings_unique',
         },
         feature: {
           allowNull: false,
           type: DataTypes.STRING,
-          // unique: 'settings_unique',
         },
         value: {
           allowNull: false,

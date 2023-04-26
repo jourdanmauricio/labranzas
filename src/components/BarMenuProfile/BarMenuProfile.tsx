@@ -39,8 +39,12 @@ const BarMenuProfile = () => {
           className="flex items-center text-sm text-gray-900 hover:text-blue-600 md:mr-0"
           type="button"
         >
-          {session?.user.name}
+          <span className="hidden sm:block">{session?.user.name}</span>
+          <span className="block sm:hidden bg-yellow-200 p-2 rounded-full">
+            {session?.user.name?.charAt(0).toUpperCase()}
+          </span>
           <Image
+            className="hidden sm:block"
             src="/assets/icons/dropdown.svg"
             alt="dropdown icon"
             width={20}
@@ -53,7 +57,7 @@ const BarMenuProfile = () => {
       <div
         className={`${
           showPersonalMenu ? 'block' : 'hidden'
-        } absolute w-fit  top-10 z-10 divide-y shadow bg-slate-50 divide-slate-200`}
+        } absolute w-fit top-10 right-0 sm:right-12 z-10 divide-y shadow bg-slate-50 divide-slate-200`}
       >
         <ul className="py-2 text-sm text-gray-600">
           <li>

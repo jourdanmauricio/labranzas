@@ -4,3 +4,4 @@ export * from './formValidate/product.validate';
 export * from './formValidate/category.validate';
 export * from './formValidate/login.validate';
 export * from './formValidate/register.validate';
+export * from './formValidate/suscribe.validate';

@@ -1,13 +1,16 @@
-// import AppBar from '@/components/AppBar/AppBar';
+import AppBar from '@/components/AppBar/AppBar';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import Footer from '@/components/Footer/Footer';
+import { ICategory, IContact } from '@/models';
 
 interface IProps {
   children: ReactNode;
+  categories: ICategory[];
+  contact: IContact;
 }
 
-const MainLayout = ({ children }: IProps) => {
+const MainLayout = ({ children, categories, contact }: IProps) => {
   return (
     <>
       <div className="min-h-full">
@@ -18,11 +21,11 @@ const MainLayout = ({ children }: IProps) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        {/* <AppBar /> */}
+        <AppBar categories={categories} contact={contact} />
 
         <main>{children}</main>
 
-        <Footer />
+        <Footer contact={contact} />
       </div>
     </>
   );

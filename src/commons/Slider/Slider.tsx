@@ -2,8 +2,16 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
+type image = {
+  id: number;
+  image: string;
+  alt_image: string;
+  text: string;
+  order: number;
+};
+
 interface IProps {
-  images: string[];
+  images: image[];
   autoPlay?: boolean;
   showButtons?: boolean;
 }
@@ -22,7 +30,7 @@ const Slider = ({ images, autoPlay = true, showButtons = true }: IProps) => {
     }
   });
 
-  const selectNewImage = (index: number, images: string[], next = true) => {
+  const selectNewImage = (index: number, images: image[], next = true) => {
     setLoaded(false);
 
     setTimeout(() => {
@@ -54,13 +62,13 @@ const Slider = ({ images, autoPlay = true, showButtons = true }: IProps) => {
           loaded ? 'opacity-1' : 'opacity-40'
         }`}
         onLoad={() => setLoaded(true)}
-        src={`/assets/images/${selectedImage}`}
-        alt="Slider Labranzas"
+        src={`/assets/images/${selectedImage.image}`}
+        alt={selectedImage.alt_image}
         width={1440}
         height={600}
       />
-      <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-purple-100 bg-opacity-50 text-[1.5rem] sm:text-[2rem] text-purple-800 p-5 text-center">
-        15% off abonando en efectivo / transferencia
+      <p className="absolute leading-none	top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-purple-100 bg-opacity-50 text-[1.2rem] sm:text-[2rem] text-purple-800 p-5 text-center">
+        {selectedImage.text}
       </p>
       {showButtons && (
         <div className="absolute top-0 w-full h-full flex items-center justify-between">

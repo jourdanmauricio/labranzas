@@ -1,0 +1,69 @@
+const { models, Sequelize } = require('@/db/config/sequelize');
+
+class suscibersService {
+  async create(data) {
+    console.log('Create Suscriber');
+    const newSuscriber = await models.Suscriber.create(data);
+    console.log('newSuscriber', newSuscriber);
+    return newSuscriber;
+  }
+
+  // async find(field, value) {
+  //   const options = {
+  //     where: {},
+  //     // order: [[Sequelize.literal('productsCount'), 'DESC']],
+  //   };
+
+  //   switch (field) {
+  //     case 'cat_prods':
+  //       options.include = ['products'];
+  //       options.where['slug'] = value;
+  //       break;
+  //     case 'ml_id':
+  //     case 'name':
+  //       options.where[field] = value;
+  //       break;
+  //     case undefined:
+  //       options.attributes = {
+  //         include: [
+  //           [
+  //             Sequelize.literal(
+  //               `(SELECT COUNT(*) FROM "product" WHERE "product"."category_id" = "category"."id")`
+  //             ),
+  //             'productsCount',
+  //           ],
+  //         ],
+  //       };
+  //       break;
+  //   }
+
+  //   const rta = await models.Category.findAll(options);
+
+  //   if (field !== undefined) {
+  //     return rta[0];
+  //   }
+  //   return rta;
+  // }
+
+  // async findOne(id) {
+  //   const category = await models.Category.findByPk(id);
+  //   if (!category) {
+  //     throw 'Not found';
+  //   }
+  //   return category;
+  // }
+
+  // async update(id, changes) {
+  //   const user = await this.findOne(id);
+  //   const rta = await user.update(changes);
+  //   return rta;
+  // }
+
+  // async delete(id) {
+  //   const category = await this.findOne(id);
+  //   await category.destroy();
+  //   return { id };
+  // }
+}
+
+module.exports = suscibersService;

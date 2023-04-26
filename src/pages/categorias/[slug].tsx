@@ -1,21 +1,24 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import MainLayout from '@/layout/MainLayout';
-import AppBar from '@/components/AppBar/AppBar';
 import SearchFilterOrder from '@/components/elements/SearchFilterOrder';
 import ProductCard from '@/components/elements/ProductCard';
-import { ICategory, IProduct } from '@/models';
+import { ICategory, IContact, IProduct } from '@/models';
 
 const CategoryService = require('@/db/services/category.service');
 const service = new CategoryService();
+
+const SettingService = require('@/db/services/setting.service');
+const settingService = new SettingService();
 
 interface IProps {
   products: IProduct[];
   categories: ICategory[];
   category: ICategory;
+  contact: IContact;
 }
 
-const CategoryPage = ({ products, categories, category }: IProps) => {
+const CategoryPage = ({ products, categories, category, contact }: IProps) => {
   const [searchText, setSearchText] = useState('');
   const [order, setOrder] = useState('Ordenar por');
 
@@ -37,8 +40,7 @@ const CategoryPage = ({ products, categories, category }: IProps) => {
   };
 
   return (
-    <MainLayout>
-      <AppBar categories={categories} />
+    <MainLayout categories={categories} contact={contact}>
       <section className="flex px-2">
         <aside className="hidden text-sm tracking-wider sm:block w-fit max-w-[240px] border-r">
           <ul>
@@ -121,11 +123,22 @@ export const getStaticProps = async ({
       (cat: ICategory) => cat.id === products[0].category_id
     );
 
+    // contactData;
+    const responseContact = await settingService.find('type', 'contactData');
+    const respContact = responseContact.map(
+      (setting: any) => setting.dataValues
+    );
+    const contact = respContact.reduce(
+      (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
+      {}
+    );
+
     return {
       props: {
         products: JSON.parse(JSON.stringify(products)),
         categories,
-        category: category,
+        category,
+        contact,
       },
     };
   } catch (error) {

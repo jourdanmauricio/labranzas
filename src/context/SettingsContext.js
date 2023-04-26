@@ -93,7 +93,6 @@ const SettingsProvider = ({ children }) => {
       return dataType;
     },
     handleUpdSettings: async (values) => {
-      console.log('values', values);
       for (const property in values) {
         let found = settings.find(
           (setting) =>
@@ -101,7 +100,6 @@ const SettingsProvider = ({ children }) => {
         );
         if (found) {
           found = { ...found, value: values[property] };
-          console.log('UPD');
           await handleUpdSetting(found);
         }
       }
