@@ -1,12 +1,22 @@
 'use client';
 import Button from '@/components/elements/Button';
-
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { IUser } from '@/models';
+import { ICategory, IContact, IUser } from '@/models';
 import MainLayout from '@/layout/MainLayout';
 
-const User = () => {
+const SettingService = require('@/db/services/setting.service');
+const settingService = new SettingService();
+
+const CategoryService = require('@/db/services/category.service');
+const categoryService = new CategoryService();
+
+interface IProps {
+  categories: ICategory[];
+  contact: IContact;
+}
+
+const User = ({ categories, contact }: IProps) => {
   const { data: session } = useSession();
   const [userData, setUserData] = useState<IUser>();
 
@@ -27,7 +37,7 @@ const User = () => {
     setUserData(data);
   };
   return (
-    <MainLayout>
+    <MainLayout categories={categories} contact={contact}>
       <div className="px-10">
         <p className="flex justify-center items-center p-5 text-sky-500 text-lg font-bold">
           This is user Panel
@@ -47,3 +57,33 @@ const User = () => {
 };
 
 export default User;
+
+export async function getStaticProps() {
+  try {
+    // contactData;
+    const responseContact = await settingService.find('type', 'contactData');
+    const respContact = responseContact.map(
+      (setting: any) => setting.dataValues
+    );
+    const contact = respContact.reduce(
+      (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
+      {}
+    );
+
+    // Categories
+    const responseCategories = await categoryService.find();
+    const respCategories = responseCategories.map((cat: any) => cat.dataValues);
+    const categories = respCategories.filter(
+      (cat: ICategory) => cat.productsCount > 0
+    );
+
+    return {
+      props: {
+        categories,
+        contact,
+      },
+    };
+  } catch (error) {
+    console.log('ERROR', error);
+  }
+}
