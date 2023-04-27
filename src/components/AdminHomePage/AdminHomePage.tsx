@@ -1,6 +1,6 @@
 import Slider from '@/commons/Slider/Slider';
 import SettingsContext from '@/context/SettingsContext';
-import { IUpdateSettingDto, TImage } from '@/models';
+import { TImage } from '@/models';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';

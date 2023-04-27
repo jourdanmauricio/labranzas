@@ -1,15 +1,23 @@
-// import { Modal } from '@/commons/Modal/Modal';
-// import ChangePassword from './ChangePassword/ChangePassword';
 import Spinner from '@/commons/Loader-overlay/Loader-overlay';
 import { useFormik } from 'formik';
-// import AddPicture from './AddPicture/AddPicture';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import SettingsContext from '@/context/SettingsContext';
 import { adminProfileValidate } from '@/utils';
 
 const AdminProfile = () => {
   const { settings, selectName, handleUpdSettingsValue, status } =
     useContext(SettingsContext);
+  const [contactData, setContactData] = useState([]);
+
+  const onSubmit = (values: any) => {
+    const newValues = contactData.map(
+      (data: { id: number; feature: string; value: string }) => ({
+        ...data,
+        value: values[data.feature],
+      })
+    );
+    handleUpdSettingsValue('CONTACT_DATA', newValues);
+  };
 
   const formik: any = useFormik({
     initialValues: {
@@ -21,13 +29,24 @@ const AdminProfile = () => {
       phone: '',
     },
     validate: adminProfileValidate,
-    onSubmit: handleUpdSettingsValue,
+    onSubmit: onSubmit,
     enableReinitialize: true,
   });
 
   useEffect(() => {
-    const metaData = selectName('contactData', 'object');
-    if (Object.keys(metaData).length > 0) formik.setValues(metaData);
+    const data = selectName('CONTACT_DATA', 'array');
+
+    if (Object.keys(data).length > 0) {
+      setContactData(data[0].values);
+      const contactData = data[0].values.reduce(
+        (obj: any, cur: any) => ({
+          ...obj,
+          [cur.feature]: cur.value,
+        }),
+        {}
+      );
+      formik.setValues(contactData);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 

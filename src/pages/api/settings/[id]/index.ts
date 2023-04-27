@@ -28,6 +28,7 @@ export default async function handler(
   if (req.method === 'PUT') {
     try {
       const updSetting = await service.update(id, req.body);
+
       await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
 
       res.status(200).json(updSetting);

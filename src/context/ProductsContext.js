@@ -20,7 +20,6 @@ const ACTIONS = {
 };
 
 function reducer(state, action) {
-  console.log('action.payload', action.payload);
   switch (action.type) {
     case ACTIONS.SET_PRODUCTS:
       return {
@@ -199,12 +198,13 @@ const ProductsProvider = ({ children }) => {
 
       const sku = maxSku === -Infinity ? 'ML-1' : `ML-${maxSku + 1}`;
 
-      const newProduct = await productService.createFromMl(
+      let newProduct = await productService.createFromMl(
         productMl,
         categoria.id,
         products.length + 1,
         sku
       );
+      newProduct.category = categoria;
       dispatch({ type: ACTIONS.ADD_PRODUCT, payload: newProduct });
 
       dispatchNotif({

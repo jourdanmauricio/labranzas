@@ -29,7 +29,7 @@ export const localInterceptor = () => {
     (err) => {
       let message = '';
 
-      console.log('ERRRRRRRRRRRRRRRRRRR', err);
+      // console.log('ERRRRRRRRRRRRRRRRRRR', err);
       if (typeof err.response.data.message === 'string') {
         message = `${err.response.status}: ${err.response.data.message}`;
       } else {

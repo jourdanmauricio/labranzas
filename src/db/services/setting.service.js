@@ -10,14 +10,11 @@ class SettingService {
   }
 
   async find(field, value) {
-    console.log('service DB settings', field, value);
-
     let options = {
       where: {},
     };
 
     if (field !== 'undefined') {
-      console.log('field !!!!!!!!!!!', typeof field);
       options.where[field] = value;
     }
 
@@ -45,6 +42,7 @@ class SettingService {
   async update(id, changes) {
     const setting = await this.findOne(id);
     const rta = await setting.update(changes);
+    console.log('rta', rta);
     return rta;
   }
 

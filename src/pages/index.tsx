@@ -1,13 +1,6 @@
 import Slider from '@/commons/Slider/Slider';
 import MainLayout from '@/layout/MainLayout';
-import {
-  ICategory,
-  IContact,
-  IMetadata,
-  IProduct,
-  ISetting,
-  TImage,
-} from '@/models';
+import { ICategory, IContact, IMetadata, IProduct, TImage } from '@/models';
 import ProductCard from '@/components/elements/ProductCard';
 import Image from 'next/image';
 
@@ -115,21 +108,17 @@ export default function HomePage({
 
 export async function getStaticProps() {
   try {
-    // Metadata
-    const responseMatadata = await settingService.find('name', 'metaData');
-    const respMatadata = responseMatadata.map(
-      (setting: any) => setting.dataValues
-    );
-    const metadata = respMatadata.reduce(
+    // metadata
+    const responseMetadata = await settingService.find('name', 'META_DATA');
+    const respMetadata = JSON.parse(responseMetadata[0].dataValues.values);
+    const metadata = respMetadata.reduce(
       (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
       {}
     );
 
     // contactData;
-    const responseContact = await settingService.find('name', 'contactData');
-    const respContact = responseContact.map(
-      (setting: any) => setting.dataValues
-    );
+    const responseContact = await settingService.find('name', 'CONTACT_DATA');
+    const respContact = JSON.parse(responseContact[0].dataValues.values);
     const contact = respContact.reduce(
       (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
       {}
@@ -150,7 +139,6 @@ export async function getStaticProps() {
     const responseImages = await settingService.find('name', 'HERO_CAROUSEL');
     const respImages = JSON.parse(responseImages[0].dataValues.values);
     const time = JSON.parse(responseImages[0].dataValues.value);
-
     const imagesCarousel: TImage[] = respImages.sort(
       (a: any, b: any) => +a.order - +b.order
     );

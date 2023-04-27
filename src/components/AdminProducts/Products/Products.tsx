@@ -29,6 +29,8 @@ const Products = () => {
     handleAddProductfromMl(_ml_id);
   };
 
+  console.log('products', products);
+
   return (
     <div>
       <Breadcrumbs catId={currentData?.id} />

@@ -1,13 +1,24 @@
 import Image from 'next/image';
 import { useFormik } from 'formik';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import SettingsContext from '@/context/SettingsContext';
 import { metadataValidate } from '@/utils';
 import Spinner from '@/commons/Loader-overlay/Loader-overlay';
 
 const Metadata = () => {
+  const [metaData, setMetaData] = useState([]);
   const { settings, selectName, handleUpdSettingsValue, status } =
     useContext(SettingsContext);
+
+  const onSubmit = (values: any) => {
+    const newValues = metaData.map(
+      (data: { id: number; feature: string; value: string }) => ({
+        ...data,
+        value: values[data.feature],
+      })
+    );
+    handleUpdSettingsValue('META_DATA', newValues);
+  };
 
   const formik: any = useFormik({
     initialValues: {
@@ -17,13 +28,24 @@ const Metadata = () => {
       meta_url: '',
     },
     validate: metadataValidate,
-    onSubmit: handleUpdSettingsValue,
+    onSubmit: onSubmit,
     enableReinitialize: true,
   });
 
   useEffect(() => {
-    const metaData = selectName('metaData', 'object');
-    if (Object.keys(metaData).length > 0) formik.setValues(metaData);
+    const data = selectName('META_DATA', 'array');
+
+    if (Object.keys(data).length > 0) {
+      setMetaData(data[0].values);
+      const metaData = data[0].values.reduce(
+        (obj: any, cur: any) => ({
+          ...obj,
+          [cur.feature]: cur.value,
+        }),
+        {}
+      );
+      formik.setValues(metaData);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 

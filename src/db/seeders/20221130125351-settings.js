@@ -41,77 +41,68 @@ module.exports = {
       },
       // CONTACT DATA
       {
-        name: 'contactData',
+        name: 'CONTACT_DATA',
         type: 'data',
-        feature: 'instagram',
-        value: 'https://www.instagram.com/labranzas/',
-        comment: null,
-      },
-      {
-        name: 'contactData',
-        type: 'data',
-        feature: 'facebook',
-        value: 'https://www.facebook.com/labranzas/',
-        comment: null,
-      },
-      {
-        name: 'contactData',
-        type: 'data',
-        feature: 'twitter',
+        feature: 'contactData',
+        order: 99,
+        show: true,
+        image: '',
+        alt_image: '',
         value: '',
-        comment: null,
+        comment: '',
+        values: JSON.stringify([
+          {
+            id: 1,
+            feature: 'instagram',
+            value: 'https://www.instagram.com/labranzas/',
+          },
+          {
+            id: 2,
+            feature: 'facebook',
+            value: 'https://www.facebook.com/labranzas/',
+          },
+          { id: 3, feature: 'twitter', value: '' },
+          {
+            id: 4,
+            feature: 'whatsapp',
+            value:
+              'https://wa.me/5491158046525?text=Hola, quiero recibir información',
+          },
+          { id: 5, feature: 'email', value: 'labranzas@gmail.com' },
+          { id: 6, feature: 'phone', value: '(011) 15 58046525' },
+        ]),
       },
+      // META DATA
       {
-        name: 'contactData',
+        name: 'META_DATA',
         type: 'data',
-        feature: 'whatsapp',
-        value:
-          'https://wa.me/5491158046525?text=Hola, quiero recibir información',
-        comment: null,
-      },
-      {
-        name: 'contactData',
-        type: 'data',
-        feature: 'email',
-        value: 'labranzas@gmail.com',
-        comment: null,
-      },
-      {
-        name: 'contactData',
-        type: 'data',
-        feature: 'phone',
-        value: '(011) 15 58046525',
-        comment: null,
-      },
-      // METADATA
-      {
-        name: 'metaData',
-        type: 'data',
-        feature: 'meta_description',
-        value:
-          'Encontrarás una amplia variedad de productos para hacer de tu hogar un espacio más acogedor, así como todo lo necesario para hacer de tus eventos momentos inolvidables',
-        comment: null,
-      },
-      {
-        name: 'metaData',
-        type: 'data',
-        feature: 'meta_title',
-        value: 'Labranzas - Insumos para eventos y decoración para el hogar',
-        comment: null,
-      },
-      {
-        name: 'metaData',
-        type: 'data',
-        feature: 'meta_canonical',
-        value: 'https://labranzas.com.ar',
-        comment: null,
-      },
-      {
-        name: 'metaData',
-        type: 'data',
-        feature: 'meta_url',
-        value: 'https://labranzas.com.ar',
-        comment: null,
+        feature: 'metaData',
+        order: 98,
+        show: true,
+        image: '',
+        alt_image: '',
+        value: '',
+        comment: '',
+        values: JSON.stringify([
+          {
+            id: 1,
+            feature: 'meta_description',
+            value:
+              'Encontrarás una amplia variedad de productos para hacer de tu hogar un espacio más acogedor, así como todo lo necesario para hacer de tus eventos momentos inolvidables',
+          },
+          {
+            id: 2,
+            feature: 'meta_title',
+            value:
+              'Labranzas - Insumos para eventos y decoración para el hogar',
+          },
+          {
+            id: 3,
+            feature: 'meta_canonical',
+            value: 'https://labranzas.com.ar',
+          },
+          { id: 4, feature: 'meta_url', value: 'https://labranzas.com.ar' },
+        ]),
       },
     ]);
   },

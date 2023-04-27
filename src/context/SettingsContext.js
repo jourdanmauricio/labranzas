@@ -151,23 +151,16 @@ const SettingsProvider = ({ children }) => {
         message: 'Configuración modificada',
       });
     },
-    handleUpdSettingsValue: async (values) => {
-      for (const property in values) {
-        let found = settings.find(
-          (setting) =>
-            setting.feature === property && setting.value !== values[property]
-        );
-        if (found) {
-          found = { ...found, value: values[property] };
-          await handleUpdSetting(found);
-        }
-      }
-
+    handleUpdSettingsValue: async (name, values) => {
+      let found = settings.find((setting) => setting.name === name);
+      found.values = values;
+      await handleUpdSetting(found);
       dispatchNotif({
         type: 'SUCCESS',
         message: 'Configuración modificada',
       });
     },
+
     handleUpdValues: async (name, values) => {
       const found = settings.find((setting) => setting.name === name);
       const newValues = found.values.map((el) =>
