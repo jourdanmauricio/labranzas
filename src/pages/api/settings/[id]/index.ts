@@ -1,7 +1,15 @@
+import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const SettingService = require('@/db/services/setting.service');
 const service = new SettingService();
+
+const URL_REVALIDATE = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/revalidate`;
+const CONFIG_REVALIDATE = {
+  headers: {
+    revalidate: process.env.REVALIDATE_TOKEN,
+  },
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,8 +27,10 @@ export default async function handler(
 
   if (req.method === 'PUT') {
     try {
-      const updCategory = await service.update(id, req.body);
-      res.status(200).json(updCategory);
+      const updSetting = await service.update(id, req.body);
+      await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
+
+      res.status(200).json(updSetting);
     } catch (error) {
       res.status(404).json({ message: error });
     }

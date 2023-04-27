@@ -8,7 +8,7 @@ import SettingsContext from '@/context/SettingsContext';
 import { adminProfileValidate } from '@/utils';
 
 const AdminProfile = () => {
-  const { settings, selectType, handleUpdSettings, status } =
+  const { settings, selectName, handleUpdSettingsValue, status } =
     useContext(SettingsContext);
 
   const formik: any = useFormik({
@@ -21,14 +21,13 @@ const AdminProfile = () => {
       phone: '',
     },
     validate: adminProfileValidate,
-    onSubmit: handleUpdSettings,
+    onSubmit: handleUpdSettingsValue,
     enableReinitialize: true,
   });
 
   useEffect(() => {
-    const metaData = selectType('contactData');
-    if (Object.keys(metaData).length > 0)
-      formik.setValues(selectType('contactData'));
+    const metaData = selectName('contactData', 'object');
+    if (Object.keys(metaData).length > 0) formik.setValues(metaData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 

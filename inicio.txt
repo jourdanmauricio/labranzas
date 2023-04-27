@@ -62,7 +62,7 @@ $ npm run seeders:runAll
 Generador de pass en base 64:
 openssl rand -base64 32
 
-sequelize db:migrate:undo --name 20230413012755-create-products.js
+sequelize db:migrate:undo --name 20221130124734-create-settings.js
 sequelize db:migrate:undo --name 20230404050306-create-categories.js
 
 npm run migrations:run

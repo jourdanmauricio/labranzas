@@ -85,7 +85,7 @@ export async function getStaticProps() {
     );
 
     // contactData;
-    const responseContact = await settingService.find('type', 'contactData');
+    const responseContact = await settingService.find('name', 'contactData');
     const respContact = responseContact.map(
       (setting: any) => setting.dataValues
     );

@@ -97,7 +97,7 @@ export const getStaticProps = async ({
     product.updated_at = Math.floor(product.updated_at / 1000);
 
     // contactData;
-    const responseContact = await settingService.find('type', 'contactData');
+    const responseContact = await settingService.find('name', 'contactData');
     const respContact = responseContact.map(
       (setting: any) => setting.dataValues
     );

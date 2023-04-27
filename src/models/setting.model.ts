@@ -3,9 +3,14 @@ import { BaseModel } from './base.model';
 export interface ISetting extends BaseModel {
   id: number;
   type: string;
+  name: string;
   feature: string;
   value: string;
-  comment: string;
+  image?: string;
+  alt_image?: string;
+  values?: [];
+  order?: number;
+  comment?: string;
 }
 
 export interface ICreateSettingDto

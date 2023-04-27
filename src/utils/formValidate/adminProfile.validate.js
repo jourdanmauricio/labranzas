@@ -3,7 +3,7 @@ export const adminProfileValidate = (values) => {
   const errors = {};
 
   if (
-    values.facebook.length > 0 &&
+    values.facebook &&
     !/(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i.test(
       values.facebook
     )
@@ -12,7 +12,7 @@ export const adminProfileValidate = (values) => {
   }
 
   if (
-    values.twitter.length > 0 &&
+    values.twitter &&
     !/http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/.test(
       values.twitter
     )
@@ -21,7 +21,7 @@ export const adminProfileValidate = (values) => {
   }
 
   if (
-    values.instagram.length > 0 &&
+    values.instagram &&
     !/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am|twitter\.com)\/([A-Za-z0-9-_\.]+)/im.test(
       values.instagram
     )
@@ -30,20 +30,20 @@ export const adminProfileValidate = (values) => {
   }
 
   if (
-    values.whatsapp.length > 0 &&
+    values.whatsapp &&
     !/(?:(?:http|https):\/\/)?(?:www\.)?(?:wa\.me)\/.*$/.test(values.whatsapp)
   ) {
     errors.whatsapp = 'Ingrese un link válido para Whatsapp';
   }
 
   if (
-    values.email.length > 0 &&
+    values.email &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
   ) {
     errors.email = 'Email inválido';
   }
 
-  if (values.phone.length > 0 && !/^[0-9*\s()+?-]*$/.test(values.phone)) {
+  if (values.phone && !/^[0-9*\s()+?-]*$/.test(values.phone)) {
     errors.phone = 'El teléfono solo admite números, -, +, y ()';
   }
 

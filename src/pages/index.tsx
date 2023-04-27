@@ -1,6 +1,6 @@
 import Slider from '@/commons/Slider/Slider';
 import MainLayout from '@/layout/MainLayout';
-import { ICategory, IContact, IMetadata, IProduct } from '@/models';
+import { ICategory, IContact, IMetadata, IProduct, ISetting } from '@/models';
 import ProductCard from '@/components/elements/ProductCard';
 import Image from 'next/image';
 
@@ -18,6 +18,7 @@ interface IProps {
   bestSellers: IProduct[];
   metadata: IMetadata;
   contact: IContact;
+  imagesCarousel: ISetting[];
 }
 
 const services = [
@@ -44,35 +45,12 @@ const services = [
   },
 ];
 
-const imagesCarousel = [
-  {
-    id: 1,
-    image: 'slider-1_opt.jpg',
-    alt_image: 'Super descuentos abonando en efectivo',
-    text: '15% off abonando en efectivo / transferencia',
-    order: 1,
-  },
-  {
-    id: 2,
-    image: 'slider-2_opt.jpg',
-    alt_image: 'Envíos',
-    text: 'Envíos a todo el país',
-    order: 2,
-  },
-  {
-    id: 3,
-    image: 'slider-3_opt.jpg',
-    alt_image: 'Centos de mesa y souvenirs',
-    text: 'Centros de mesa y souvenirs para que tu evento sea único',
-    order: 3,
-  },
-];
-
 export default function HomePage({
   categories,
   bestSellers,
   metadata,
   contact,
+  imagesCarousel,
 }: IProps) {
   return (
     <>
@@ -124,7 +102,7 @@ export default function HomePage({
 export async function getStaticProps() {
   try {
     // Metadata
-    const responseMatadata = await settingService.find('type', 'metaData');
+    const responseMatadata = await settingService.find('name', 'metaData');
     const respMatadata = responseMatadata.map(
       (setting: any) => setting.dataValues
     );
@@ -134,7 +112,7 @@ export async function getStaticProps() {
     );
 
     // contactData;
-    const responseContact = await settingService.find('type', 'contactData');
+    const responseContact = await settingService.find('name', 'contactData');
     const respContact = responseContact.map(
       (setting: any) => setting.dataValues
     );
@@ -154,12 +132,19 @@ export async function getStaticProps() {
     const responseBestSellers = await productService.find('best-selling', 3);
     const bestSellers = responseBestSellers.map((prod: any) => prod.dataValues);
 
+    // imagesCarousel
+    const responseImages = await settingService.find('name', 'heroCarousel');
+    const imagesCarousel = responseImages.map(
+      (setting: any) => setting.dataValues
+    );
+
     return {
       props: {
         categories,
         bestSellers: JSON.parse(JSON.stringify(bestSellers)),
         metadata,
         contact,
+        imagesCarousel,
       },
     };
   } catch (error) {

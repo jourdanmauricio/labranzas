@@ -9,6 +9,8 @@ const ACTIONS = {
   SET_SETTINGS: 'setSettings',
   UPD_SETTING: 'updSetting',
   UPD_STATUS: 'updStatus',
+  SET_CURRENT_DATA: 'setCurrentdata',
+  UPD_ACTION: 'updAction',
 };
 
 function reducer(state, action) {
@@ -20,7 +22,7 @@ function reducer(state, action) {
         settings: action.payload,
         status: 'success',
         // message: '',
-        // action: 'view',
+        action: 'view',
         // error: null,
       };
     case ACTIONS.UPD_SETTING:
@@ -31,12 +33,24 @@ function reducer(state, action) {
         status: 'success',
         message: '',
         error: null,
+        action: 'view',
       };
     case ACTIONS.UPD_STATUS:
       return {
         ...state,
         status: action.payload,
       };
+    case ACTIONS.SET_CURRENT_DATA:
+      return {
+        ...state,
+        currentData: action.payload,
+      };
+    case ACTIONS.UPD_ACTION:
+      return {
+        ...state,
+        action: action.payload,
+      };
+
     default:
       return state;
   }
@@ -49,9 +63,11 @@ const SettingsProvider = ({ children }) => {
     status: 'success',
     error: null,
     message: '',
+    action: 'view',
+    currentData: {},
   });
 
-  const { settings, status } = state;
+  const { settings, status, action, currentData } = state;
 
   useEffect(() => {
     dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
@@ -84,15 +100,21 @@ const SettingsProvider = ({ children }) => {
   const data = {
     settings,
     status,
-    selectType: (type) => {
-      const data = settings.filter((setting) => setting.type === type);
-      const dataType = data.reduce(
-        (obj, cur) => ({ ...obj, [cur.feature]: cur.value }),
-        {}
-      );
-      return dataType;
+    action,
+    currentData,
+    selectName: (name, type) => {
+      const data = settings.filter((setting) => setting.name === name);
+      if (type === 'object') {
+        const dataName = data.reduce(
+          (obj, cur) => ({ ...obj, [cur.feature]: cur.value }),
+          {}
+        );
+        return dataName;
+      } else {
+        return data;
+      }
     },
-    handleUpdSettings: async (values) => {
+    handleUpdSettingsValue: async (values) => {
       for (const property in values) {
         let found = settings.find(
           (setting) =>
@@ -103,12 +125,32 @@ const SettingsProvider = ({ children }) => {
           await handleUpdSetting(found);
         }
       }
-      console.log('FIN');
+
       dispatchNotif({
         type: 'SUCCESS',
         message: 'Configuración modificada',
       });
     },
+    handleUpdSettings: async (values) => {
+      const found = settings.find((setting) => setting.id === values.id);
+      if (JSON.stringify(found) !== JSON.stringify(values)) {
+        await handleUpdSetting(values);
+        dispatchNotif({
+          type: 'SUCCESS',
+          message: 'Configuración modificada',
+        });
+      }
+    },
+    handleUpdAction: (action) =>
+      dispatch({
+        type: ACTIONS.UPD_ACTION,
+        payload: action,
+      }),
+    setCurrentData: (currentData) =>
+      dispatch({
+        type: ACTIONS.SET_CURRENT_DATA,
+        payload: currentData,
+      }),
   };
 
   return (

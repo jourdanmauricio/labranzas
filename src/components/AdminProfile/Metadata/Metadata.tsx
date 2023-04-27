@@ -6,7 +6,7 @@ import { metadataValidate } from '@/utils';
 import Spinner from '@/commons/Loader-overlay/Loader-overlay';
 
 const Metadata = () => {
-  const { settings, selectType, handleUpdSettings, status } =
+  const { settings, selectName, handleUpdSettingsValue, status } =
     useContext(SettingsContext);
 
   const formik: any = useFormik({
@@ -17,14 +17,13 @@ const Metadata = () => {
       meta_url: '',
     },
     validate: metadataValidate,
-    onSubmit: handleUpdSettings,
+    onSubmit: handleUpdSettingsValue,
     enableReinitialize: true,
   });
 
   useEffect(() => {
-    const metaData = selectType('metaData');
-    if (Object.keys(metaData).length > 0)
-      formik.setValues(selectType('metaData'));
+    const metaData = selectName('metaData', 'object');
+    if (Object.keys(metaData).length > 0) formik.setValues(metaData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 

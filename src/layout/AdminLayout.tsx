@@ -9,6 +9,7 @@ import {
   FaTh,
   FaUserCog,
   FaRegImages,
+  FaHome,
 } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
@@ -25,7 +26,8 @@ const links = [
   { label: 'Categorías', route: '/admin/categorias', icon: FaSitemap },
   { label: 'Productos', route: '/admin/products', icon: FaBoxOpen },
   { label: 'Perfil', route: '/admin/profile', icon: FaUserCog },
-  { label: 'media', route: '/admin/media', icon: FaRegImages },
+  { label: 'Media', route: '/admin/media', icon: FaRegImages },
+  { label: 'HomePage', route: '/admin/homepage', icon: FaHome },
 ];
 
 const AdminLayout = (props: IProps) => {
@@ -60,7 +62,7 @@ const AdminLayout = (props: IProps) => {
               <Link
                 key={route}
                 href={route}
-                className={`py-5 pl-4 pr-[14px] no-underline text-lg block text-left hover:text-purple-500 ${
+                className={`py-3 pl-4 pr-[14px] no-underline text-lg block text-left hover:text-purple-500 ${
                   router.pathname == route ? 'text-purple-700' : ''
                 }`}
               >
