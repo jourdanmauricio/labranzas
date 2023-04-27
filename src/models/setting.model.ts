@@ -6,6 +6,7 @@ export interface ISetting extends BaseModel {
   name: string;
   feature: string;
   value: string;
+  show?: boolean;
   image?: string;
   alt_image?: string;
   values?: [];

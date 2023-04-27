@@ -6,31 +6,38 @@ module.exports = {
     return queryInterface.bulkInsert('settings', [
       // HERO CAROUSEL
       {
-        name: 'heroCarousel',
+        name: 'HERO_CAROUSEL',
         type: 'carousel',
         feature: 'heroCarousel',
-        image: '/assets/images/slider-1_opt.jpg',
-        alt_image: 'Super descuentos abonando en efectivo',
-        value: '15% off abonando en efectivo / transferencia',
         order: 1,
-      },
-      {
-        name: 'heroCarousel',
-        type: 'carousel',
-        feature: 'heroCarousel',
-        image: '/assets/images/slider-2_opt.jpg',
-        alt_image: 'Envíos',
-        value: 'Envíos a todo el país',
-        order: 2,
-      },
-      {
-        name: 'heroCarousel',
-        type: 'carousel',
-        feature: 'heroCarousel',
-        image: '/assets/images/slider-3_opt.jpg',
-        alt_image: 'Super descuentos abonando en efectivo',
-        value: 'Centros de mesa y souvenirs para que tu evento sea único',
-        order: 3,
+        show: true,
+        image: '',
+        alt_image: '',
+        value: '4000',
+        comment: '',
+        values: JSON.stringify([
+          {
+            id: 1,
+            image: '/assets/images/slider-1_opt.jpg',
+            alt_image: 'Super descuentos abonando en efectivo',
+            value: '15% off abonando en efectivo / transferencia',
+            order: 1,
+          },
+          {
+            id: 2,
+            image: '/assets/images/slider-2_opt.jpg',
+            alt_image: 'Envíos',
+            value: 'Envíos a todo el país',
+            order: 2,
+          },
+          {
+            id: 3,
+            image: '/assets/images/slider-3_opt.jpg',
+            alt_image: 'Centros de mesa y souvenirs',
+            value: 'Centros de mesa y souvenirs para que tu evento sea único',
+            order: 3,
+          },
+        ]),
       },
       // CONTACT DATA
       {

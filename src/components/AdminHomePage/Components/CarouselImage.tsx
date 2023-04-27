@@ -1,6 +1,6 @@
 import AddPicture from '@/components/AddPicture/AddPicture';
 import SettingsContext from '@/context/SettingsContext';
-import { CloudinaryImage, ISetting } from '@/models';
+import { CloudinaryImage } from '@/models';
 import { useFormik } from 'formik';
 import { useContext } from 'react';
 
@@ -8,8 +8,8 @@ const CarouselImage = () => {
   const {
     currentData,
     action,
-    handleAddSetting,
-    handleUpdSettings,
+    handleAddValue,
+    handleUpdValues,
     handleUpdAction,
   } = useContext(SettingsContext);
 
@@ -19,12 +19,18 @@ const CarouselImage = () => {
   };
 
   console.log('currentData', currentData);
+
+  const onSubmit = (values: any) => {
+    action === 'new'
+      ? handleAddValue('HERO_CAROUSEL', values)
+      : handleUpdValues('HERO_CAROUSEL', values);
+  };
+
   const formik: any = useFormik({
     initialValues: currentData,
     // validate: productValidate,
     validate: validate,
-    onSubmit: action === 'new' ? handleAddSetting : handleUpdSettings,
-    // onSubmit: onSubmit,
+    onSubmit: onSubmit,
   });
 
   const handleChangeImage = (image: CloudinaryImage) => {

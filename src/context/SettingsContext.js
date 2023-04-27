@@ -124,50 +124,12 @@ const SettingsProvider = ({ children }) => {
     }
   };
 
-  const handleAddSetting = async (setting) => {
-    try {
-      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
-
-      const newSetting = await settingService.create(setting);
-      dispatch({ type: ACTIONS.ADD_SETTING, payload: newSetting });
-      dispatchNotif({
-        type: 'SUCCESS',
-        message: 'Configuración creada',
-      });
-    } catch (error) {
-      console.log('ERROR CONTEXT ', error);
-      dispatchNotif({
-        type: 'Error',
-        message: 'Error creando la configuración',
-      });
-    }
-  };
-
-  const handleDeleteSetting = async (id) => {
-    try {
-      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
-      await settingService.delete(id);
-      dispatch({ type: ACTIONS.DEL_SETTING, payload: id });
-      dispatchNotif({
-        type: 'SUCCESS',
-        message: 'Producto eliminado',
-      });
-    } catch (err) {
-      console.log('ERROR CONTEXT ', err);
-      dispatchNotif({
-        type: 'Error',
-        message: 'Error eliminando el producto',
-      });
-    }
-  };
-
   const data = {
     settings,
     status,
     action,
     currentData,
     showModalDelete,
-    handleDeleteSetting,
     selectName: (name, type) => {
       const data = settings.filter((setting) => setting.name === name);
       if (type === 'object') {
@@ -180,7 +142,15 @@ const SettingsProvider = ({ children }) => {
         return data;
       }
     },
-    handleAddSetting,
+    handleAddValue: async (name, values) => {
+      let found = settings.find((setting) => setting.name === name);
+      found.values.push(values);
+      await handleUpdSetting(found);
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Configuración modificada',
+      });
+    },
     handleUpdSettingsValue: async (values) => {
       for (const property in values) {
         let found = settings.find(
@@ -198,15 +168,28 @@ const SettingsProvider = ({ children }) => {
         message: 'Configuración modificada',
       });
     },
-    handleUpdSettings: async (values) => {
-      const found = settings.find((setting) => setting.id === values.id);
-      if (JSON.stringify(found) !== JSON.stringify(values)) {
-        await handleUpdSetting(values);
-        dispatchNotif({
-          type: 'SUCCESS',
-          message: 'Configuración modificada',
-        });
-      }
+    handleUpdValues: async (name, values) => {
+      const found = settings.find((setting) => setting.name === name);
+      const newValues = found.values.map((el) =>
+        el.id === values.id ? values : el
+      );
+      const newSetting = { ...found, values: newValues };
+      await handleUpdSetting(newSetting);
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Configuración modificada',
+      });
+    },
+    handleUpdSetting,
+    handleDeleteValue: async (name, id) => {
+      const found = settings.find((setting) => setting.name === name);
+      const newValues = found.values.filter((el) => el.id !== id);
+      const newSetting = { ...found, values: newValues };
+      await handleUpdSetting(newSetting);
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Configuración modificada',
+      });
     },
     handleUpdAction: (action) =>
       dispatch({

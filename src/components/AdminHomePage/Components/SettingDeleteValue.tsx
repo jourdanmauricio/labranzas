@@ -7,7 +7,11 @@ interface IProps {
   onCancelDelete: () => void;
 }
 
-const SettingDelete = ({ dataToDelete, onDelete, onCancelDelete }: IProps) => {
+const SettingDeleteValue = ({
+  dataToDelete,
+  onDelete,
+  onCancelDelete,
+}: IProps) => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     onDelete(dataToDelete.id);
@@ -39,4 +43,4 @@ const SettingDelete = ({ dataToDelete, onDelete, onCancelDelete }: IProps) => {
   );
 };
 
-export default SettingDelete;
+export default SettingDeleteValue;

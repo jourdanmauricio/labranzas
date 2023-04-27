@@ -1,23 +1,21 @@
-import { ISetting } from '@/models';
+import { TImage } from '@/models';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-type image = {
-  id: number;
-  image: string;
-  alt_image: string;
-  text: string;
-  order: number;
-};
-
 interface IProps {
-  images: ISetting[];
+  images: TImage[];
   autoPlay?: boolean;
   showButtons?: boolean;
+  time: number;
 }
 
-const Slider = ({ images, autoPlay = true, showButtons = true }: IProps) => {
+const Slider = ({
+  images,
+  autoPlay = true,
+  showButtons = true,
+  time = 4000,
+}: IProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState(images[0]);
   const [loaded, setLoaded] = useState(false);
@@ -26,12 +24,12 @@ const Slider = ({ images, autoPlay = true, showButtons = true }: IProps) => {
     if (autoPlay || !showButtons) {
       const interval = setInterval(() => {
         selectNewImage(selectedIndex, images);
-      }, 4000);
+      }, time);
       return () => clearInterval(interval);
     }
   });
 
-  const selectNewImage = (index: number, images: ISetting[], next = true) => {
+  const selectNewImage = (index: number, images: TImage[], next = true) => {
     setLoaded(false);
 
     setTimeout(() => {

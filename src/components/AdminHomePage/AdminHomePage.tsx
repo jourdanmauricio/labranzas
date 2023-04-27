@@ -1,35 +1,25 @@
 import Slider from '@/commons/Slider/Slider';
 import SettingsContext from '@/context/SettingsContext';
-import { ISetting } from '@/models';
+import { IUpdateSettingDto, TImage } from '@/models';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import CarouselImage from './Components/CarouselImage';
 import Modal from '@/commons/Modal/Modal';
-import SettingDelete from './Components/SettingDelete';
 import Loader from '@/commons/Loader-overlay/Loader-overlay';
-
-const initialData = {
-  id: 0,
-  type: 'carousel',
-  name: 'heroCarousel',
-  feature: 'heroCarousel',
-  value: '',
-  image: '',
-  alt_image: '',
-  values: [],
-  order: 1,
-  comment: '',
-};
+import Image from 'next/image';
+import SettingDeleteValue from './Components/SettingDeleteValue';
+import ChangeSettingHero from './Components/ChangeSettingHero';
 
 const AdminHomePage = () => {
-  const [imagesCarousel, setImagesCarousel] = useState<ISetting[]>();
+  const [time, setTime] = useState('4000');
+  const [imagesCarousel, setImagesCarousel] = useState<TImage[]>([]);
   const {
     action,
     selectName,
     setCurrentData,
     handleUpdAction,
-    handleDeleteSetting,
+    handleDeleteValue,
     status,
     settings,
     setShowModalDelete,
@@ -38,22 +28,28 @@ const AdminHomePage = () => {
   } = useContext(SettingsContext);
 
   useEffect(() => {
-    const heroCarousel = selectName('heroCarousel', 'array');
+    const heroCarousel = selectName('HERO_CAROUSEL', 'array');
     if (heroCarousel.length > 0) {
-      const imagesCarousel: ISetting[] = heroCarousel.sort(
-        (a: any, b: any) => +a.order - +b.order
-      );
-      setImagesCarousel(imagesCarousel);
+      setImagesCarousel(heroCarousel[0].values);
+      setTime(heroCarousel[0].value);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 
-  const deleteData = (row: ISetting) => {
+  const initialData = {
+    id: imagesCarousel.length + 1,
+    value: '',
+    image: '',
+    alt_image: '',
+    order: imagesCarousel.length + 1,
+  };
+
+  const deleteData = (row: TImage) => {
     setCurrentData(row);
     setShowModalDelete(true);
   };
 
-  const editData = (row: ISetting) => {
+  const editData = (row: TImage) => {
     setCurrentData(row);
     handleUpdAction('edit');
   };
@@ -66,20 +62,31 @@ const AdminHomePage = () => {
   const CAROUSEL_COLUMNS = [
     {
       name: 'Imagen',
-      selector: (row: ISetting) => row.image || '',
-      sortable: true,
+      width: '150px',
+      center: true,
+      cell: (row: TImage) => (
+        <div className="h-[90px] object-scale-down flex items-center justify-center">
+          <Image
+            src={row.image || ''}
+            alt={row.alt_image || ''}
+            width={150}
+            height={90}
+            className="max-h-[90px]"
+          />
+        </div>
+      ),
     },
     {
       name: 'Valor',
       center: true,
-      selector: (row: ISetting) => row.value || '',
+      selector: (row: TImage) => row.value || '',
       sortable: true,
     },
     {
       name: 'Acciones',
       width: '120px',
       center: true,
-      cell: (row: ISetting) => (
+      cell: (row: TImage) => (
         <div className="flex">
           <button
             onClick={() => deleteData(row)}
@@ -104,7 +111,7 @@ const AdminHomePage = () => {
   };
 
   const onDelete = () => {
-    handleDeleteSetting(currentData?.id);
+    handleDeleteValue('HERO_CAROUSEL', currentData?.id);
     setShowModalDelete(false);
   };
 
@@ -119,25 +126,35 @@ const AdminHomePage = () => {
 
   return (
     <div>
-      {imagesCarousel && (
+      {imagesCarousel.length > 0 && (
         <>
-          <Slider images={imagesCarousel} autoPlay={true} showButtons={true} />
           {status === 'loading' && <Loader />}
           {action !== 'view' && <CarouselImage />}
           {action === 'view' && (
-            <DataTable
-              className="mb-20"
-              title="Imágenes"
-              columns={CAROUSEL_COLUMNS}
-              data={imagesCarousel}
-              dense
-              actions={actionsMenu}
-            />
+            <>
+              <Slider
+                images={imagesCarousel}
+                autoPlay={true}
+                showButtons={true}
+                time={parseInt(time)}
+              />
+              <DataTable
+                className="mb-10"
+                title="Imágenes"
+                columns={CAROUSEL_COLUMNS}
+                data={imagesCarousel}
+                dense
+                responsive
+                actions={actionsMenu}
+              />
+
+              <ChangeSettingHero />
+            </>
           )}
         </>
       )}
       <Modal show={showModalDelete} onClose={onCancelDelete}>
-        <SettingDelete
+        <SettingDeleteValue
           dataToDelete={currentData}
           onDelete={onDelete}
           onCancelDelete={onCancelDelete}

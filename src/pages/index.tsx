@@ -1,6 +1,13 @@
 import Slider from '@/commons/Slider/Slider';
 import MainLayout from '@/layout/MainLayout';
-import { ICategory, IContact, IMetadata, IProduct, ISetting } from '@/models';
+import {
+  ICategory,
+  IContact,
+  IMetadata,
+  IProduct,
+  ISetting,
+  TImage,
+} from '@/models';
 import ProductCard from '@/components/elements/ProductCard';
 import Image from 'next/image';
 
@@ -18,7 +25,8 @@ interface IProps {
   bestSellers: IProduct[];
   metadata: IMetadata;
   contact: IContact;
-  imagesCarousel: ISetting[];
+  imagesCarousel: TImage[];
+  time: string;
 }
 
 const services = [
@@ -51,11 +59,17 @@ export default function HomePage({
   metadata,
   contact,
   imagesCarousel,
+  time,
 }: IProps) {
   return (
     <>
       <MainLayout categories={categories} contact={contact}>
-        <Slider images={imagesCarousel} autoPlay={true} showButtons={true} />
+        <Slider
+          images={imagesCarousel}
+          autoPlay={true}
+          showButtons={true}
+          time={parseInt(time)}
+        />
         {/* Servicios */}
         <section className="bg-slate-50 my-16">
           <div className="mx-auto flex justify-center items-center gap-8 flex-row flex-wrap">
@@ -133,10 +147,11 @@ export async function getStaticProps() {
     const bestSellers = responseBestSellers.map((prod: any) => prod.dataValues);
 
     // imagesCarousel
-    const responseImages = await settingService.find('name', 'heroCarousel');
-    const respImages = responseImages.map((setting: any) => setting.dataValues);
+    const responseImages = await settingService.find('name', 'HERO_CAROUSEL');
+    const respImages = JSON.parse(responseImages[0].dataValues.values);
+    const time = JSON.parse(responseImages[0].dataValues.value);
 
-    const imagesCarousel: ISetting[] = respImages.sort(
+    const imagesCarousel: TImage[] = respImages.sort(
       (a: any, b: any) => +a.order - +b.order
     );
 
@@ -147,6 +162,7 @@ export async function getStaticProps() {
         metadata,
         contact,
         imagesCarousel,
+        time,
       },
     };
   } catch (error) {
