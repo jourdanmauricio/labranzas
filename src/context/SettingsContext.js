@@ -7,10 +7,13 @@ const SettingsContext = createContext();
 
 const ACTIONS = {
   SET_SETTINGS: 'setSettings',
+  ADD_SETTING: 'addSetting',
   UPD_SETTING: 'updSetting',
+  DEL_SETTING: 'delSetting',
   UPD_STATUS: 'updStatus',
   SET_CURRENT_DATA: 'setCurrentdata',
   UPD_ACTION: 'updAction',
+  SET_SHOW_MODAL_DELETE: 'showModalDelete',
 };
 
 function reducer(state, action) {
@@ -25,6 +28,16 @@ function reducer(state, action) {
         action: 'view',
         // error: null,
       };
+    case ACTIONS.ADD_SETTING:
+      console.log('action.payload', action.payload);
+      return {
+        ...state,
+        status: 'success',
+        settings: [...state.settings, action.payload],
+        message: '',
+        action: 'view',
+        error: null,
+      };
     case ACTIONS.UPD_SETTING:
       return {
         settings: state.settings.map((setting) =>
@@ -34,6 +47,16 @@ function reducer(state, action) {
         message: '',
         error: null,
         action: 'view',
+      };
+    case ACTIONS.DEL_SETTING:
+      return {
+        ...state,
+        settings: state.settings.filter(
+          (setting) => setting.id !== action.payload
+        ),
+        status: 'suscces',
+        message: '',
+        error: null,
       };
     case ACTIONS.UPD_STATUS:
       return {
@@ -50,7 +73,11 @@ function reducer(state, action) {
         ...state,
         action: action.payload,
       };
-
+    case ACTIONS.SET_SHOW_MODAL_DELETE:
+      return {
+        ...state,
+        showModalDelete: action.payload,
+      };
     default:
       return state;
   }
@@ -67,7 +94,7 @@ const SettingsProvider = ({ children }) => {
     currentData: {},
   });
 
-  const { settings, status, action, currentData } = state;
+  const { settings, status, action, currentData, showModalDelete } = state;
 
   useEffect(() => {
     dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
@@ -97,11 +124,50 @@ const SettingsProvider = ({ children }) => {
     }
   };
 
+  const handleAddSetting = async (setting) => {
+    try {
+      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+
+      const newSetting = await settingService.create(setting);
+      dispatch({ type: ACTIONS.ADD_SETTING, payload: newSetting });
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Configuración creada',
+      });
+    } catch (error) {
+      console.log('ERROR CONTEXT ', error);
+      dispatchNotif({
+        type: 'Error',
+        message: 'Error creando la configuración',
+      });
+    }
+  };
+
+  const handleDeleteSetting = async (id) => {
+    try {
+      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      await settingService.delete(id);
+      dispatch({ type: ACTIONS.DEL_SETTING, payload: id });
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Producto eliminado',
+      });
+    } catch (err) {
+      console.log('ERROR CONTEXT ', err);
+      dispatchNotif({
+        type: 'Error',
+        message: 'Error eliminando el producto',
+      });
+    }
+  };
+
   const data = {
     settings,
     status,
     action,
     currentData,
+    showModalDelete,
+    handleDeleteSetting,
     selectName: (name, type) => {
       const data = settings.filter((setting) => setting.name === name);
       if (type === 'object') {
@@ -114,6 +180,7 @@ const SettingsProvider = ({ children }) => {
         return data;
       }
     },
+    handleAddSetting,
     handleUpdSettingsValue: async (values) => {
       for (const property in values) {
         let found = settings.find(
@@ -150,6 +217,11 @@ const SettingsProvider = ({ children }) => {
       dispatch({
         type: ACTIONS.SET_CURRENT_DATA,
         payload: currentData,
+      }),
+    setShowModalDelete: (showModalDelete) =>
+      dispatch({
+        type: ACTIONS.SET_SHOW_MODAL_DELETE,
+        payload: showModalDelete,
       }),
   };
 

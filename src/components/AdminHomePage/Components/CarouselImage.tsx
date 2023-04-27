@@ -8,7 +8,7 @@ const CarouselImage = () => {
   const {
     currentData,
     action,
-    handleAddProduct,
+    handleAddSetting,
     handleUpdSettings,
     handleUpdAction,
   } = useContext(SettingsContext);
@@ -18,18 +18,13 @@ const CarouselImage = () => {
     return errors;
   };
 
-  const onSubmit = (values: any) => {
-    console.log('touched', formik.touched);
-    handleUpdSettings(values);
-  };
-
   console.log('currentData', currentData);
   const formik: any = useFormik({
     initialValues: currentData,
     // validate: productValidate,
     validate: validate,
-    // onSubmit: action === 'new' ? handleAddProduct : handleUpdProduct,
-    onSubmit: onSubmit,
+    onSubmit: action === 'new' ? handleAddSetting : handleUpdSettings,
+    // onSubmit: onSubmit,
   });
 
   const handleChangeImage = (image: CloudinaryImage) => {

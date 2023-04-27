@@ -57,6 +57,12 @@ class SettingService {
     const settings = await this.find();
     return settings;
   }
+
+  async delete(id) {
+    const setting = await this.findOne(id);
+    await setting.destroy();
+    return { id };
+  }
 }
 
 module.exports = SettingService;

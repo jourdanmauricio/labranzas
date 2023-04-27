@@ -5,6 +5,22 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import CarouselImage from './Components/CarouselImage';
+import Modal from '@/commons/Modal/Modal';
+import SettingDelete from './Components/SettingDelete';
+import Loader from '@/commons/Loader-overlay/Loader-overlay';
+
+const initialData = {
+  id: 0,
+  type: 'carousel',
+  name: 'heroCarousel',
+  feature: 'heroCarousel',
+  value: '',
+  image: '',
+  alt_image: '',
+  values: [],
+  order: 1,
+  comment: '',
+};
 
 const AdminHomePage = () => {
   const [imagesCarousel, setImagesCarousel] = useState<ISetting[]>();
@@ -13,29 +29,38 @@ const AdminHomePage = () => {
     selectName,
     setCurrentData,
     handleUpdAction,
-    handleUpdSettings,
+    handleDeleteSetting,
     status,
     settings,
+    setShowModalDelete,
+    showModalDelete,
+    currentData,
   } = useContext(SettingsContext);
 
   useEffect(() => {
     const heroCarousel = selectName('heroCarousel', 'array');
-    if (heroCarousel.length > 0) setImagesCarousel(heroCarousel);
+    if (heroCarousel.length > 0) {
+      const imagesCarousel: ISetting[] = heroCarousel.sort(
+        (a: any, b: any) => +a.order - +b.order
+      );
+      setImagesCarousel(imagesCarousel);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 
   const deleteData = (row: ISetting) => {
-    console.log('delete', row);
+    setCurrentData(row);
+    setShowModalDelete(true);
   };
 
   const editData = (row: ISetting) => {
-    console.log('edit', row);
     setCurrentData(row);
     handleUpdAction('edit');
   };
 
   const newData = () => {
-    console.log('New');
+    setCurrentData(initialData);
+    handleUpdAction('new');
   };
 
   const CAROUSEL_COLUMNS = [
@@ -73,6 +98,16 @@ const AdminHomePage = () => {
     },
   ];
 
+  const onCancelDelete = () => {
+    setCurrentData(initialData);
+    setShowModalDelete(false);
+  };
+
+  const onDelete = () => {
+    handleDeleteSetting(currentData?.id);
+    setShowModalDelete(false);
+  };
+
   const actionsMenu = useMemo(() => {
     return (
       <button className="table__icon table__icon--add" onClick={newData}>
@@ -87,9 +122,11 @@ const AdminHomePage = () => {
       {imagesCarousel && (
         <>
           <Slider images={imagesCarousel} autoPlay={true} showButtons={true} />
+          {status === 'loading' && <Loader />}
           {action !== 'view' && <CarouselImage />}
           {action === 'view' && (
             <DataTable
+              className="mb-20"
               title="Imágenes"
               columns={CAROUSEL_COLUMNS}
               data={imagesCarousel}
@@ -99,6 +136,13 @@ const AdminHomePage = () => {
           )}
         </>
       )}
+      <Modal show={showModalDelete} onClose={onCancelDelete}>
+        <SettingDelete
+          dataToDelete={currentData}
+          onDelete={onDelete}
+          onCancelDelete={onCancelDelete}
+        />
+      </Modal>
     </div>
   );
 };

@@ -57,16 +57,15 @@ const Slider = ({ images, autoPlay = true, showButtons = true }: IProps) => {
     selectNewImage(selectedIndex, images);
   };
   return (
-    <div className="relative w-full h-auto">
+    <div className="relative w-full h-[calc(100vh-92px)]">
       <Image
-        className={`w-full h-auto transition-opacity duration-1000 ${
+        className={`w-full h-auto object-cover transition-opacity duration-1000 ${
           loaded ? 'opacity-1' : 'opacity-40'
         }`}
         onLoad={() => setLoaded(true)}
         src={selectedImage.image || 'assets/images/image_not_found.svg'}
         alt={selectedImage.alt_image || ''}
-        width={1440}
-        height={600}
+        fill
       />
       <p className="absolute leading-none	top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-purple-100 bg-opacity-50 text-[1.2rem] sm:text-[2rem] text-purple-800 p-5 text-center">
         {selectedImage.value}

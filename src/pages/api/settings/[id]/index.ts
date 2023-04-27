@@ -36,14 +36,15 @@ export default async function handler(
     }
   }
 
-  // if (req.method === 'DELETE') {
-  //   try {
-  //     const delCategory = await service.delete(id);
-  //     res.status(200).json(delCategory);
-  //   } catch (error) {
-  //     res.status(404).json({ message: error });
-  //   }
-  // }
+  if (req.method === 'DELETE') {
+    try {
+      const delSetting = await service.delete(id);
+      await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
+      res.status(200).json(delSetting);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+  }
 
   // res.status(405).json({ error: 'Method not allowed' });
 }

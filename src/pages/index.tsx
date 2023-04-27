@@ -134,8 +134,10 @@ export async function getStaticProps() {
 
     // imagesCarousel
     const responseImages = await settingService.find('name', 'heroCarousel');
-    const imagesCarousel = responseImages.map(
-      (setting: any) => setting.dataValues
+    const respImages = responseImages.map((setting: any) => setting.dataValues);
+
+    const imagesCarousel: ISetting[] = respImages.sort(
+      (a: any, b: any) => +a.order - +b.order
     );
 
     return {
