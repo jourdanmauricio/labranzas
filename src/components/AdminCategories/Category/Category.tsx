@@ -46,6 +46,11 @@ const Category = ({ category }: Iprops) => {
     onSubmit: category.id === 0 ? handleAddCategory : handleUpdCategory,
   });
 
+  const onChangeName = (value: string) => {
+    formik.setFieldValue('name', value);
+    formik.setFieldValue('slug', value.replaceAll(' ', '-').toLowerCase());
+  };
+
   const onChangeImage = (image: CloudinaryImage) => {
     formik.setFieldValue('image', image.secure_url);
     formik.setFieldValue('alt_image', image.public_id);
@@ -131,7 +136,8 @@ const Category = ({ category }: Iprops) => {
             className="input-form"
             type="text"
             id="name"
-            {...formik.getFieldProps('name')}
+            onChange={(e) => onChangeName(e.target.value)}
+            // {...formik.getFieldProps('name')}
           />
           {formik.errors.name && formik.touched.name && (
             <span className="text-xs text-rose-500">{formik.errors.name}</span>
@@ -147,7 +153,6 @@ const Category = ({ category }: Iprops) => {
             type="text"
             id="slug"
             {...formik.getFieldProps('slug')}
-            disabled
           />
           {formik.errors.slug && formik.touched.slug && (
             <span className="text-xs text-rose-500">{formik.errors.slug}</span>

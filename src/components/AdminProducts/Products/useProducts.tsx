@@ -1,56 +1,53 @@
-import { useContext, useMemo } from 'react';
+import { status as statusProd } from '@/config/variables';
+import { useContext, useMemo, useState } from 'react';
 import ProductsContext from '@/context/ProductsContext';
 import { IProduct } from '@/models';
-import { FaRegTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
+import { FaRegTrashAlt, FaEdit, FaPlus, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
 import { trad } from '@/config/helpTraduccion';
-
-const initialData = {
-  id: 0,
-  ml_id: '',
-  attributes: [],
-  available_quantity: 0,
-  price: 0,
-  status: 'under_review',
-  sold_quantity: 0,
-  seller_id: null,
-  sku: '',
-  listing_type_id: '',
-  thumbnail: '',
-  category_id: 0,
-  condition: 'new',
-  permalink: '',
-  title: '',
-  pictures: [],
-  description: '',
-  sale_terms: [],
-  variations: [],
-  video_id: '',
-};
+import { initialProduct } from '@/config/variables';
+import { ExpanderComponentProps } from 'react-data-table-component';
+import ShowVariations from '../ShowVariations/ShowVariations';
 
 const useProducts = () => {
+  // const [categories, setCategories] = useState<string[]>([]);
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterText, setFilterText] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+
   const {
     products,
     status,
     action,
     message,
-    handleDeleteProduct,
-    handleUpdStatus,
-    handleUpdAction,
     setCurrentData,
     currentData,
     showModalDelete,
     setShowModalDelete,
+    getCategories,
+    handleDeleteProduct,
+    handleUpdStatus,
+    handleUpdAction,
     handleAddProductfromMl,
   } = useContext(ProductsContext);
 
+  const filteredItems = products.filter(
+    (product: IProduct) =>
+      (product.title.toLowerCase().includes(filterText.toLowerCase()) ||
+        product.sku.toLowerCase().includes(filterText.toLowerCase())) &&
+      product.status.toLowerCase().includes(filterStatus.toLowerCase()) &&
+      product.category?.name
+        .toLowerCase()
+        .includes(filterCategory.toLowerCase())
+  );
+
+  // let categories = products.map((product: IProduct) => product.category?.name);
+  // categories = categories.filter(
+  //   (item: string, index: number) => categories.indexOf(item) === index
+  // );
+
   const PRODUCTS_COLUMNS = [
-    // {
-    //   name: 'ID',
-    //   width: '70px',
-    //   cell: (row: IProduct) => <span>{row.id}</span>,
-    //   sortable: true,
-    // },
     {
       name: 'Imagen',
       width: '90px',
@@ -73,10 +70,10 @@ const useProducts = () => {
       sortable: true,
     },
     {
-      name: 'SKU',
-      width: '150px',
+      name: 'Precio',
+      width: '100px',
       center: true,
-      cell: (row: IProduct) => <span>{row.sku}</span>,
+      selector: (row: IProduct) => row.price,
       sortable: true,
     },
     {
@@ -86,32 +83,10 @@ const useProducts = () => {
       cell: (row: IProduct) => <span>{trad(row.status)}</span>,
       sortable: true,
     },
-
-    {
-      name: 'Acciones',
-      width: '120px',
-      center: true,
-      cell: (row: IProduct) => (
-        <div className="flex">
-          <button
-            onClick={() => deleteData(row)}
-            className="table__icon table__icon--delete"
-          >
-            <FaRegTrashAlt />
-          </button>
-          <button
-            onClick={() => editData(row)}
-            className="table__icon table__icon--edit"
-          >
-            <FaEdit />
-          </button>
-        </div>
-      ),
-    },
   ];
 
   const onCancelDelete = () => {
-    setCurrentData(initialData);
+    setCurrentData(initialProduct);
     setShowModalDelete(false);
   };
 
@@ -131,31 +106,156 @@ const useProducts = () => {
   };
 
   const newData = () => {
-    setCurrentData(initialData);
+    setCurrentData(initialProduct);
     handleUpdAction('new');
   };
 
-  const actionsMenu = useMemo(() => {
+  // const actionsMenu = useMemo(() => {
+  //   return (
+  //     <button className="table__icon table__icon--add" onClick={newData}>
+  //       <FaPlus />
+  //     </button>
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  const subHeaderComponentMemo = useMemo(() => {
+    const handleClear = () => {
+      if (filterText || filterStatus || filterCategory) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText('');
+        setFilterStatus('');
+        setFilterCategory('');
+      }
+    };
+
     return (
-      <button className="table__icon table__icon--add" onClick={newData}>
-        <FaPlus />
-      </button>
+      <div className="w-full flex gap-4 items-end">
+        <div className="w-full">
+          <label className="label-form" htmlFor="ml-id">
+            Categoría
+          </label>
+          <select
+            className="input-form"
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+          >
+            <option value=""></option>
+            {getCategories().map((el: string) => (
+              <option key={el} value={el}>
+                {el}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="w-full">
+          <label className="label-form" htmlFor="ml-id">
+            Estado
+          </label>
+          <select
+            className="input-form"
+            value={statusProd.find((el) => el.id === filterStatus)?.id || ''}
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
+            <option value=""></option>
+            {statusProd.map((el) => (
+              <option key={el.id} value={el.id}>
+                {el.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="w-full">
+          <label className="label-form" htmlFor="ml-id">
+            Buscar
+          </label>
+          <input
+            className="input-form"
+            id="search"
+            type="text"
+            placeholder="Search"
+            aria-label="Search Input"
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+          />
+        </div>
+        <div className="w-8">
+          <button
+            className="table__icon table__icon--delete"
+            type="button"
+            onClick={handleClear}
+          >
+            <FaTimes />
+          </button>
+        </div>
+        <div className="w-8 ml-4">
+          <button
+            className="table__icon table__icon--add"
+            type="button"
+            onClick={newData}
+          >
+            <FaPlus />
+          </button>
+        </div>
+      </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    filterCategory,
+    filterStatus,
+    filterText,
+    resetPaginationToggle,
+    getCategories,
+  ]);
+
+  const ExpandedComponent: React.FC<ExpanderComponentProps<IProduct>> = ({
+    data,
+  }) => {
+    return (
+      <div className="bg-blue-200 p-4">
+        <p>SKU: {data.sku}</p>
+        <p>Cantidad: {data.available_quantity}</p>
+        <p>
+          Categoría: {data.category_id} - {data.category?.name}
+        </p>
+
+        <ShowVariations product={data} />
+        <div className="flex justify-end gap-4">
+          <button
+            onClick={() => deleteData(data)}
+            className="table__icon table__icon--delete"
+          >
+            <FaRegTrashAlt />
+          </button>
+          <button
+            onClick={() => editData(data)}
+            className="table__icon table__icon--edit"
+          >
+            <FaEdit />
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   return {
     action,
     status,
     products,
     PRODUCTS_COLUMNS,
-    actionsMenu,
+    // actionsMenu,
     showModalDelete,
     currentData,
-    onCancelDelete,
-    onDelete,
+    filteredItems,
     handleUpdStatus,
     handleAddProductfromMl,
+    subHeaderComponentMemo,
+    resetPaginationToggle,
+    ExpandedComponent,
+    onCancelDelete,
+    onDelete,
   };
 };
 

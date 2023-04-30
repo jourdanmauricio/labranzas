@@ -17,6 +17,7 @@ export interface IProduct extends BaseModel {
   listing_type_id: ListingType;
   thumbnail: string;
   category_id: number;
+  category?: { id: number; name: string; slug: string };
   condition: Condition;
   permalink: string;
   title: string;

@@ -5,3 +5,5 @@ export * from './formValidate/category.validate';
 export * from './formValidate/login.validate';
 export * from './formValidate/register.validate';
 export * from './formValidate/suscribe.validate';
+export * from './functions/isVariationContain';
+export * from './functions/isArrayEquals';

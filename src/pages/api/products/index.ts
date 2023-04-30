@@ -38,7 +38,7 @@ export default async function handler(
 
   if (req.method === 'POST') {
     try {
-      const newCategory = await service.create(req.body);
+      const newProduct = await service.create(req.body);
 
       // REVALIDATE All Categories
       const categories = await categoryService.find();
@@ -53,11 +53,16 @@ export default async function handler(
 
       await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
 
+      await axios(
+        `${URL_REVALIDATE}?path=/productos/${newProduct.slug}`,
+        CONFIG_REVALIDATE
+      );
+
       axios.all(requests).then(() => {
         // console.log('responses', responses);
       });
 
-      res.status(200).json(newCategory);
+      res.status(200).json(newProduct);
     } catch (error) {
       res.status(409).json({ message: error });
     }

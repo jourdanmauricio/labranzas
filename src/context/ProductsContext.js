@@ -248,6 +248,13 @@ const ProductsProvider = ({ children }) => {
       }),
     handleCancelDelete: () => dispatch({ type: ACTIONS.CANCEL }),
     handleAddProductfromMl,
+    getCategories: () => {
+      let categories = products.map((product) => product.category?.name);
+      categories = categories.filter(
+        (item, index) => categories.indexOf(item) === index
+      );
+      return categories;
+    },
   };
 
   return (

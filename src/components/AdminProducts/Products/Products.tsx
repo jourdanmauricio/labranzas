@@ -1,11 +1,11 @@
 import DataTable from 'react-data-table-component';
-import { useState } from 'react';
 import useProducts from './useProducts';
 import Product from '../Product/Product';
 import Modal from '@/commons/Modal/Modal';
 import ProductDelete from '../ProductDelete/ProductDelete';
 import Loader from '@/commons/Loader-overlay/Loader-overlay';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { paginationOptions } from '@/config/variables';
 
 const Products = () => {
   const {
@@ -13,23 +13,16 @@ const Products = () => {
     action,
     products,
     PRODUCTS_COLUMNS,
-    actionsMenu,
+    // actionsMenu,
     showModalDelete,
     currentData,
+    filteredItems,
+    subHeaderComponentMemo,
+    resetPaginationToggle,
+    ExpandedComponent,
     onCancelDelete,
     onDelete,
-    handleAddProductfromMl,
   } = useProducts();
-
-  const [ml_id, setProdMlId] = useState<string>('');
-
-  const handleDownloadML = async () => {
-    let _ml_id = ml_id;
-    if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;
-    handleAddProductfromMl(_ml_id);
-  };
-
-  console.log('products', products);
 
   return (
     <div>
@@ -41,23 +34,18 @@ const Products = () => {
           <DataTable
             title="Productos"
             columns={PRODUCTS_COLUMNS}
-            data={products}
+            data={filteredItems}
             dense
-            actions={actionsMenu}
+            // actions={actionsMenu}
+            // persistTableHead
+            pagination
+            paginationResetDefaultPage={resetPaginationToggle}
+            expandableRows
+            expandableRowsComponent={ExpandedComponent}
+            subHeader
+            subHeaderComponent={subHeaderComponentMemo}
+            paginationComponentOptions={paginationOptions}
           />
-
-          <h1>Productos</h1>
-          <p>Ejemplo: MLA1114163236 - CAT MLA44388 - 3</p>
-          <p>Ejemplo: MLA842822989 - CAT: MLA10076 - not found</p>
-          <input
-            className="input-form"
-            type="text"
-            value={ml_id}
-            onChange={(e) => setProdMlId(e.target.value)}
-          />
-          <button className="btn-primary" onClick={handleDownloadML}>
-            Download Prod ML
-          </button>
         </>
       )}
       <Modal show={showModalDelete} onClose={onCancelDelete}>

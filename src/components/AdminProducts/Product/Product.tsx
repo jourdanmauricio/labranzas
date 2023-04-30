@@ -19,6 +19,7 @@ import Order from './components/Order';
 import Slug from './components/Slug';
 
 const Product = () => {
+  const [ml_id, setProdMlId] = useState('');
   const [toggleState, setToggleState] = useState<number | null>(null);
   const {
     currentData,
@@ -26,10 +27,17 @@ const Product = () => {
     handleAddProduct,
     handleUpdProduct,
     handleUpdAction,
+    handleAddProductfromMl,
   } = useContext(ProductsContext);
 
   const toggleTab = (index: number) => {
     toggleState === index ? setToggleState(null) : setToggleState(index);
+  };
+
+  const handleDownloadML = async () => {
+    let _ml_id = ml_id;
+    if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;
+    handleAddProductfromMl(_ml_id);
   };
 
   const formik = useFormik({
@@ -40,9 +48,32 @@ const Product = () => {
 
   return (
     <div>
+      {action === 'new' && (
+        <div className="flex gap-8 py-6 border-b-2 border-b-gray-900 items-end">
+          {/* <p>Ejemplo: MLA1114163236 - CAT MLA44388 - 3</p>
+          <p>Ejemplo: MLA842822989 - CAT: MLA10076 - not found</p> */}
+          <div className="w-full">
+            <label className="label-form" htmlFor="title">
+              ML Id (Download)
+            </label>
+            <input
+              className="input-form"
+              type="text"
+              value={ml_id}
+              onChange={(e) => setProdMlId(e.target.value)}
+            />
+          </div>
+          <div>
+            <button className="btn-primary" onClick={handleDownloadML}>
+              Download
+            </button>
+          </div>
+        </div>
+      )}
+
       <form
         onSubmit={formik.handleSubmit}
-        className="pt-2 flex flex-col gap-5"
+        className="pt-6 flex flex-col gap-5"
         noValidate
       >
         <div className="flex flex-col sm:flex-row gap-4">

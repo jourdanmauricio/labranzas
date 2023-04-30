@@ -13,7 +13,6 @@ const Variations = ({ formik }: IProps) => {
     ExpandedComponent,
     newAttrib,
     newAtribComb,
-    setNewAttrib,
     newData,
     onBlurAddVar,
     handleAddAttrib,

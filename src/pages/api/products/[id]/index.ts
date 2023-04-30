@@ -33,11 +33,16 @@ export default async function handler(
       const updProduct = await service.update(id, req.body);
       // REVALIDATE Category
       const category = await categoryService.findOne(updProduct.category_id);
+      await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
+
       await axios(
         `${URL_REVALIDATE}?path=/categorias/${category.slug}`,
         CONFIG_REVALIDATE
       );
-
+      await axios(
+        `${URL_REVALIDATE}?path=/productos/${updProduct.slug}`,
+        CONFIG_REVALIDATE
+      );
       res.status(200).json(updProduct);
     } catch (error) {
       res.status(404).json({ message: error });

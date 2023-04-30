@@ -65,14 +65,16 @@ const ProductCard = ({ product }: IProps) => {
       </div>
 
       <div className="flex flex-col gap-3 px-3">
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <span className="badge">Stock ready</span>
           <span className="badge">Oficial store</span>
-        </div>
+        </div> */}
 
-        <h2 className="line-clamp-2 product-title" title={product.title}>
-          {product.title}
-        </h2>
+        <Link href={`/productos/${product.slug}`}>
+          <h3 className="line-clamp-2 product-title" title={product.title}>
+            {product.title}
+          </h3>
+        </Link>
 
         <div className="flex justify-between items-center gap-2 mt-1">
           <span className="text-sm line-through opacity-50"> $50000</span>

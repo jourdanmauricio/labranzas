@@ -18,8 +18,6 @@ const FavoritesFlyout = () => {
     if (favorites.length <= 1) showFavorites();
   };
 
-  console.log('isFavoritesOpen', isFavoritesOpen);
-
   return (
     <aside
       className={`absolute z-10 p-2 bg-gray-50 top-[53px] right-0 border-2 h-screen overflow-y-auto transition duration-300 ease-in-out origin-top-right ${
