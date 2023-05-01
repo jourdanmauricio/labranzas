@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import FavoritesContext from '@/context/FavoritesContext';
 import { IProduct } from '@/models';
+import FavoriteItem from './FavoriteItem';
 
 const FavoritesFlyout = () => {
   const [_favorites, _setFavorites] = useState([]);
@@ -44,29 +44,31 @@ const FavoritesFlyout = () => {
       {_favorites.length > 0 && (
         <ul>
           {_favorites.map((item: IProduct) => (
-            <li key={item.id} className="text-sm flex gap-2 border-b-2 py-2">
-              <Image
-                width={56}
-                height={56}
-                src={item.thumbnail}
-                alt={item.thumbnail}
-              />
-              <div className="w-full flex flex-col justify-between">
-                <Link onClick={showFavorites} href={`/productos/${item.slug}`}>
-                  <p>{item.title}</p>
-                </Link>
-                <div className="flex justify-between text-gray-800">
-                  <p>{item.sku}</p>
-                  <p>${item.price}</p>
-                  <span
-                    onClick={() => handleDelete(item.id)}
-                    className="text-xs cursor-pointer p-1 rounded-md text-red-500  hover:bg-red-50"
-                  >
-                    Borrar
-                  </span>
-                </div>
-              </div>
-            </li>
+            <FavoriteItem key={item.id} item={item} />
+
+            // <li key={item.id} className="text-sm flex gap-2 border-b-2 py-2">
+            //   <Image
+            //     width={56}
+            //     height={56}
+            //     src={item.thumbnail}
+            //     alt={item.thumbnail}
+            //   />
+            //   <div className="w-full flex flex-col justify-between">
+            //     <Link onClick={showFavorites} href={`/productos/${item.slug}`}>
+            //       <p>{item.title}</p>
+            //     </Link>
+            //     <div className="flex justify-between text-gray-800">
+            //       <p>{item.sku}</p>
+            //       <p>${item.price}</p>
+            //       <span
+            //         onClick={() => handleDelete(item.id)}
+            //         className="text-xs cursor-pointer p-1 rounded-md text-red-500  hover:bg-red-50"
+            //       >
+            //         Borrar
+            //       </span>
+            //     </div>
+            //   </div>
+            // </li>
           ))}
         </ul>
       )}

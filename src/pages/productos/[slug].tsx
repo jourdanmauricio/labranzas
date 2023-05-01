@@ -21,8 +21,6 @@ interface IProps {
 }
 
 const ProductDetail = ({ categories, product, contact }: IProps) => {
-  console.log('PRODUCT', product);
-
   return (
     <MainLayout categories={categories} contact={contact}>
       <div className="flex">

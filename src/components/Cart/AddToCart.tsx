@@ -1,27 +1,34 @@
 import { IProduct } from '@/models';
+import Link from 'next/link';
+import { FaCartPlus, FaCat } from 'react-icons/fa';
 
 interface IProps {
-  item: IProduct;
+  product: IProduct;
 }
 
-const AddToCart = ({ item }: IProps) => {
-  console.log('item', item);
+const handleAddToCart = () => {
+  console.log('handleAddToCart');
+};
+
+const AddToCart = ({ product }: IProps) => {
+  console.log('product', product);
   return (
-    <div className="flex justify-end flex-wrap text-sm">
-      <input
-        className="text-gray-400 text-center w-8 p-1 focus:outline-0 border border-gray-500"
-        placeholder="1"
-        type="text"
-        name=""
-        id=""
-      />
-      <button className="p-1 border tracking-wider bg-white hover:bg-purple-200 border-gray-500 text-gray-800 transition ease-in-out delay-150">
-        Agregar al carrito
-      </button>
-      {/* <input className="w-8 h-8 p-2 border-none rounded-l" type="text" />
-      <button className="border h-8 p-1 rounded-r bg-gray-400">
-        Agregar al carrito
-      </button> */}
+    <div className="flex justify-end flex-wrap">
+      {product.variations.length > 1 ? (
+        <Link
+          href={`/productos/${product.slug}`}
+          className="button-primary w-full mt-3"
+        >
+          Seleccionar variación
+        </Link>
+      ) : (
+        <button
+          onClick={handleAddToCart}
+          className="button-primary w-full mt-3"
+        >
+          Agregar <FaCartPlus className="inline-block text-teal-500" />
+        </button>
+      )}
     </div>
   );
 };

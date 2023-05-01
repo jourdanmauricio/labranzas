@@ -111,9 +111,14 @@ export const getStaticProps = async ({
 
     // Products
     const responseProducts = await service.find('cat_prods', slug);
-    const respProducts = responseProducts.dataValues.products.map(
+    let respProducts = responseProducts.dataValues.products.map(
       (product: any) => product.dataValues
     );
+    respProducts = respProducts.map((prod: any) => ({
+      ...prod,
+      variations: JSON.parse(prod.variations),
+    }));
+
     const products = respProducts.sort(
       (a: IProduct, b: IProduct) => a.order - b.order
     );

@@ -40,7 +40,7 @@ const FavoriteItem = ({ item }: IProps) => {
             <p className="min-w-[150px]">{item.sku}</p>
             <p className="text-center">${item.price}</p>
             <div className="hidden sm:inline-block">
-              <AddToCart item={item} />
+              <AddToCart product={item} />
             </div>
             {/* <p className="hidden sm:inline-block">Agregar al carrito</p> */}
           </div>
@@ -48,7 +48,7 @@ const FavoriteItem = ({ item }: IProps) => {
       </div>
 
       <div className="sm:hidden text-sm flex justify-between text-gray-800">
-        <AddToCart item={item} />
+        <AddToCart product={item} />
         <span
           onClick={() => handleDelete(item.id)}
           className="tracking-wider text-xs cursor-pointer p-1 rounded-md text-red-500  hover:bg-red-50"

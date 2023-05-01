@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { FaEye, FaHeart } from 'react-icons/fa';
 import FavoritesContext from '@/context/FavoritesContext';
+import AddToCart from '../Cart/AddToCart';
 
 interface IProps {
   product: IProduct;
@@ -30,6 +31,7 @@ const ProductCard = ({ product }: IProps) => {
           sku: product.sku,
           slug: product.slug,
           thumbnail: product.thumbnail,
+          variations: product.variations,
         });
   };
   return (
@@ -46,13 +48,6 @@ const ProductCard = ({ product }: IProps) => {
 
       <div className="absolute top-1 right-6 mt-5 flex flex-col gap-3">
         <button className="button-icon">
-          {/* <FaHeart
-            onClick={handleClick}
-            className={`w-6 h-6 opacity-50 ${
-              isFavorite(product.id) ? 'text-purple-500' : 'text-gray-400'
-            }`}
-          /> */}
-
           <FaHeart
             onClick={handleClick}
             className={`w-6 h-6 opacity-50 ${color}`}
@@ -60,7 +55,6 @@ const ProductCard = ({ product }: IProps) => {
         </button>
         <Link href={`/productos/${product.slug}`} className="button-icon">
           <FaEye className="w-6 h-6 opacity-50" />
-          {/* <Icon className="w-6 h-6 opacity-50" icon="mdi:eye" /> */}
         </Link>
       </div>
 
@@ -82,7 +76,8 @@ const ProductCard = ({ product }: IProps) => {
           <span>${product.price}</span>
         </div>
       </div>
-      <button className="button-primary w-full mt-3">Agregar al carrito</button>
+
+      <AddToCart product={product} />
     </div>
   );
 };

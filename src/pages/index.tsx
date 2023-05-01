@@ -9,7 +9,6 @@ import {
   TService,
 } from '@/models';
 import ProductCard from '@/components/elements/ProductCard';
-import Image from 'next/image';
 import Services from '../components/Services/Services';
 
 const SettingService = require('@/db/services/setting.service');
@@ -96,7 +95,11 @@ export async function getStaticProps() {
 
     // best-selling
     const responseBestSellers = await productService.find('best-selling', 3);
-    const bestSellers = responseBestSellers.map((prod: any) => prod.dataValues);
+    let bestSellers = responseBestSellers.map((prod: any) => prod.dataValues);
+    bestSellers = bestSellers.map((prod: any) => ({
+      ...prod,
+      variations: JSON.parse(prod.variations),
+    }));
 
     // imagesCarousel
     const responseImages = await settingService.find('name', 'HERO_CAROUSEL');
@@ -109,7 +112,6 @@ export async function getStaticProps() {
     // services
     const responseServices = await settingService.find('name', 'SERVICES');
     const respServices = JSON.parse(responseServices[0].dataValues.values);
-    // const time = JSON.parse(responseImages[0].dataValues.value);
     const services: TImage[] = respServices.sort(
       (a: any, b: any) => +a.order - +b.order
     );
