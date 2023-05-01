@@ -12,7 +12,7 @@ import Status from './components/Status';
 import Description from './components/Description';
 import Images from './components/Images';
 import Attributes from './components/Attributes';
-import AccordionItem from './components/AccordionItem';
+import AccordionItem from '@/commons/AccordionItem/AccordionItem';
 import Variations from './components/Variations/Variations';
 import { productValidate } from '@/utils';
 import Order from './components/Order';

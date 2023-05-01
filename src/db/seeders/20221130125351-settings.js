@@ -39,6 +39,45 @@ module.exports = {
           },
         ]),
       },
+      // SERVICES
+      {
+        name: 'SERVICES',
+        type: 'data',
+        feature: 'services',
+        order: 3,
+        show: true,
+        image: '',
+        alt_image: '',
+        value: '',
+        comment: '',
+        values: JSON.stringify([
+          {
+            id: 1,
+            image: '/assets/icons/truck-1.png',
+            alt_image: 'Envíos a todo el país',
+            title: 'Envíos a todo el país',
+            text: 'Envios Super Economicos a CABA y GBA. Tambien enviamos a todo el pais con codigo de seguimiento.',
+            order: 1,
+          },
+          {
+            id: 2,
+            image: '/assets/icons/whatsapp.png',
+            alt_image: 'Contacto whatsapp',
+            title: 'whatsapp 11 5804-6525',
+            text: 'Contactanos por whatsapp y te responderemos a la brevedad. Esperamos tu pregunta.',
+            order: 2,
+          },
+          {
+            id: 3,
+            image: '/assets/icons/combos.png',
+            alt_image: 'Combos de products',
+            title: 'Los mejores combos',
+            text: 'Aprovecha los descuentos a través de nuestros combos novedosos y de calidad.',
+            order: 3,
+          },
+        ]),
+      },
+
       // CONTACT DATA
       {
         name: 'CONTACT_DATA',

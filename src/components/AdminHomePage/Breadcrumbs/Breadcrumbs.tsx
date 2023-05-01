@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { useContext } from 'react';
-import ProductsContext from '@/context/ProductsContext';
+import SettingsContext from '@/context/SettingsContext';
 
 interface IProps {
-  catId: number;
+  id: number;
+  type: string;
 }
 
-const Breadcrumbs = ({ catId }: IProps) => {
-  const { action, handleUpdAction } = useContext(ProductsContext);
+const Breadcrumbs = ({ id, type }: IProps) => {
+  const { action, handleUpdAction } = useContext(SettingsContext);
   return (
     <p className="text-xs">
       <Link className="hover:underline cursor-pointer" href="/admin">
@@ -15,17 +16,19 @@ const Breadcrumbs = ({ catId }: IProps) => {
       </Link>
       <span> / </span>
       {action === 'view' ? (
-        <span>Productos</span>
+        <span>{type}</span>
       ) : (
         <span
           onClick={() => handleUpdAction('view')}
           className="hover:underline cursor-pointer"
         >
-          Productos
+          {type}
         </span>
       )}
-      {action === 'new' && ' / Crear Producto'}
-      {action === 'editHeroCarousel' && ` / Modificar Producto ${catId}`}
+      {action === 'newHeroCarousel' && ' / Crear Hero'}
+      {action === 'editHeroCarousel' && ` / Modificar Hero ${id}`}
+      {action === 'newService' && ' / Crear Servicio'}
+      {action === 'editService' && ` / Modificar Servicio ${id}`}
     </p>
   );
 };

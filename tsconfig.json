@@ -22,7 +22,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/utils/functions/isArrayEquals.js"
+    "src/utils/functions/isArrayEquals.js",
+    "src/components/AdminHomePage/Components/SettingServices"
   ],
   "exclude": ["node_modules"]
 }

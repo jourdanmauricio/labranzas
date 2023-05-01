@@ -18,8 +18,6 @@ const CarouselImage = () => {
     return errors;
   };
 
-  console.log('currentData', currentData);
-
   const onSubmit = (values: any) => {
     action === 'new'
       ? handleAddValue('HERO_CAROUSEL', values)

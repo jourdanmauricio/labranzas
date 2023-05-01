@@ -1,6 +1,6 @@
 import { IVariations } from '@/models';
 import { useEffect, useState } from 'react';
-import { isVariationContain } from '@/utils';
+import { getVariationFromAtribs, isVariationContain } from '@/utils';
 
 interface IProps {
   variations: IVariations[];
@@ -74,16 +74,27 @@ const useProductVariations = ({ variations }: IProps) => {
     // 1- Atributos selecionados
     // 2- Atributos para verificar existencia y cantidad
     let selected: Attribute[] = [];
-    let verificar: Attribute[] = [];
+    let attribsVerify: Attribute[] = [];
     fields.forEach((field) => {
       const found = newValues[field].find((value) => value.selected === true);
-      found !== undefined
-        ? selected.push(found)
-        : (verificar = newValues[field].map((fields) => fields));
+      if (found !== undefined) {
+        selected.push(found);
+      }
+      // else {
+      //   attribsVerify = newValues[field].map((fields) => fields);
+      // }
+      newValues[field].forEach((attrib) => {
+        if (attrib.selected === false) attribsVerify.push(attrib);
+      });
     });
 
+    if (selected.length === fields.length) {
+      const variation = getVariationFromAtribs(variations, selected);
+      console.log('Selected', variation);
+    }
+
     // Verificar existencia y cantidad de los atributos en las variaciones
-    verificar.forEach((attrib) => {
+    attribsVerify.forEach((attrib) => {
       // Verifico cada atributo incluyendo los atributos ya seleccionados
       let verify = [attrib].concat(selected);
       let contiene = isVariationContain(verify, variations);

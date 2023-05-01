@@ -3,6 +3,7 @@ import { trad } from '@/config/helpTraduccion';
 import MainLayout from '@/layout/MainLayout';
 import { ICategory, IContact, IPicture, IProduct } from '@/models';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const CategoryService = require('@/db/services/category.service');
 const categoryService = new CategoryService();
@@ -21,6 +22,7 @@ interface IProps {
 
 const ProductDetail = ({ categories, product, contact }: IProps) => {
   console.log('PRODUCT', product);
+
   return (
     <MainLayout categories={categories} contact={contact}>
       <div className="flex">

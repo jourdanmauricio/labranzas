@@ -7,3 +7,4 @@ export * from './formValidate/register.validate';
 export * from './formValidate/suscribe.validate';
 export * from './functions/isVariationContain';
 export * from './functions/isArrayEquals';
+export * from './functions/getVairationFromAtribs';
