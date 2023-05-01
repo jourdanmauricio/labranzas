@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import { localInterceptor } from '../services/localInterceptor';
 import NotificationProvider from '@/commons/Notifications/NotificationProvider';
 import { FavoritesProvider } from '@/context/FavoritesContext';
+import { CartProvider } from '@/context/CartContext';
 
 import { Roboto, Poppins, Mulish } from 'next/font/google';
 
@@ -39,9 +40,11 @@ export default function App({ Component, pageProps }: AppProps) {
       `}</style>
       <SessionProvider session={pageProps.session}>
         <NotificationProvider>
-          <FavoritesProvider>
-            <Component {...pageProps} />
-          </FavoritesProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <Component {...pageProps} />
+            </FavoritesProvider>
+          </CartProvider>
         </NotificationProvider>
       </SessionProvider>
     </>

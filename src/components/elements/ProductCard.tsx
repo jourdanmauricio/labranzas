@@ -21,7 +21,7 @@ const ProductCard = ({ product }: IProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFavorite(product.id)]);
 
-  const handleClick = () => {
+  const handleClickFavorite = () => {
     isFavorite(product.id)
       ? delFavorite(product.id)
       : addFavorite({
@@ -34,6 +34,7 @@ const ProductCard = ({ product }: IProps) => {
           variations: product.variations,
         });
   };
+
   return (
     <div className="card w-full max-w-sm">
       <div className="bg-white py-6 flex justify-center items-center">
@@ -49,7 +50,7 @@ const ProductCard = ({ product }: IProps) => {
       <div className="absolute top-1 right-6 mt-5 flex flex-col gap-3">
         <button className="button-icon">
           <FaHeart
-            onClick={handleClick}
+            onClick={handleClickFavorite}
             className={`w-6 h-6 opacity-50 ${color}`}
           />
         </button>

@@ -17,6 +17,7 @@ import { ICategory } from '@/models';
 import FavoritesButton from './FavoritesButton';
 import FavoritesFlyout from '../Favorites/FavoritesFlyout';
 import { createRef, useEffect, useRef, useState } from 'react';
+import CartButton from './CartButton';
 
 interface IProps {
   categories: ICategory[];
@@ -181,8 +182,9 @@ const AppBar = ({ categories, contact }: IProps) => {
         <div className="flex items-center gap-4">
           <FavoritesButton />
 
-          <div className="relative hover:bg-pink-200 p-2 rounded-full cursor-pointer">
-            <FaShoppingCart className="text-teal-500 text-xl" />
+          <div className="flex items-center gap-4">
+            {/* <FaShoppingCart className="text-teal-500 text-xl" /> */}
+            <CartButton />
           </div>
           {session?.user ? (
             <BarMenuProfile />
