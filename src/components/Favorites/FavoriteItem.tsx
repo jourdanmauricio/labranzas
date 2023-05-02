@@ -41,7 +41,7 @@ const FavoriteItem = ({ item }: IProps) => {
             <p className="text-center">${item.price}</p>
             <div className="hidden sm:inline-block">
               <AddToCart
-                product={item}
+                item={{ ...item, quantity: 1 }}
                 available_quantity={item.available_quantity}
               />
             </div>
@@ -52,7 +52,7 @@ const FavoriteItem = ({ item }: IProps) => {
 
       <div className="sm:hidden text-sm flex justify-between text-gray-800">
         <AddToCart
-          product={item}
+          item={{ ...item, quantity: 1 }}
           available_quantity={item.available_quantity}
         />
         <span
