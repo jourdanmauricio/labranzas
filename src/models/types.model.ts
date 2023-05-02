@@ -1,3 +1,5 @@
+import { IPicture } from './product.model';
+
 export type TImage = {
   id: number;
   image: string;
@@ -13,4 +15,16 @@ export type TService = {
   title: string;
   text: string;
   order: number;
+};
+
+export type TProductDetail = {
+  id: number;
+  var_id?: number;
+  sku: string;
+  title: string;
+  slug: string;
+  quantity: number;
+  price: number;
+  pictures: IPicture[];
+  variation?: number;
 };

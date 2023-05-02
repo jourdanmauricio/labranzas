@@ -4,6 +4,7 @@ import { getVariationFromAtribs, isVariationContain } from '@/utils';
 
 interface IProps {
   variations: IVariations[];
+  handleSelectedVariation: (field: string, value: string | number | []) => void;
 }
 type Selected = { [key: string]: string };
 
@@ -18,7 +19,10 @@ type Values = {
   [key: string]: Attribute[];
 };
 
-const useProductVariations = ({ variations }: IProps) => {
+const useProductVariations = ({
+  variations,
+  handleSelectedVariation,
+}: IProps) => {
   const [initialValues, setInitialValues] = useState<Values>({});
   const [fields, setFields] = useState<string[]>([]);
   const [values, setValues] = useState<Values>({});
@@ -59,6 +63,10 @@ const useProductVariations = ({ variations }: IProps) => {
     const _values =
       value.enabled === true ? Object.assign({}, values) : initialValues;
 
+    if (value.enabled === false) {
+      handleSelectedVariation('quantity', -1);
+    }
+
     // Actualizo el campo selected de las opciones en values
     const options = _values[field].map((attrib) =>
       attrib.name === value.name && attrib.value_name === value.value_name
@@ -91,6 +99,20 @@ const useProductVariations = ({ variations }: IProps) => {
     if (selected.length === fields.length) {
       const variation = getVariationFromAtribs(variations, selected);
       console.log('Selected', variation);
+      if (Object.keys(variation).length > 0) {
+        handleSelectedVariation('quantity', 1);
+        handleSelectedVariation('var_id', variation.id);
+        handleSelectedVariation('variation', variation);
+        handleSelectedVariation('price', variation.price);
+        handleSelectedVariation('sku', variation.sku);
+        handleSelectedVariation('images', variation.picture_ids);
+      } else {
+        console.log('UnSelected!!!!!!!!!!', variation);
+        handleSelectedVariation('quantity', 0);
+      }
+    } else {
+      console.log('UnSelected!!!!!!!!!!');
+      handleSelectedVariation('quantity', -1);
     }
 
     // Verificar existencia y cantidad de los atributos en las variaciones
@@ -100,7 +122,6 @@ const useProductVariations = ({ variations }: IProps) => {
       let contiene = isVariationContain(verify, variations);
 
       // Actualizo enabled
-
       const attributeDisable = verify.find((el) => el.selected === false);
       if (attributeDisable) {
         // Actualizo el campo enabled de las opciones en values

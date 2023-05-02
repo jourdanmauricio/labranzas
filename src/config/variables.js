@@ -43,3 +43,16 @@ export const initialProduct = {
   variations: [],
   video_id: '',
 };
+
+export const quillSimpleModules = {
+  toolbar: [
+    [{ header: [1, 2, 3, 4, 5, 6, false] }, { font: [] }],
+    [{ size: [] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ color: [] }, { background: [] }],
+    [{ script: 'sub' }, { script: 'super' }],
+    [{ indent: '-1' }, { indent: '+1' }, { align: [] }],
+    ['link'],
+    ['clean'],
+  ],
+};

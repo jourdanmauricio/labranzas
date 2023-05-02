@@ -1,4 +1,4 @@
-import { IProduct } from '@/models';
+import { IProduct, TProductDetail } from '@/models';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
@@ -13,6 +13,15 @@ interface IProps {
 const ProductCard = ({ product }: IProps) => {
   const [color, setColor] = useState('text-gray-400');
   const { isFavorite, delFavorite, addFavorite } = useContext(FavoritesContext);
+  const [optionsProduct, setOptionsProduct] = useState<TProductDetail>({
+    id: product.id,
+    title: product.title,
+    slug: product.slug,
+    quantity: 1,
+    price: product.price,
+    sku: product.sku,
+    pictures: product.pictures,
+  });
 
   useEffect(() => {
     isFavorite(product.id)
@@ -37,7 +46,7 @@ const ProductCard = ({ product }: IProps) => {
 
   return (
     <div className="card w-full max-w-sm">
-      <div className="bg-white py-6 flex justify-center items-center">
+      <div className="bg-white py-2 flex justify-center items-center">
         <Image
           width={230}
           height={230}
@@ -61,9 +70,11 @@ const ProductCard = ({ product }: IProps) => {
 
       <div className="flex flex-col gap-3 px-3">
         {/* <div className="flex items-center gap-2">
-          <span className="badge">Stock ready</span>
-          <span className="badge">Oficial store</span>
+          <span className="badge">Stock ready</span> 
         </div> */}
+        <span className="badge w-fit mx-auto">
+          Disponible {product.available_quantity} unidades
+        </span>
 
         <Link href={`/productos/${product.slug}`}>
           <h3 className="line-clamp-2 product-title" title={product.title}>
@@ -78,7 +89,21 @@ const ProductCard = ({ product }: IProps) => {
         </div>
       </div>
 
-      <AddToCart product={product} />
+      {product.variations.length > 1 ? (
+        <div className="flex justify-end flex-wrap">
+          <Link
+            href={`/productos/${product.slug}`}
+            className="button-primary w-full mt-3"
+          >
+            Seleccionar variación
+          </Link>
+        </div>
+      ) : (
+        <AddToCart
+          item={optionsProduct}
+          available_quantity={product.available_quantity}
+        />
+      )}
     </div>
   );
 };

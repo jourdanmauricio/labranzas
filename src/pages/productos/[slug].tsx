@@ -1,9 +1,11 @@
 import ProductVariations from '@/components/Product/ProductVariations/ProductVariations';
 import { trad } from '@/config/helpTraduccion';
 import MainLayout from '@/layout/MainLayout';
-import { ICategory, IContact, IPicture, IProduct } from '@/models';
-import Image from 'next/image';
+import { ICategory, IContact, IProduct, TProductDetail } from '@/models';
 import { useEffect, useState } from 'react';
+import ProductImages from '../../components/Product/ProductImages/ProductImages';
+import Breadcrumbs from '../../components/Product/Breadcrumbs/Breadcrumbs';
+import AddToCart from '@/components/Cart/AddToCart';
 
 const CategoryService = require('@/db/services/category.service');
 const categoryService = new CategoryService();
@@ -21,46 +23,81 @@ interface IProps {
 }
 
 const ProductDetail = ({ categories, product, contact }: IProps) => {
+  const [optionsProduct, setOptionsProduct] = useState<TProductDetail>({
+    id: product.id,
+    title: product.title,
+    slug: product.slug,
+    quantity: 1,
+    price: product.price,
+    sku: product.sku,
+    pictures: product.pictures,
+  });
+
+  useEffect(() => {
+    if (product.variations.length > 0) {
+      setOptionsProduct({
+        ...optionsProduct,
+        quantity: -1,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
+
+  const handleSelectedVariation = (
+    field: string,
+    value: number | string | []
+  ) => {
+    console.log('field', field, value);
+    setOptionsProduct((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  console.log('optionsProduct', optionsProduct);
+
   return (
     <MainLayout categories={categories} contact={contact}>
+      <div className="mt-4 ml-2">
+        <Breadcrumbs product={product} />
+      </div>
       <div className="flex">
-        <div className="flex flex-col m-6 gap-2">
-          <div className="relative h-[300px] w-[300px] sm:h-[400px] sm:w-[400px]">
-            <Image
-              src={product.pictures[0].secure_url}
-              // className="object-cover hover:scale-105 transition-all duration-500 ease-in-out transform"
-              className="object-contain block"
-              alt={product.title}
-              fill
-            />
-          </div>
-          <div className="max-w-[400px] flex-wrap flex justify-between gap-1 ">
-            {product.pictures.map((pic: IPicture) => (
-              <div key={pic.id} className="relative mx-6 h-[80px] w-[80px]">
-                <Image
-                  src={pic.secure_url}
-                  className="object-contain"
-                  alt={product.title}
-                  fill
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <ProductImages images={optionsProduct.pictures} title={product.title} />
+
         <div className="flex flex-col p-4">
-          <h1 className="text-2xl font-bold pt-10 pb-8">{product.title}</h1>
+          <h1 className="text-2xl font-bold pb-8">{product.title}</h1>
           <span className="text-sm text-gray-500">
-            {trad(product.condition)} | {product.available_quantity} vendidos
+            {trad(product.condition)} | {product.sold_quantity} vendidos
           </span>
-          <p className="text-xl py-2">${product.price}</p>
+          <p className="text-2xl py-2">${optionsProduct.price}</p>
 
           {product.variations.length > 0 && (
             <div className="mt-4">
-              <ProductVariations variations={product.variations} />
+              <ProductVariations
+                variations={product.variations}
+                handleSelectedVariation={handleSelectedVariation}
+              />
             </div>
           )}
+
+          <p className="py-2">
+            Cantidad disponible:{' '}
+            {optionsProduct.quantity === -1
+              ? 'Seleccione variación'
+              : optionsProduct.quantity}
+          </p>
+          <p className="py-2">SKU: {optionsProduct.sku}</p>
+
+          <AddToCart
+            item={optionsProduct}
+            available_quantity={product.available_quantity}
+          />
         </div>
       </div>
+
+      <div
+        className="relative ql-editor p-4"
+        dangerouslySetInnerHTML={{
+          __html: product.description || '',
+        }}
+      />
     </MainLayout>
   );
 };

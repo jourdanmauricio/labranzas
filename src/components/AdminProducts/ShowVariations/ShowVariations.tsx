@@ -12,16 +12,18 @@ const ShowVariations = ({ product }: IProds) => {
         <caption className="bg-gray-900 p-1 uppercase text-white">
           Variaciones
         </caption>
-        <thead className="bg-gray-900 p-1 flex w-full text-white text-center uppercase">
-          <td className="grow shrink basis-[40%]">
-            {product.variations[0].attribute_combinations
-              .map((attribs: IAttributeCombination) => attribs.name)
-              .join(' / ')}
-          </td>
-          <td className="grow shrink basis-[30%]">SKU</td>
-          <td className="grow shrink basis-[10%]">Cantidad</td>
-          <td className="grow shrink basis-[10%]">Vendidos</td>
-          <td className="grow shrink basis-[10%]">Precio</td>
+        <thead>
+          <tr className="bg-gray-900 p-1 flex w-full text-white text-center uppercase">
+            <th className="grow shrink basis-[40%]">
+              {product.variations[0].attribute_combinations
+                .map((attribs: IAttributeCombination) => attribs.name)
+                .join(' / ')}
+            </th>
+            <th className="grow shrink basis-[30%]">SKU</th>
+            <th className="grow shrink basis-[10%]">Cantidad</th>
+            <th className="grow shrink basis-[10%]">Vendidos</th>
+            <th className="grow shrink basis-[10%]">Precio</th>
+          </tr>
         </thead>
         <tbody>
           {product.variations.map((variation: IVariations) => (

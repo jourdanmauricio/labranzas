@@ -1,83 +1,71 @@
-import { IProduct } from '@/models';
-import Link from 'next/link';
+import { TProductDetail } from '@/models';
 import { FaCartPlus, FaMinus, FaPlus } from 'react-icons/fa';
 import CartContext from '@/context/CartContext';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 interface IProps {
-  product: IProduct;
+  item: TProductDetail;
+  available_quantity: number;
 }
 
-const AddToCart = ({ product }: IProps) => {
-  const { isInCart, delCart, addCart } = useContext(CartContext);
+const AddToCart = ({ item, available_quantity }: IProps) => {
+  const { quantityInCart, delCart, addCart } = useContext(CartContext);
+  const [quantityCart, setQuantityCart] = useState(0);
+
+  useEffect(() => {
+    if (item) setQuantityCart(quantityInCart(item.id, item.var_id));
+  }, [item, setQuantityCart, quantityInCart]);
+
   const handleAddToCart = () => {
-    console.log('handleAddToCart', product);
-    addCart({
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      quantity: 1,
-      sku: product.sku,
-      slug: product.slug,
-      thumbnail: product.thumbnail,
-      variations: product.variations,
-    });
+    addCart(item, item.var_id);
   };
 
   const handleDelToCart = () => {
-    delCart(product.id);
+    delCart(item.id, item.var_id);
   };
 
-  // console.log('product', product);
+  if (available_quantity === 0) {
+    return (
+      <button className="button-primary w-full mt-3">
+        Consulte dispobilidad
+      </button>
+    );
+  }
+
+  if (available_quantity === -1) {
+    return (
+      <button className="button-primary w-full mt-3">
+        Seleccione variación
+      </button>
+    );
+  }
+
   return (
     <div>
-      {product.variations.length > 1 ? (
-        <div className="flex justify-end flex-wrap">
-          <Link
-            href={`/productos/${product.slug}`}
-            className="button-primary w-full mt-3"
-          >
-            Seleccionar variación
-          </Link>
+      {quantityCart > 0 ? (
+        <div className="flex justify-between">
+          <button onClick={handleDelToCart} className="button-primary  mt-3">
+            <FaMinus className="inline-block text-teal-500" />
+          </button>
+
+          <button className="button-primary  mt-3">
+            <FaCartPlus className="inline-block text-teal-500" />
+            <span className="ml-2">
+              {`${quantityCart} ${quantityCart === 1 ? 'unidad' : 'unidades'} `}
+            </span>
+          </button>
+
+          <button onClick={handleAddToCart} className="button-primary mt-3">
+            <FaPlus className="inline-block text-teal-500" />
+          </button>
         </div>
       ) : (
-        <>
-          {isInCart(product.id) > 0 ? (
-            <>
-              <div className="flex justify-between">
-                <button
-                  onClick={handleDelToCart}
-                  className="button-primary  mt-3"
-                >
-                  <FaMinus className="inline-block text-teal-500" />
-                </button>
-
-                <button className="button-primary  mt-3">
-                  <FaCartPlus className="inline-block text-teal-500" />
-                  <span className="ml-2">
-                    {`${isInCart(product.id)} ${
-                      isInCart(product.id) === 1 ? 'unidad' : 'unidades'
-                    } `}
-                  </span>
-                </button>
-
-                <button
-                  onClick={handleAddToCart}
-                  className="button-primary mt-3"
-                >
-                  <FaPlus className="inline-block text-teal-500" />
-                </button>
-              </div>
-            </>
-          ) : (
-            <button
-              onClick={handleAddToCart}
-              className="button-primary w-full mt-3"
-            >
-              Agregar <FaCartPlus className="inline-block text-teal-500" />
-            </button>
-          )}
-        </>
+        <button
+          onClick={handleAddToCart}
+          className="button-primary w-full mt-3"
+        >
+          Agregar <FaCartPlus className="inline-block text-teal-500" />
+        </button>
       )}
     </div>
   );

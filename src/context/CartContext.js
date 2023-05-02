@@ -10,30 +10,43 @@ const CartProvider = ({ children }) => {
       : [];
   });
 
+  console.log('cart', cart);
+
   const value = {
     cart,
     isCartOpen,
     showCart: () => setIsCartOpen(!isCartOpen),
-    addCart: (product) => {
-      const found = cart.find((el) => el.id === product.id);
-      let newCart = [];
+    addCart: (product, var_id) => {
+      const found = cart.find(
+        (el) => el.id === product.id && el.var_id === var_id
+      );
+      let newCart = cart;
+
       if (found === undefined) {
         newCart = [...cart, product];
       } else {
         newCart = cart.map((el) =>
-          el.id === product.id ? { ...found, quantity: found.quantity + 1 } : el
+          el.id === product.id && el.var_id === var_id
+            ? {
+                ...found,
+                quantity: found.quantity + 1,
+              }
+            : el
         );
       }
 
       setCart(newCart);
       window.localStorage.setItem('cart', JSON.stringify(newCart));
     },
-    delCart: (id) => {
-      const found = cart.find((el) => el.id === id);
-      let newCart = [];
+    delCart: (id, var_id) => {
+      const found = cart.find((el) => el.id === id && el.var_id === var_id);
+
+      let newCart = cart;
       if (found !== undefined) {
         if (found.quantity === 1) {
-          newCart = cart.filter((prod) => prod.id !== id);
+          newCart = cart.filter(
+            (prod) => prod.id !== id && prod.var_id === var_id
+          );
         } else {
           newCart = cart.map((el) =>
             el.id === id ? { ...found, quantity: found.quantity - 1 } : el
@@ -43,11 +56,16 @@ const CartProvider = ({ children }) => {
         newCart = cart;
       }
 
+      // setCart((prevState) => [...prevState, ...newCart]);
+
       setCart(newCart);
       window.localStorage.setItem('cart', JSON.stringify(newCart));
     },
-    isInCart: (id) => {
-      const product = cart.find((prod) => prod.id === id);
+    quantityInCart: (id, var_id) => {
+      const product = cart.find(
+        (prod) => prod.id === id && prod.var_id === var_id
+      );
+
       return product === undefined ? 0 : product?.quantity;
     },
   };

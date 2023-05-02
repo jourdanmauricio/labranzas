@@ -19,7 +19,12 @@ export class ProductHttpService {
     return ProductHttpService.instance;
   }
 
-  private async formatProduct(productMl: IProductMl, category_id: number) {
+  private async formatProduct(
+    productMl: IProductMl,
+    category_id: number,
+    order: number,
+    sku: string
+  ) {
     const pictures = productMl.pictures.map((pic) => ({
       id: pic.id,
       secure_url: pic.secure_url,
@@ -35,11 +40,12 @@ export class ProductHttpService {
         show: true,
       })),
       ml_id: productMl.id,
-      sku: '',
+      sku,
       slug: productMl.title.trim().replaceAll(' ', '-').toLowerCase(),
       status: 'under_review',
       category_id,
       pictures,
+      order,
       thumbnail: productMl.secure_thumbnail,
       sale_terms: productMl.sale_terms.map((term) => ({
         id: term.id,
@@ -52,7 +58,9 @@ export class ProductHttpService {
           available_quantity: variation.available_quantity,
           price: variation.price,
           sold_quantity: variation.sold_quantity,
-          sku: '',
+          sku: `${sku}-${variation.attribute_combinations
+            .map((comb: IAttributeCombination) => comb.value_name)
+            .join('-')}`,
           attribute_combinations: variation.attribute_combinations.map(
             (comb: IAttributeCombination) => ({
               name: comb.name,
@@ -103,7 +111,7 @@ export class ProductHttpService {
       const desc = await axiosMl.get(`/items/${ml_id}/description`);
       return {
         ...data[0].body,
-        description: desc.data.plain_text || '',
+        description: desc.data.plain_text.replaceAll('\n', '<br>') || '',
       };
     } catch (error) {
       return { ...data[0].body, description: '' };
@@ -118,8 +126,7 @@ export class ProductHttpService {
     order: number,
     sku: string
   ) {
-    let product = await this.formatProduct(productMl, category_id);
-    product = { ...product, order, sku };
+    let product = await this.formatProduct(productMl, category_id, order, sku);
 
     const newProduct = await this.create(product);
     return newProduct;

@@ -20,5 +20,5 @@ export function getVariationFromAtribs(variations, attributes) {
       found = true;
     }
   });
-  return varSel;
+  return found === true ? varSel : variations[0];
 }
