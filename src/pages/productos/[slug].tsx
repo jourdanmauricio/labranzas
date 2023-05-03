@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import ProductImages from '../../components/Product/ProductImages/ProductImages';
 import Breadcrumbs from '../../components/Product/Breadcrumbs/Breadcrumbs';
 import AddToCart from '@/components/Cart/AddToCart';
+import ProductFeatures from '@/components/Product/ProductFeatures/ProductFeatures';
 
 const CategoryService = require('@/db/services/category.service');
 const categoryService = new CategoryService();
@@ -98,6 +99,10 @@ const ProductDetail = ({ categories, product, contact }: IProps) => {
           __html: product.description || '',
         }}
       />
+
+      <div className="p-4">
+        <ProductFeatures product={product} />
+      </div>
     </MainLayout>
   );
 };
