@@ -53,6 +53,8 @@ export default async function handler(
 
       await axios(`${URL_REVALIDATE}?path=/`, CONFIG_REVALIDATE);
 
+      await axios(`${URL_REVALIDATE}?path=/checkout`, CONFIG_REVALIDATE);
+
       await axios(
         `${URL_REVALIDATE}?path=/productos/${newProduct.slug}`,
         CONFIG_REVALIDATE

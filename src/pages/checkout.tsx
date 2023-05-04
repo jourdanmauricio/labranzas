@@ -17,8 +17,8 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
   return (
     <MainLayout categories={categories} contact={contact}>
       <div className="p-10 flex gap-2">
-        <div className="border w-[30%]">Datos</div>
-        <div className="border w-[70%]">
+        <div className="border w-[40%]">Datos</div>
+        <div className="border w-[60%]">
           <CartDetail />
         </div>
       </div>

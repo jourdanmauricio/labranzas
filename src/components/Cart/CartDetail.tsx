@@ -10,11 +10,16 @@ const productService = new ProductHttpService();
 const CartDetail = () => {
   const { cart } = useContext(CartContext);
   const [itemsCart, setItemsCart] = useState<TProductDetail[]>([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const getProducts = async () => {
       const products = await productService.getByIds(cart);
-      // const total = products.reduce((value, acum) => value + acum.price, 0);
+      let total = 0;
+      for (let i = 0; i < products.length; i++) {
+        total += products[i].quantity * products[i].price;
+      }
+      setTotal(total);
       setItemsCart(products);
     };
     getProducts();
@@ -54,6 +59,7 @@ const CartDetail = () => {
             </div>
           </div>
         ))}
+      <p className="text-right">TOTAL: {total}</p>
     </div>
   );
 };
