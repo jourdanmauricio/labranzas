@@ -1,9 +1,8 @@
 import Image from 'next/image';
-// import AddToCart from '../AddToCart';
 import { IProduct } from '@/models';
 import { useContext } from 'react';
 import FavoritesContext from '@/context/FavoritesContext';
-import AddToCart from '../Cart/AddToCart';
+// import AddToCart from '../Cart/AddToCart';
 import Link from 'next/link';
 
 interface IProps {
@@ -40,10 +39,10 @@ const FavoriteItem = ({ item }: IProps) => {
             <p className="min-w-[150px]">{item.sku}</p>
             <p className="text-center">${item.price}</p>
             <div className="hidden sm:inline-block">
-              <AddToCart
+              {/* <AddToCart
                 item={{ ...item, quantity: 1 }}
                 available_quantity={item.available_quantity}
-              />
+              /> */}
             </div>
             {/* <p className="hidden sm:inline-block">Agregar al carrito</p> */}
           </div>
@@ -51,10 +50,10 @@ const FavoriteItem = ({ item }: IProps) => {
       </div>
 
       <div className="sm:hidden text-sm flex justify-between text-gray-800">
-        <AddToCart
+        {/* <AddToCart
           item={{ ...item, quantity: 1 }}
           available_quantity={item.available_quantity}
-        />
+        /> */}
         <span
           onClick={() => handleDelete(item.id)}
           className="tracking-wider text-xs cursor-pointer p-1 rounded-md text-red-500  hover:bg-red-50"
