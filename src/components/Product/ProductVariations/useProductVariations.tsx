@@ -100,12 +100,17 @@ const useProductVariations = ({
       const variation = getVariationFromAtribs(variations, selected);
       console.log('Selected', variation);
       if (Object.keys(variation).length > 0) {
-        handleSelectedVariation('quantity', 1);
+        handleSelectedVariation(
+          'quantity',
+          parseInt(variation.available_quantity)
+        );
+        // handleSelectedVariation('quantity', 1);
         handleSelectedVariation('var_id', variation.id);
         handleSelectedVariation('variation', variation);
         handleSelectedVariation('price', variation.price);
         handleSelectedVariation('sku', variation.sku);
-        handleSelectedVariation('images', variation.picture_ids);
+        handleSelectedVariation('pictures', variation.picture_ids);
+        handleSelectedVariation('type', 'variation');
       } else {
         console.log('UnSelected!!!!!!!!!!', variation);
         handleSelectedVariation('quantity', 0);

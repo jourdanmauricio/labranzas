@@ -99,6 +99,7 @@ export async function getStaticProps() {
     bestSellers = bestSellers.map((prod: any) => ({
       ...prod,
       variations: JSON.parse(prod.variations),
+      pictures: JSON.parse(prod.pictures),
     }));
 
     // imagesCarousel

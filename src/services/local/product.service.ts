@@ -5,9 +5,12 @@ import {
   IProductMl,
   IAttributeCombination,
   IUpdateProductDto,
+  TProductDetail,
+  IVariations,
 } from '@/models';
 import { axiosMl } from '../mlInterceptor';
 import axios from 'axios';
+import { initialSaleTerms } from '@/config/variables';
 
 export class ProductHttpService {
   private static instance: ProductHttpService | null = null;
@@ -47,11 +50,18 @@ export class ProductHttpService {
       pictures,
       order,
       thumbnail: productMl.secure_thumbnail,
-      sale_terms: productMl.sale_terms.map((term) => ({
-        id: term.id,
-        name: term.name,
-        value: term.value_name,
-      })),
+      sale_terms: initialSaleTerms.map((saleTerm) => {
+        const value = productMl.sale_terms.find(
+          (term) => term.id === saleTerm.id
+        );
+        return value
+          ? {
+              id: value.id,
+              name: value.name,
+              value_name: value.value_name,
+            }
+          : saleTerm;
+      }),
       variations: productMl.variations.map((variation) => {
         const vari = {
           id: variation.id,
@@ -80,6 +90,44 @@ export class ProductHttpService {
   async getAll() {
     const { data } = await axios.get<IProduct[]>('/api/products');
     return data;
+  }
+
+  async get(id: number) {
+    const { data } = await axios.get<IProduct[]>(`/api/products/${id}`);
+    return data;
+  }
+
+  async getByIds(products: TProductDetail[]) {
+    const productUrls = products.map(
+      (product) => `/api/products/${product.id}`
+    );
+
+    const requests = productUrls.map((url: string) => axios.get(url));
+
+    return axios.all(requests).then((responses) => {
+      let newItems: TProductDetail[] = [];
+      const _products = responses.map((response) => response.data);
+      const newData = products.forEach((prod) => {
+        const found = _products.find((item) => item.id === prod.id);
+        if (found) {
+          if (prod.type === 'product') {
+            prod.price = found.price;
+            prod.available_quantity = parseInt(found.available_quantity);
+          } else {
+            const foundVari = found.variations.find(
+              (vari: IVariations) => vari.id === prod.var_id
+            );
+            if (foundVari) {
+              prod.price = foundVari.price;
+              prod.available_quantity = parseInt(foundVari.available_quantity);
+            }
+          }
+          newItems.push(prod);
+        }
+      });
+
+      return newItems;
+    });
   }
 
   async create(product: ICreateProductDto) {

@@ -57,7 +57,7 @@ const ProductFeatures = ({ product }: IProps) => {
               : styles.tab__content
           }
         >
-          <ProductSaleTerms />
+          <ProductSaleTerms saleTerms={product.sale_terms} />
         </div>
       </div>
     </div>

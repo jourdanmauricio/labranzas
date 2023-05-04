@@ -56,3 +56,26 @@ export const quillSimpleModules = {
     ['clean'],
   ],
 };
+
+export const initialSaleTerms = [
+  {
+    id: 'WARRANTY_TYPE',
+    name: 'Tipo de garantía',
+    value_name: '',
+  },
+  {
+    id: 'WARRANTY_TIME',
+    name: 'Tiempo de garantía',
+    value_name: '',
+  },
+  {
+    id: 'MANUFACTURING_TIME',
+    name: 'Disponibilidad de stock',
+    value_name: '',
+  },
+  {
+    id: 'PURCHASE_MAX_QUANTITY',
+    name: 'Cantidad máxima de compra',
+    value_name: '',
+  },
+];

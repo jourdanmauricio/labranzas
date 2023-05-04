@@ -12,7 +12,7 @@ const ProductVariations = ({ variations, handleSelectedVariation }: IProps) => {
     useProductVariations({ variations, handleSelectedVariation });
 
   return (
-    <div className="relative h-fit border border-gray-600 rounded px-2 py-4">
+    <div className="relative h-fit w-fit border border-gray-600 rounded px-2 py-4 mx-auto">
       <span className="absolute bg-slate-50 px-2 -top-3 left-5 text-sm">
         Variaciones
       </span>
@@ -74,10 +74,10 @@ const ProductVariations = ({ variations, handleSelectedVariation }: IProps) => {
       {/* <p>Cantidad: {quantity}</p>
       <p>Precio: {price}</p> */}
       {Object.keys(selected).length > 0 && (
-        <>
+        <div className="block text-center">
           <p>Cantidad: {findQuantity().available_quantity}</p>
           <p>Precio: {findQuantity().price}</p>
-        </>
+        </div>
       )}
     </div>
   );

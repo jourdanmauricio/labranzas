@@ -117,6 +117,7 @@ export const getStaticProps = async ({
     respProducts = respProducts.map((prod: any) => ({
       ...prod,
       variations: JSON.parse(prod.variations),
+      pictures: JSON.parse(prod.pictures),
     }));
 
     const products = respProducts.sort(

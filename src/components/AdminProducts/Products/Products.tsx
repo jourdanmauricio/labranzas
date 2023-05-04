@@ -11,9 +11,7 @@ const Products = () => {
   const {
     status,
     action,
-    products,
     PRODUCTS_COLUMNS,
-    // actionsMenu,
     showModalDelete,
     currentData,
     filteredItems,
@@ -29,15 +27,14 @@ const Products = () => {
       <Breadcrumbs catId={currentData?.id} />
       {status === 'loading' && <Loader />}
       {action !== 'view' && <Product />}
-      {action === 'view' && products && (
+      {action === 'view' && filteredItems() && (
         <>
+          {/* {filteredItems[0].id} */}
           <DataTable
             title="Productos"
             columns={PRODUCTS_COLUMNS}
-            data={filteredItems}
+            data={filteredItems()}
             dense
-            // actions={actionsMenu}
-            // persistTableHead
             pagination
             paginationResetDefaultPage={resetPaginationToggle}
             expandableRows

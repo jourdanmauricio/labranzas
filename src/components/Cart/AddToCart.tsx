@@ -43,19 +43,23 @@ const AddToCart = ({ item, available_quantity }: IProps) => {
   return (
     <div>
       {quantityCart > 0 ? (
-        <div className="flex justify-between">
+        <div className="flex justify-between w-fit gap-2 mx-auto">
           <button onClick={handleDelToCart} className="button-primary  mt-3">
             <FaMinus className="inline-block text-teal-500" />
           </button>
 
-          <button className="button-primary  mt-3">
+          <button className="button-primary mt-3">
             <FaCartPlus className="inline-block text-teal-500" />
             <span className="ml-2">
               {`${quantityCart} ${quantityCart === 1 ? 'unidad' : 'unidades'} `}
             </span>
           </button>
 
-          <button onClick={handleAddToCart} className="button-primary mt-3">
+          <button
+            onClick={handleAddToCart}
+            className="button-primary mt-3 disabled:bg-gray-200"
+            disabled={quantityCart === available_quantity}
+          >
             <FaPlus className="inline-block text-teal-500" />
           </button>
         </div>

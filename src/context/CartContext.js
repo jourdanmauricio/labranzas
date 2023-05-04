@@ -23,7 +23,7 @@ const CartProvider = ({ children }) => {
       let newCart = cart;
 
       if (found === undefined) {
-        newCart = [...cart, product];
+        newCart = [...cart, { ...product, quantity: 1 }];
       } else {
         newCart = cart.map((el) =>
           el.id === product.id && el.var_id === var_id
@@ -45,11 +45,14 @@ const CartProvider = ({ children }) => {
       if (found !== undefined) {
         if (found.quantity === 1) {
           newCart = cart.filter(
-            (prod) => prod.id !== id && prod.var_id === var_id
+            // (prod) => prod.id !== id && prod.var_id === var_id
+            (prod) => prod !== found
           );
         } else {
           newCart = cart.map((el) =>
-            el.id === id ? { ...found, quantity: found.quantity - 1 } : el
+            el.id === id && el.var_id === var_id
+              ? { ...found, quantity: found.quantity - 1 }
+              : el
           );
         }
       } else {

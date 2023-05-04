@@ -24,14 +24,14 @@ export interface IProduct extends BaseModel {
   slug: string;
   pictures: IPicture[];
   description?: string;
-  sale_terms: ITerms[] | [];
+  sale_terms: ISaleTerm[] | [];
   variations: any[]; // IVariations[];
   video_id: string | null;
 }
 
 export interface ICreateProductDto
   extends Omit<IProduct, 'id' | 'created_at' | 'updated_at' | 'sale_terms'> {
-  sale_terms: ITerms[] | [];
+  sale_terms: ISaleTerm[] | [];
 }
 
 export interface IUpdateProductDto extends Partial<IProduct> {}

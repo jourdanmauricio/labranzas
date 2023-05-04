@@ -21,6 +21,7 @@ const ProductCard = ({ product }: IProps) => {
     price: product.price,
     sku: product.sku,
     pictures: product.pictures,
+    type: 'product',
   });
 
   useEffect(() => {

@@ -17,6 +17,7 @@ import Variations from './components/Variations/Variations';
 import { productValidate } from '@/utils';
 import Order from './components/Order';
 import Slug from './components/Slug';
+import SaleTerms from './components/SaleTerms';
 
 const Product = () => {
   const [ml_id, setProdMlId] = useState('');
@@ -26,7 +27,7 @@ const Product = () => {
     action,
     handleAddProduct,
     handleUpdProduct,
-    handleUpdAction,
+    handleUpdField,
     handleAddProductfromMl,
   } = useContext(ProductsContext);
 
@@ -40,10 +41,17 @@ const Product = () => {
     handleAddProductfromMl(_ml_id);
   };
 
+  const onUpdateProduct = async (values: any) => {
+    console.log('Before UPD PROD');
+    await handleUpdProduct(values);
+    console.log('After UPD PROD');
+  };
+
   const formik = useFormik({
     initialValues: currentData,
     validate: productValidate,
-    onSubmit: action === 'new' ? handleAddProduct : handleUpdProduct,
+    // onSubmit: action === 'new' ? handleAddProduct : handleUpdProduct,
+    onSubmit: action === 'new' ? handleAddProduct : onUpdateProduct,
   });
 
   return (
@@ -135,7 +143,6 @@ const Product = () => {
             title="Variaciones"
           >
             <Variations formik={formik} />
-            {/* <p>VARIACIONES</p> */}
           </AccordionItem>
           {formik.getFieldProps('variations').value.length === 0 && (
             <AccordionItem
@@ -146,14 +153,27 @@ const Product = () => {
               <Images formik={formik} />
             </AccordionItem>
           )}
-        </ul>
+          <AccordionItem
+            onToggle={() => toggleTab(3)}
+            active={toggleState === 3}
+            title="Términos de venta"
+          >
+            <SaleTerms formik={formik} />
+          </AccordionItem>
 
-        <Description formik={formik} />
+          <AccordionItem
+            onToggle={() => toggleTab(4)}
+            active={toggleState === 4}
+            title="Descripción"
+          >
+            <Description formik={formik} />
+          </AccordionItem>
+        </ul>
 
         <div className="mt-8 flex justify-between">
           <button
             type="button"
-            onClick={() => handleUpdAction('view')}
+            onClick={() => handleUpdField('action', 'view')}
             className="btn-secondary"
           >
             Cancelar

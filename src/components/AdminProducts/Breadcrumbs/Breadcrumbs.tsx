@@ -7,7 +7,8 @@ interface IProps {
 }
 
 const Breadcrumbs = ({ catId }: IProps) => {
-  const { action, handleUpdAction } = useContext(ProductsContext);
+  // const { action, handleUpdAction } = useContext(ProductsContext);
+  const { action, handleUpdField } = useContext(ProductsContext);
   return (
     <p className="text-xs">
       <Link className="hover:underline cursor-pointer" href="/admin">
@@ -18,7 +19,7 @@ const Breadcrumbs = ({ catId }: IProps) => {
         <span>Productos</span>
       ) : (
         <span
-          onClick={() => handleUpdAction('view')}
+          onClick={() => handleUpdField('action', 'view')}
           className="hover:underline cursor-pointer"
         >
           Productos

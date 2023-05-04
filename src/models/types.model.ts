@@ -27,4 +27,6 @@ export type TProductDetail = {
   price: number;
   pictures: IPicture[];
   variation?: number;
+  type: 'product' | 'variation';
+  available_quantity?: number;
 };

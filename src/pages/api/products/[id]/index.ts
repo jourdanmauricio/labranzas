@@ -28,6 +28,15 @@ export default async function handler(
 
   const { id } = req.query;
 
+  if (req.method === 'GET') {
+    try {
+      const product = await service.findOne(id);
+      res.status(200).json(product);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+  }
+
   if (req.method === 'PUT') {
     try {
       const updProduct = await service.update(id, req.body);

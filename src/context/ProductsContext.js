@@ -9,14 +9,12 @@ const categoryService = new CategoryHttpService();
 
 const ACTIONS = {
   SET_PRODUCTS: 'setProducts',
-  SET_CURRENT_DATA: 'setCurrentdata',
-  UPD_ACTION: 'updAction',
   DEL_PRODUCT: 'delProduct',
   ADD_PRODUCT: 'addProduct',
   UPD_PRODUCT: 'updProduct',
-  SET_SHOW_MODAL_DELETE: 'showModalDelete',
   CANCEL: 'cancel',
-  UPD_STATUS: 'updStatus',
+  UPD_FILTER: 'updFilter',
+  UPD_FIELD: 'updField',
 };
 
 function reducer(state, action) {
@@ -30,16 +28,6 @@ function reducer(state, action) {
         action: 'view',
         error: null,
       };
-    case ACTIONS.SET_CURRENT_DATA:
-      return {
-        ...state,
-        currentData: action.payload,
-      };
-    case ACTIONS.UPD_ACTION:
-      return {
-        ...state,
-        action: action.payload,
-      };
     case ACTIONS.DEL_PRODUCT:
       return {
         ...state,
@@ -52,12 +40,13 @@ function reducer(state, action) {
       return {
         ...state,
         status: 'success',
-        products: [...state.products, action.payload],
+        products: [action.payload, ...state.products],
         message: '',
         action: 'view',
         error: null,
       };
     case ACTIONS.UPD_PRODUCT:
+      console.log('UPDTED PROD', action.payload);
       return {
         products: state.products.map((prod) =>
           prod.id === action.payload.id ? action.payload : prod
@@ -66,23 +55,31 @@ function reducer(state, action) {
         message: '',
         action: 'view',
         error: null,
-      };
-    case ACTIONS.SET_SHOW_MODAL_DELETE:
-      return {
-        ...state,
-        showModalDelete: action.payload,
+        filter: {
+          filterCategory: '',
+          filterText: '',
+          filterStatus: '',
+        },
+        resetPaginationToggle: !state.resetPaginationToggle,
       };
     case ACTIONS.CANCEL:
       return {
         ...state,
         currentData: null,
         showModalDelete: false,
-        // showModalDetail: false,
       };
-    case ACTIONS.UPD_STATUS:
+    case ACTIONS.UPD_FILTER:
       return {
         ...state,
-        status: action.payload,
+        filter: {
+          ...state.filter,
+          [action.payload.field]: action.payload.value,
+        },
+      };
+    case ACTIONS.UPD_FIELD:
+      return {
+        ...state,
+        [action.payload.field]: action.payload.value,
       };
     default:
       return state;
@@ -90,7 +87,6 @@ function reducer(state, action) {
 }
 
 const ProductsProvider = ({ children }) => {
-  // const route = useRouter();
   const dispatchNotif = useNotification();
   const [state, dispatch] = useReducer(reducer, {
     products: [],
@@ -100,13 +96,31 @@ const ProductsProvider = ({ children }) => {
     currentData: {},
     message: '',
     showModalDelete: false,
+    resetPaginationToggle: false,
+    filter: {
+      filterCategory: '',
+      filterText: '',
+      filterStatus: '',
+    },
   });
 
-  const { products, status, action, message, currentData, showModalDelete } =
-    state;
+  const {
+    products,
+    status,
+    action,
+    message,
+    currentData,
+    showModalDelete,
+    resetPaginationToggle,
+    filter,
+  } = state;
 
   useEffect(() => {
-    dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+    dispatch({
+      type: ACTIONS.UPD_FIELD,
+      payload: { field: 'status', value: 'loading' },
+    });
+
     const fetchProducts = async () => {
       try {
         const products = await productService.getAll();
@@ -121,7 +135,11 @@ const ProductsProvider = ({ children }) => {
 
   const handleAddProduct = async (product) => {
     try {
-      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      dispatch({
+        type: ACTIONS.UPD_FIELD,
+        payload: { field: 'status', value: 'loading' },
+      });
+
       // Change category
       if (product.category_id !== product.category.id)
         product.category_id = parseInt(product.category.id);
@@ -142,7 +160,11 @@ const ProductsProvider = ({ children }) => {
   };
   const handleUpdProduct = async (product) => {
     try {
-      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      dispatch({
+        type: ACTIONS.UPD_FIELD,
+        payload: { field: 'status', value: 'loading' },
+      });
+
       // Change category
       if (product.category_id !== product.category.id)
         product.category_id = parseInt(product.category.id);
@@ -163,7 +185,11 @@ const ProductsProvider = ({ children }) => {
   };
   const handleDeleteProduct = async (id) => {
     try {
-      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      dispatch({
+        type: ACTIONS.UPD_FIELD,
+        payload: { field: 'status', value: 'loading' },
+      });
+
       await productService.delete(id);
       dispatch({ type: ACTIONS.DEL_PRODUCT, payload: id });
       dispatchNotif({
@@ -180,7 +206,10 @@ const ProductsProvider = ({ children }) => {
   };
   const handleAddProductfromMl = async (ml_id) => {
     try {
-      dispatch({ type: ACTIONS.UPD_STATUS, payload: 'loading' });
+      dispatch({
+        type: ACTIONS.UPD_FIELD,
+        payload: { field: 'status', value: 'loading' },
+      });
       let _ml_id = ml_id;
       if (!ml_id.includes('MLA')) _ml_id = `MLA${ml_id}`;
 
@@ -223,38 +252,50 @@ const ProductsProvider = ({ children }) => {
     message,
     currentData,
     showModalDelete,
+    resetPaginationToggle,
+    filter,
     handleDeleteProduct,
-    handleUpdStatus: (status) =>
-      dispatch({
-        type: ACTIONS.UPD_STATUS,
-        payload: status,
-      }),
     handleUpdProduct,
     handleAddProduct,
-    handleUpdAction: (action) =>
-      dispatch({
-        type: ACTIONS.UPD_ACTION,
-        payload: action,
-      }),
-    setCurrentData: (currentData) =>
-      dispatch({
-        type: ACTIONS.SET_CURRENT_DATA,
-        payload: currentData,
-      }),
-    setShowModalDelete: (showModalDelete) =>
-      dispatch({
-        type: ACTIONS.SET_SHOW_MODAL_DELETE,
-        payload: showModalDelete,
-      }),
-    handleCancelDelete: () => dispatch({ type: ACTIONS.CANCEL }),
     handleAddProductfromMl,
+    handleCancelDelete: () => dispatch({ type: ACTIONS.CANCEL }),
+    handleUpdFilter: (field, value) =>
+      dispatch({
+        type: ACTIONS.UPD_FILTER,
+        payload: { field, value },
+      }),
+    handleUpdField: (field, value) =>
+      dispatch({
+        type: ACTIONS.UPD_FIELD,
+        payload: { field, value },
+      }),
     getCategories: () => {
-      let categories = products.map((product) => product.category?.name);
+      // Array con las categorias
+      let categories = state.products.map((product) => product.category?.name);
+      // Elimino duplicados
       categories = categories.filter(
         (item, index) => categories.indexOf(item) === index
       );
       return categories;
     },
+    filteredItems: () =>
+      state.products
+        .filter(
+          (product) =>
+            (product.title
+              .toLowerCase()
+              .includes(state.filter.filterText.toLowerCase()) ||
+              product.sku
+                .toLowerCase()
+                .includes(state.filter.filterText.toLowerCase())) &&
+            product.status
+              .toLowerCase()
+              .includes(state.filter.filterStatus.toLowerCase()) &&
+            product.category?.name
+              .toLowerCase()
+              .includes(state.filter.filterCategory.toLowerCase())
+        )
+        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)),
   };
 
   return (

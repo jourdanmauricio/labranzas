@@ -7,6 +7,7 @@ import ProductImages from '../../components/Product/ProductImages/ProductImages'
 import Breadcrumbs from '../../components/Product/Breadcrumbs/Breadcrumbs';
 import AddToCart from '@/components/Cart/AddToCart';
 import ProductFeatures from '@/components/Product/ProductFeatures/ProductFeatures';
+import Link from 'next/link';
 
 const CategoryService = require('@/db/services/category.service');
 const categoryService = new CategoryService();
@@ -32,6 +33,7 @@ const ProductDetail = ({ categories, product, contact }: IProps) => {
     price: product.price,
     sku: product.sku,
     pictures: product.pictures,
+    type: 'product',
   });
 
   useEffect(() => {
@@ -39,6 +41,7 @@ const ProductDetail = ({ categories, product, contact }: IProps) => {
       setOptionsProduct({
         ...optionsProduct,
         quantity: -1,
+        pictures: product.variations[0].picture_ids,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,18 +51,15 @@ const ProductDetail = ({ categories, product, contact }: IProps) => {
     field: string,
     value: number | string | []
   ) => {
-    console.log('field', field, value);
     setOptionsProduct((prevState) => ({ ...prevState, [field]: value }));
   };
-
-  console.log('optionsProduct', optionsProduct);
 
   return (
     <MainLayout categories={categories} contact={contact}>
       <div className="mt-4 ml-2">
         <Breadcrumbs product={product} />
       </div>
-      <div className="flex">
+      <div className="flex w-fit mx-auto">
         <ProductImages images={optionsProduct.pictures} title={product.title} />
 
         <div className="flex flex-col p-4">
@@ -88,8 +88,13 @@ const ProductDetail = ({ categories, product, contact }: IProps) => {
 
           <AddToCart
             item={optionsProduct}
-            available_quantity={product.available_quantity}
+            // available_quantity={product.available_quantity}
+            available_quantity={optionsProduct.quantity}
           />
+
+          <Link href="/checkout" className="btn-primary mt-10">
+            <p className="mx-auto">Finalizar pedido</p>
+          </Link>
         </div>
       </div>
 
@@ -136,7 +141,6 @@ export const getStaticProps = async ({
     let product = Object.assign({}, responseProduct.dataValues);
 
     product.category = product.category.dataValues;
-
     product.attributes = JSON.parse(product.attributes);
     product.pictures = JSON.parse(product.pictures);
     product.sale_terms = JSON.parse(product.sale_terms);

@@ -1,5 +1,5 @@
 import { status as statusProd } from '@/config/variables';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import ProductsContext from '@/context/ProductsContext';
 import { IProduct } from '@/models';
 import { FaRegTrashAlt, FaEdit, FaPlus, FaTimes } from 'react-icons/fa';
@@ -10,42 +10,23 @@ import { ExpanderComponentProps } from 'react-data-table-component';
 import ShowVariations from '../ShowVariations/ShowVariations';
 
 const useProducts = () => {
-  // const [categories, setCategories] = useState<string[]>([]);
-  const [filterCategory, setFilterCategory] = useState('');
-  const [filterText, setFilterText] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
-  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-
   const {
-    products,
     status,
     action,
     message,
-    setCurrentData,
     currentData,
     showModalDelete,
-    setShowModalDelete,
+    filter,
     getCategories,
     handleDeleteProduct,
-    handleUpdStatus,
-    handleUpdAction,
     handleAddProductfromMl,
+    resetPaginationToggle,
+    handleUpdFilter,
+    handleUpdField,
+    filteredItems,
   } = useContext(ProductsContext);
 
-  const filteredItems = products.filter(
-    (product: IProduct) =>
-      (product.title.toLowerCase().includes(filterText.toLowerCase()) ||
-        product.sku.toLowerCase().includes(filterText.toLowerCase())) &&
-      product.status.toLowerCase().includes(filterStatus.toLowerCase()) &&
-      product.category?.name
-        .toLowerCase()
-        .includes(filterCategory.toLowerCase())
-  );
-
-  // let categories = products.map((product: IProduct) => product.category?.name);
-  // categories = categories.filter(
-  //   (item: string, index: number) => categories.indexOf(item) === index
-  // );
+  console.log('products', filteredItems());
 
   const PRODUCTS_COLUMNS = [
     {
@@ -86,46 +67,37 @@ const useProducts = () => {
   ];
 
   const onCancelDelete = () => {
-    setCurrentData(initialProduct);
-    setShowModalDelete(false);
+    handleUpdField('currentData', initialProduct);
+    handleUpdField('showModalDelete', false);
   };
 
   const onDelete = () => {
     handleDeleteProduct(currentData?.id);
-    setShowModalDelete(false);
+    handleUpdField('showModalDelete', false);
   };
 
   const deleteData = (row: IProduct) => {
-    setCurrentData(row);
-    setShowModalDelete(true);
+    handleUpdField('currentData', row);
+    handleUpdField('showModalDelete', true);
   };
 
   const editData = (row: IProduct) => {
-    setCurrentData(row);
-    handleUpdAction('edit');
+    handleUpdField('currentData', row);
+    handleUpdField('action', 'edit');
   };
 
   const newData = () => {
-    setCurrentData(initialProduct);
-    handleUpdAction('new');
+    handleUpdField('currentData', initialProduct);
+    handleUpdField('action', 'new');
   };
-
-  // const actionsMenu = useMemo(() => {
-  //   return (
-  //     <button className="table__icon table__icon--add" onClick={newData}>
-  //       <FaPlus />
-  //     </button>
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
-      if (filterText || filterStatus || filterCategory) {
-        setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText('');
-        setFilterStatus('');
-        setFilterCategory('');
+      if (filter.filterText || filter.filterStatus || filter.filterCategory) {
+        handleUpdField('resetPaginationToggle', !resetPaginationToggle);
+        handleUpdFilter('filterCategory', '');
+        handleUpdFilter('filterText', '');
+        handleUpdFilter('filterStatus', '');
       }
     };
 
@@ -137,8 +109,8 @@ const useProducts = () => {
           </label>
           <select
             className="input-form"
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
+            value={filter.filterCategory}
+            onChange={(e) => handleUpdFilter('filterCategory', e.target.value)}
           >
             <option value=""></option>
             {getCategories().map((el: string) => (
@@ -155,8 +127,10 @@ const useProducts = () => {
           </label>
           <select
             className="input-form"
-            value={statusProd.find((el) => el.id === filterStatus)?.id || ''}
-            onChange={(e) => setFilterStatus(e.target.value)}
+            value={
+              statusProd.find((el) => el.id === filter.filterStatus)?.id || ''
+            }
+            onChange={(e) => handleUpdFilter('filterStatus', e.target.value)}
           >
             <option value=""></option>
             {statusProd.map((el) => (
@@ -177,8 +151,8 @@ const useProducts = () => {
             type="text"
             placeholder="Search"
             aria-label="Search Input"
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
+            value={filter.filterText}
+            onChange={(e) => handleUpdFilter('filterText', e.target.value)}
           />
         </div>
         <div className="w-8">
@@ -202,13 +176,7 @@ const useProducts = () => {
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    filterCategory,
-    filterStatus,
-    filterText,
-    resetPaginationToggle,
-    getCategories,
-  ]);
+  }, [filter, resetPaginationToggle, getCategories, status]);
 
   const ExpandedComponent: React.FC<ExpanderComponentProps<IProduct>> = ({
     data,
@@ -243,13 +211,10 @@ const useProducts = () => {
   return {
     action,
     status,
-    products,
     PRODUCTS_COLUMNS,
-    // actionsMenu,
     showModalDelete,
     currentData,
     filteredItems,
-    handleUpdStatus,
     handleAddProductfromMl,
     subHeaderComponentMemo,
     resetPaginationToggle,
