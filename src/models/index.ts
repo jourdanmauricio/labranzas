@@ -5,5 +5,5 @@ export * from './image.model';
 export * from './product.model';
 export * from './user.model';
 export * from './base.model';
-
+export * from './shipping.model';
 export * from './types.model';

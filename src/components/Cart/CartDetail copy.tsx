@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from 'react';
 import { ProductHttpService } from '@/services/local';
 import AddToCart from './AddToCart';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const productService = new ProductHttpService();
 
@@ -28,9 +27,7 @@ const CartDetail = () => {
 
   return (
     <div>
-      <p className="text-center text-sm border bg-gray-100 p-1 font-bold">
-        PRODUCTOS
-      </p>
+      <p className="text-center text-sm border bg-gray-100 p-1">PRODUCTOS</p>
       {itemsCart.length > 0 &&
         itemsCart.map((item: TProductDetail) => (
           <div key={item.sku} className="odd:bg-purple-50 p-2">
@@ -65,15 +62,6 @@ const CartDetail = () => {
       <p className="text-right text-sm border bg-gray-100 p-1 font-bold">
         TOTAL: ${total}
       </p>
-
-      <div className="mt-8">
-        <Link
-          href={'/checkout'}
-          className="block btn-primary ml-auto w-full sm:w-fit"
-        >
-          Generar Pedido
-        </Link>
-      </div>
     </div>
   );
 };

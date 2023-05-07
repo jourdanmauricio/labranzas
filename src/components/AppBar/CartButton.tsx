@@ -17,7 +17,7 @@ const CartButton = () => {
 
   return (
     <Link
-      href={'/checkout'}
+      href={'/cart'}
       className="relative hover:bg-pink-200 p-2 rounded-full cursor-pointer"
     >
       <FaShoppingCart className="text-teal-500 text-xl" />
