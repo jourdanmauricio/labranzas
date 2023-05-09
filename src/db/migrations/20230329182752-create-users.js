@@ -22,6 +22,30 @@ module.exports = {
         allowNull: true,
         type: DataTypes.STRING,
       },
+      lastName: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      phone: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      document: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      bill_name: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      bill_lastName: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      bill_document: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
       image: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -38,16 +62,25 @@ module.exports = {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      createdAt: {
+      addresses: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: '[]',
+        get() {
+          return JSON.parse(this.getDataValue('addresses'));
+        },
+        set(value) {
+          this.setDataValue('addresses', JSON.stringify(value));
+        },
+      },
+      created_at: {
         allowNull: false,
         type: DataTypes.DATE,
-        field: 'created_at',
         defaultValue: Sequelize.NOW,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: DataTypes.DATE,
-        field: 'updated_at',
         defaultValue: Sequelize.NOW,
       },
     });

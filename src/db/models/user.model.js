@@ -19,6 +19,30 @@ const UserSchema = {
     allowNull: true,
     type: DataTypes.STRING,
   },
+  lastName: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
+  phone: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
+  document: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
+  bill_name: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
+  bill_lastName: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
+  bill_document: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
   image: {
     allowNull: true,
     type: DataTypes.STRING,
@@ -35,32 +59,30 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  createdAt: {
+  addresses: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    defaultValue: '[]',
+    get() {
+      return JSON.parse(this.getDataValue('addresses'));
+    },
+    set(value) {
+      this.setDataValue('addresses', JSON.stringify(value));
+    },
+  },
+  created_at: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'created_at',
     defaultValue: Sequelize.NOW,
   },
-  updatedAt: {
+  updated_at: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'updated_at',
     defaultValue: Sequelize.NOW,
   },
 };
 
 class User extends Model {
-  // static associate(models) {
-  //   //   this.hasOne(models.Customer, {
-  //   //     as: 'customer',
-  //   //     foreignKey: 'userId',
-  //   //   });
-  //   this.hasMany(models.Post, {
-  //     as: 'posts',
-  //     foreignKey: 'user_id',
-  //   });
-  // }
-
   static config(sequelize) {
     return {
       sequelize,
@@ -72,13 +94,9 @@ class User extends Model {
           const password = await bcrypt.hash(user.password, 10);
           user.password = password;
         },
-        // beforeUpdate: async (user) => {
-        //   const password = await bcrypt.hash(user.password, 10);
-        //   user.password = password;
-        // },
       },
       defaultScope: {
-        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        attributes: { exclude: ['created_at', 'updated_at'] },
       },
       scopes: {
         withPassword: {
