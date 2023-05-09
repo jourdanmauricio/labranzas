@@ -10,8 +10,6 @@ const CartProvider = ({ children }) => {
       : [];
   });
 
-  console.log('cart', cart);
-
   const value = {
     cart,
     isCartOpen,

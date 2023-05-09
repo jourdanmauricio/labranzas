@@ -36,16 +36,16 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
     });
   };
 
-  const onSubmitShippingInfo = async () => {
-    // if (
-    //   formikShippingInfo.getFieldProps('cp').value === '' ||
-    //   formikShippingInfo.getFieldProps('state').value === '' ||
-    //   formikShippingInfo.getFieldProps('city').value === ''
-    //   // formikShippingInfo.getFieldProps('street').value === '' ||
-    //   // formikShippingInfo.getFieldProps('number').value === ''
-    // )
-    //   return;
+  // if (
+  //   formikShippingInfo.getFieldProps('cp').value === '' ||
+  //   formikShippingInfo.getFieldProps('state').value === '' ||
+  //   formikShippingInfo.getFieldProps('city').value === ''
+  //   // formikShippingInfo.getFieldProps('street').value === '' ||
+  //   // formikShippingInfo.getFieldProps('number').value === ''
+  // )
+  //   return;
 
+  const onSubmitShippingInfo = async () => {
     const data = await shippingService.getRateByCarrier({
       name: formikPersonalInfo.getFieldProps('name').value,
       postalCode: formikShippingInfo.getFieldProps('cp').value,
@@ -68,13 +68,10 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
     formikShippingInfo.setFieldValue('carrierOption', data2[0]);
   };
 
-  // const shippingInfoValidate = () => {
-  //   //
-  // };
-
   const formikPersonalInfo = useFormik({
     initialValues: {
       name: '',
+      lastName: '',
       email: '',
       phone: '',
       dniCuil: '',
@@ -152,7 +149,9 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
               2
             </span>
             <button
-              disabled={!formikPersonalInfo.isValid}
+              disabled={
+                !formikPersonalInfo.isValid || !formikPersonalInfo.dirty
+              }
               onClick={() => handleChangeTab(1)}
               className="flex items-center"
             >
@@ -186,13 +185,13 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
             <BuyerInfoForm formik={formikPersonalInfo} />
             <div className="p-5">
               <button
-                onClick={() => handleChangeTab(1)}
+                // onClick={() => handleChangeTab(1)}
                 type="submit"
                 className="block w-full sm:w-fit btn-primary uppercase leading-normal ml-auto"
                 data-te-ripple-init
                 data-te-ripple-color="light"
               >
-                Siguiente
+                Siguiente!
               </button>
             </div>
           </form>
@@ -207,7 +206,7 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
             <div className="flex justify-between p-5">
               <button
                 onClick={() => handleChangeTab(0)}
-                type="submit"
+                type="button"
                 className="inline-block w-fit btn-primary uppercase leading-normal"
                 data-te-ripple-init
                 data-te-ripple-color="light"
@@ -217,7 +216,7 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
 
               <button
                 onClick={() => handleChangeTab(2)}
-                type="submit"
+                type="button"
                 className="inline-block w-fit btn-primary uppercase leading-normal"
                 data-te-ripple-init
                 data-te-ripple-color="light"
@@ -229,11 +228,16 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
         )}
         {tab === 2 && (
           <div>
-            <ConfirmationInfo formik={formikShippingInfo} />
+            <ConfirmationInfo
+              formik={formikShippingInfo}
+              name={formikPersonalInfo.getFieldProps('name').value}
+              lastName={formikPersonalInfo.getFieldProps('lastName').value}
+              email={formikPersonalInfo.getFieldProps('email').value}
+            />
             <div className="flex justify-between p-5">
               <button
                 onClick={() => handleChangeTab(1)}
-                type="submit"
+                type="button"
                 className="inline-block w-fit btn-primary uppercase leading-normal"
                 data-te-ripple-init
                 data-te-ripple-color="light"
@@ -242,7 +246,7 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
               </button>
               <button
                 // onClick={handlePrevTab}
-                type="submit"
+                type="button"
                 className="inline-block w-fit btn-primary uppercase leading-normal"
                 data-te-ripple-init
                 data-te-ripple-color="light"

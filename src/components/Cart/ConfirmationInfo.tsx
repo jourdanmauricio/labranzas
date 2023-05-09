@@ -1,16 +1,21 @@
 import CartContext from '@/context/CartContext';
 import { TProductDetail } from '@/models';
 import { useContext, useEffect, useState } from 'react';
-import { ProductHttpService } from '@/services/local';
+import { CkeckoutHttpService, ProductHttpService } from '@/services/local';
 import Image from 'next/image';
+import { loadMercadoPago } from '@mercadopago/sdk-js';
 
 const productService = new ProductHttpService();
+const checkoutService = new CkeckoutHttpService();
 
 interface IProps {
   formik: any;
+  name: string;
+  lastName: string;
+  email: string;
 }
 
-const ConfirmationInfo = ({ formik }: IProps) => {
+const ConfirmationInfo = ({ formik, name, lastName, email }: IProps) => {
   const { cart } = useContext(CartContext);
   const [itemsCart, setItemsCart] = useState<TProductDetail[]>([]);
   const [total, setTotal] = useState(0);
@@ -24,6 +29,46 @@ const ConfirmationInfo = ({ formik }: IProps) => {
       }
       setTotal(total);
       setItemsCart(products);
+
+      // CHECKOUT ID
+      const data: any = await checkoutService.create(
+        name,
+        lastName,
+        email,
+        products
+      );
+      console.log('data', data);
+
+      // data.global is the ID that MP returns from the API, it comes from our backend route
+      if (data.global) {
+        const script = document.createElement('script'); // Here we create the empty script tag
+        script.type = 'text/javascript'; // The type of the script
+        script.src = 'https://sdk.mercadopago.com/js/v2'; // The link where the script is hosted
+        script.setAttribute('data-preference-id', data.global); // Here we set its data-preference-id to the ID that the Mercado Pago API gives us
+        document.body.appendChild(script); // Here we append it to the body of our page
+
+        // Here we create the button, setting the container, our public key and the ID of the preference that Mercado Pago API returns in its response
+        // const mp = new window.MercadoPago(
+        await loadMercadoPago();
+        // @ts-ignore
+        const mp = new window.MercadoPago(
+          process.env.NEXT_PUBLIC_MP_PUBLIC_KEY,
+          {
+            locale: 'es-AR',
+          }
+        );
+
+        // The ".checkout" is the function that creates the connection between the button and the platform
+        mp.checkout({
+          preference: {
+            id: data.global,
+          },
+          render: {
+            container: '.cho-container',
+            label: 'Pagar ahora',
+          },
+        });
+      }
     };
     getProducts();
   }, [cart]);
@@ -96,6 +141,7 @@ const ConfirmationInfo = ({ formik }: IProps) => {
           ) / 100}
         </p>
       </div>
+      <div className="cho-container"></div>
     </div>
   );
 };

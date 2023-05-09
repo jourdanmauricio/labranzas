@@ -11,6 +11,12 @@ export const personalInfoValidate = (values) => {
   } else if (!/^[A-Za-zÑñÁáÉéÍíÓóÚú\s]+$/i.test(values.name)) {
     errors.name = 'Solo se permiten letras y espacios';
   }
+  // lastName;
+  if (!values.lastName) {
+    errors.lastName = 'Requerido';
+  } else if (!/^[A-Za-zÑñÁáÉéÍíÓóÚú\s]+$/i.test(values.lastName)) {
+    errors.lastName = 'Solo se permiten letras y espacios';
+  }
   // email;
   if (!values.email) {
     errors.email = 'Requiredo';

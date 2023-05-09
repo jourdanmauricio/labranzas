@@ -47,6 +47,35 @@ const BuyerInfoForm = ({ formik }: IProps) => {
             <input
               type="text"
               className="min-h-[auto] w-full rounded border border-slate-600 bg-transparent py-[0.15rem] px-3 leading-[1.6] text-slate-900 outline-none block focus:outline-none focus:ring-0 focus:border-slate-900 peer"
+              id="lastName"
+              placeholder=" "
+              {...formik.getFieldProps('lastName')}
+              name="lastName"
+            />
+            <label
+              htmlFor="lastName"
+              className="absolute text-slate-600 duration-300 transform -translate-y-[1.50rem] scale-90 top-[0.25rem] z-10 origin-[0_0] left-3 mb-0 peer-focus:text-slate-600 peer-focus:scale-90 peer-focus:-translate-y-[1.50rem] peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100"
+            >
+              Apellido
+            </label>
+
+            <div className="h-4">
+              <span
+                className={`absolute left-0 text-xs text-rose-500 transition-opacity duration-1000 ease-in-out ${
+                  formik.errors.lastName && formik.touched.lastName
+                    ? 'opacity-100'
+                    : 'opacity-0'
+                }`}
+              >
+                {formik.errors.lastName}
+              </span>
+            </div>
+          </div>
+
+          <div className="relative w-full">
+            <input
+              type="text"
+              className="min-h-[auto] w-full rounded border border-slate-600 bg-transparent py-[0.15rem] px-3 leading-[1.6] text-slate-900 outline-none block focus:outline-none focus:ring-0 focus:border-slate-900 peer"
               id="phone"
               placeholder=" "
               {...formik.getFieldProps('phone')}
