@@ -37,7 +37,6 @@ const ConfirmationInfo = ({ formik, name, lastName, email }: IProps) => {
         email,
         products
       );
-      console.log('data', data);
 
       // data.global is the ID that MP returns from the API, it comes from our backend route
       if (data.global) {

@@ -46,7 +46,6 @@ function reducer(state, action) {
         error: null,
       };
     case ACTIONS.UPD_PRODUCT:
-      console.log('UPDTED PROD', action.payload);
       return {
         products: state.products.map((prod) =>
           prod.id === action.payload.id ? action.payload : prod

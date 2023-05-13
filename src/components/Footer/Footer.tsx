@@ -28,8 +28,6 @@ const Footer = ({ contact }: IProps) => {
       setAction('loading');
       const newSuscriber = await suscriberService.create(values);
 
-      console.log('newSuscriber', newSuscriber);
-
       setFormMsg('Formulario enviado!. Pronto recibirás novedades.');
     } catch (error) {
       setFormMsg('Error enviando el formulario');

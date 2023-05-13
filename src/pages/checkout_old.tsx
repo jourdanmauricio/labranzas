@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { ShippingHttpService } from '@/services/local/shipping.service';
 import { ICategory, IContact, IRate } from '@/models';
@@ -9,6 +9,7 @@ import BuyerInfoForm from '@/components/Cart/BuyerInfo';
 import { personalInfoValidate, shippingInfoValidate } from '@/utils';
 import { defaultCarriers, provincias } from '@/config/variables';
 import { FaAngleDoubleRight } from 'react-icons/fa';
+import { useSession } from 'next-auth/react';
 
 const shippingService = new ShippingHttpService();
 
@@ -28,6 +29,8 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
   const [shippingOptions, setShippingOptions] =
     useState<IRate[]>(defaultCarriers);
 
+  const { data: session } = useSession();
+
   const handleChangeTab = (value: number) => {
     setTab(value);
     window.scrollTo({
@@ -35,15 +38,6 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
       behavior: 'smooth',
     });
   };
-
-  // if (
-  //   formikShippingInfo.getFieldProps('cp').value === '' ||
-  //   formikShippingInfo.getFieldProps('state').value === '' ||
-  //   formikShippingInfo.getFieldProps('city').value === ''
-  //   // formikShippingInfo.getFieldProps('street').value === '' ||
-  //   // formikShippingInfo.getFieldProps('number').value === ''
-  // )
-  //   return;
 
   const onSubmitShippingInfo = async () => {
     const data = await shippingService.getRateByCarrier({
@@ -56,7 +50,6 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
       street: formikShippingInfo.getFieldProps('street').value,
       number: formikShippingInfo.getFieldProps('number').value,
     });
-    console.log('DATA', data);
     const data2 = data.filter(
       (option: IRate) =>
         option.serviceId !== 277 &&
@@ -70,15 +63,15 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
 
   const formikPersonalInfo = useFormik({
     initialValues: {
-      name: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      dniCuil: '',
-      billingName: '',
-      billingDniCuil: '',
-      pickUpName: '',
-      pickUpDni: '',
+      name: session?.user.name || '',
+      lastName: session?.user.lastName || '',
+      email: session?.user.email || '',
+      phone: session?.user.phone || '',
+      dniCuil: session?.user.document || '',
+      billingName: session?.user.billingName || '',
+      billingDniCuil: session?.user.billingDniCuil || '',
+      pickUpName: session?.user.pickUpName || '',
+      pickUpDni: session?.user.pickUpDni || '',
     },
     validate: personalInfoValidate,
     onSubmit: () => handleChangeTab(1),
@@ -185,13 +178,12 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
             <BuyerInfoForm formik={formikPersonalInfo} />
             <div className="p-5">
               <button
-                // onClick={() => handleChangeTab(1)}
                 type="submit"
                 className="block w-full sm:w-fit btn-primary uppercase leading-normal ml-auto"
                 data-te-ripple-init
                 data-te-ripple-color="light"
               >
-                Siguiente!
+                Siguiente
               </button>
             </div>
           </form>

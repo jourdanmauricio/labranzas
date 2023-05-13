@@ -2,6 +2,7 @@ import CartDetail from '@/components/Cart/CartDetail';
 import ProductCard from '@/components/elements/ProductCard';
 import MainLayout from '@/layout/MainLayout';
 import { ICategory, IContact, IProduct } from '@/models';
+import { useEffect } from 'react';
 
 const CategoryService = require('@/db/services/category.service');
 const service = new CategoryService();

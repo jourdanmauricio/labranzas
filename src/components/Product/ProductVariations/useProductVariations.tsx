@@ -98,7 +98,6 @@ const useProductVariations = ({
 
     if (selected.length === fields.length) {
       const variation = getVariationFromAtribs(variations, selected);
-      console.log('Selected', variation);
       if (Object.keys(variation).length > 0) {
         handleSelectedVariation(
           'quantity',
@@ -112,11 +111,9 @@ const useProductVariations = ({
         handleSelectedVariation('pictures', variation.picture_ids);
         handleSelectedVariation('type', 'variation');
       } else {
-        console.log('UnSelected!!!!!!!!!!', variation);
         handleSelectedVariation('quantity', 0);
       }
     } else {
-      console.log('UnSelected!!!!!!!!!!');
       handleSelectedVariation('quantity', -1);
     }
 

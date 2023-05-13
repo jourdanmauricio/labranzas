@@ -18,6 +18,7 @@ import FavoritesButton from './FavoritesButton';
 import FavoritesFlyout from '../Favorites/FavoritesFlyout';
 import { createRef, useEffect, useRef, useState } from 'react';
 import CartButton from './CartButton';
+import { Url } from 'next/dist/shared/lib/router/router';
 
 interface IProps {
   categories: ICategory[];
@@ -33,6 +34,7 @@ interface IProps {
 
 const AppBar = ({ categories, contact }: IProps) => {
   const router = useRouter();
+
   const currentPath = router.pathname;
 
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -165,7 +167,7 @@ const AppBar = ({ categories, contact }: IProps) => {
 
             <li
               className={`p-2 transition duration-300 ease-in-out hover:bg-gray-600 hover:bg-opacity-70 hover:text-white ${
-                currentPath === '/#ofertas' ? 'bg-gray-900 text-white' : ''
+                currentPath === '/ofertas' ? 'bg-gray-900 text-white' : ''
               }`}
             >
               <Link href="/">OFERTAS</Link>
@@ -190,18 +192,18 @@ const AppBar = ({ categories, contact }: IProps) => {
             <BarMenuProfile />
           ) : (
             <div className="hidden lg:block">
-              <button
+              <Link
                 className="text-gray-700 text-xs hover:underline"
-                onClick={() => signIn()}
+                href={`/auth/register?callbackUrl=${currentPath}`}
               >
                 CREAR CUENTA
-              </button>
-              <Link
+              </Link>
+              <button
                 className="text-gray-700 ml-5 text-xs hover:underline"
-                href="/auth/register"
+                onClick={() => signIn()}
               >
                 INICIAR SESION
-              </Link>
+              </button>
             </div>
           )}
         </div>

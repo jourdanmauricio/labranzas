@@ -24,7 +24,6 @@ export default async function handler(
   //   }
   // }
 
-  console.log('req.method', req.method);
   if (req.method === 'POST') {
     try {
       const newSuscriber = await service.create(req.body);

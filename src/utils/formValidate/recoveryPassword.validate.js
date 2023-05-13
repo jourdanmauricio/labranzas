@@ -1,19 +1,5 @@
-export const registerValidate = (values) => {
+export const recoveryPasswordValidate = (values) => {
   const errors = {};
-
-  if (!values.name) {
-    errors.name = 'Requerido';
-  }
-
-  if (!values.lastName) {
-    errors.lastName = 'Requerido';
-  }
-
-  if (!values.email) {
-    errors.email = 'Requerido';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address';
-  }
 
   if (!values.password) {
     errors.password = 'Requerido';

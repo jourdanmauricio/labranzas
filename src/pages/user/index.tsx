@@ -21,8 +21,6 @@ const User = ({ categories, contact }: IProps) => {
   const [userData, setUserData] = useState<IUser>();
 
   const fetchUserProfile = async () => {
-    console.log(session);
-
     const res = await fetch(
       `http://localhost:3000/users/${session?.user.userName}`,
       {

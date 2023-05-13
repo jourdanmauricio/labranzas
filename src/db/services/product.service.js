@@ -10,7 +10,6 @@ class ProductService {
   }
 
   async find(field, value) {
-    console.log('Find Products');
     let options = {
       include: {
         as: 'category',

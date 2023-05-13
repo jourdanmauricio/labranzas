@@ -42,9 +42,7 @@ const Product = () => {
   };
 
   const onUpdateProduct = async (values: any) => {
-    console.log('Before UPD PROD');
     await handleUpdProduct(values);
-    console.log('After UPD PROD');
   };
 
   const formik = useFormik({

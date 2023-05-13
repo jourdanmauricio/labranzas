@@ -1,22 +1,21 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '@/styles/Form.module.css';
-import { HiAtSymbol, HiFingerPrint, HiOutlineUser } from 'react-icons/hi';
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import { registerValidate } from '@/utils';
+// import { registerValidate } from '@/utils';
 import { useRouter } from 'next/router';
 import { Url } from 'next/dist/shared/lib/router/router';
 import { signIn } from 'next-auth/react';
 
-import { loginValidate } from '@/utils';
-// import AuthLayout from '@/layout/AuthLayout/AuthLayout';
+import { recoveryPasswordValidate } from '@/utils';
 import MainLayout from '@/layout/MainLayout';
-import { ICategory, IContact, IProduct } from '@/models';
+import { ICategory, IContact } from '@/models';
 
 import { useSession } from 'next-auth/react';
-import { FaAt, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Loader from '@/commons/Loader-overlay/Loader-overlay';
+import { useNotification } from '@/commons/Notifications/NotificationProvider';
 
 const CategoryService = require('@/db/services/category.service');
 const service = new CategoryService();
@@ -25,11 +24,8 @@ const SettingService = require('@/db/services/setting.service');
 const settingService = new SettingService();
 
 interface FormValues {
-  name: string;
-  email: string;
   password: string;
   confPass: string;
-  role: string;
 }
 
 interface IProps {
@@ -37,63 +33,64 @@ interface IProps {
   contact: IContact;
 }
 
-const Register = ({ categories, contact }: IProps) => {
+const RecoverPasswordPage = ({ categories, contact }: IProps) => {
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const dispatchNotif = useNotification();
+
   const [show, setShow] = useState({
     password: false,
     confPass: false,
   });
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { callbackUrl } = useRouter().query;
+  const { token } = useRouter().query;
 
   const onSubmit = async (values: FormValues) => {
-    const url = process.env.NEXT_PUBLIC_BASE_PATH;
+    if (token === undefined) {
+      setError('Token inválido');
+      return;
+    }
     setLoading(true);
+
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
+      body: JSON.stringify({ token, newPassword: values.password }),
     };
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/auth/register`,
+      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/auth/change-password`,
       options
     );
 
     const user = await res.json();
 
     if (res.ok === false) {
-      if (res.status === 422) {
-        setError('Email ya registado');
-      } else {
-        setError('Error creando usuario');
-      }
+      setError('Error modificando la contraseña');
     } else {
+      dispatchNotif({
+        type: 'SUCCESS',
+        message: 'Contraseña modificada',
+      });
       const status = await signIn('credentials', {
         redirect: true,
-        email: values.email,
+        email: user.email,
         password: values.password,
-        callbackUrl: callbackUrl as string,
+        callbackUrl: '/',
       });
 
-      // console.log('status', status);
-      // if (status) if (status.ok) router.push(status.url as Url);
-      // router.push(`${process.env.NEXT_PUBLIC_BASE_PATH}/${callbackUrl}` as Url);
+      if (status && status.ok)
+        router.push((process.env.NEXT_PUBLIC_BASE_PATH + '/') as Url);
     }
     setLoading(false);
   };
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      email: '',
-      lastName: '',
       password: '',
       confPass: '',
-      role: 'customer',
     },
-    validate: registerValidate,
+    validate: recoveryPasswordValidate,
     onSubmit,
   });
 
@@ -102,9 +99,8 @@ const Register = ({ categories, contact }: IProps) => {
   return (
     <MainLayout categories={categories} contact={contact}>
       <Head>
-        <title>Labranzas | Registro</title>
+        <title>Login</title>
       </Head>
-
       <div className="flex bg-blue-400">
         <div className="m-auto bg-slate-50 rounded-md w-[95%] sm:w-4/5 h-[80vh] grid lg:grid-cols-2 my-5">
           <div className="relative overflow-hidden  bg-gradient-to-r from-blue-500 to-indigo-500 hidden lg:block">
@@ -116,119 +112,34 @@ const Register = ({ categories, contact }: IProps) => {
           </div>
 
           <div className="relative text-center">
-            {error && <p className="error__form">{error}</p>}
+            {error.length > 0 && <p className="error__form">{error}</p>}
             <section className="w-3/4 h-full mx-auto flex flex-col mt-4">
               <div className="title">
-                <h1 className="text-gray-800 text-2xl">Registrarse</h1>
+                <h1 className="text-gray-800 text-2xl">Recuperar contraseña</h1>
               </div>
               {/* FORM */}
               <form
                 onSubmit={formik.handleSubmit}
-                className="flex flex-col justify-evenly h-full"
+                className="flex flex-col mt-2 justify-evenly h-full"
               >
+                <p className="text-left">
+                  Ingresa la nueva contraseña. Recuerda que debe tener al menos
+                  8 caracteres.
+                </p>
                 <div className={styles.input__group}>
                   <input
-                    type="text"
                     className="input__form peer"
-                    id="name"
-                    placeholder=" "
-                    {...formik.getFieldProps('name')}
-                    name="name"
-                  />
-                  <span className="icon flex items-center px-2">
-                    <HiOutlineUser className="text-gray-400" size={20} />
-                  </span>
-
-                  <label htmlFor="name" className="label__form">
-                    Nombre
-                  </label>
-                  <div className="h-4">
-                    <span
-                      className={`error__input ${
-                        formik.errors.name && formik.touched.name
-                          ? 'opacity-100'
-                          : 'opacity-0'
-                      }`}
-                    >
-                      {formik.errors.name}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.input__group}>
-                  <input
-                    type="text"
-                    className="input__form peer"
-                    id="lastName"
-                    placeholder=" "
-                    {...formik.getFieldProps('lastName')}
-                    name="lastName"
-                  />
-
-                  <span className="icon flex items-center px-2">
-                    <HiOutlineUser className="text-gray-400" size={20} />
-                  </span>
-
-                  <label htmlFor="lastName" className="label__form">
-                    Apellido
-                  </label>
-                  <div className="h-4">
-                    <span
-                      className={`error__input ${
-                        formik.errors.lastName && formik.touched.lastName
-                          ? 'opacity-100'
-                          : 'opacity-0'
-                      }`}
-                    >
-                      {formik.errors.lastName}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.input__group}>
-                  <input
-                    type="text"
-                    className="input__form peer"
-                    id="email"
-                    placeholder=" "
-                    {...formik.getFieldProps('email')}
-                    name="email"
-                  />
-
-                  <span className="icon flex items-center px-2">
-                    <FaAt className="text-gray-400" size={20} />
-                  </span>
-
-                  <label htmlFor="email" className="label__form">
-                    Email
-                  </label>
-                  <div className="h-4">
-                    <span
-                      className={`error__input ${
-                        formik.errors.email && formik.touched.email
-                          ? 'opacity-100'
-                          : 'opacity-0'
-                      }`}
-                    >
-                      {formik.errors.email}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.input__group}>
-                  <input
                     type={`${show.password ? 'text' : 'password'}`}
-                    className="input__form peer"
-                    id="password"
                     placeholder=" "
+                    id="password"
                     {...formik.getFieldProps('password')}
                     name="password"
                   />
                   <span
+                    className="icon flex items-center px-2"
                     onClick={() =>
                       setShow({ ...show, password: !show.password })
                     }
-                    className="icon flex items-center px-2 cursor-pointer"
                   >
                     {show.password ? (
                       <FaEyeSlash className="text-gray-400" size={20} />
@@ -236,7 +147,6 @@ const Register = ({ categories, contact }: IProps) => {
                       <FaEye className="text-gray-400" size={20} />
                     )}
                   </span>
-
                   <label htmlFor="password" className="label__form">
                     Contraseña
                   </label>
@@ -255,18 +165,18 @@ const Register = ({ categories, contact }: IProps) => {
 
                 <div className={styles.input__group}>
                   <input
-                    type={`${show.password ? 'text' : 'password'}`}
                     className="input__form peer"
-                    id="confPass"
+                    type={`${show.confPass ? 'text' : 'password'}`}
                     placeholder=" "
+                    id="confPass"
                     {...formik.getFieldProps('confPass')}
                     name="confPass"
                   />
                   <span
+                    className="icon flex items-center px-2"
                     onClick={() =>
                       setShow({ ...show, confPass: !show.confPass })
                     }
-                    className="icon flex items-center px-2 cursor-pointer"
                   >
                     {show.confPass ? (
                       <FaEyeSlash className="text-gray-400" size={20} />
@@ -275,8 +185,8 @@ const Register = ({ categories, contact }: IProps) => {
                     )}
                   </span>
 
-                  <label htmlFor="confPass" className="label__form">
-                    Contraseña
+                  <label htmlFor="password" className="label__form">
+                    Confirmar contraseña
                   </label>
                   <div className="h-4">
                     <span
@@ -291,16 +201,16 @@ const Register = ({ categories, contact }: IProps) => {
                   </div>
                 </div>
 
-                {/* Register button */}
-                <div className="pt-2">
+                {/* Recovery button */}
+                <div className="pt-5">
                   <button className={styles.button} type="submit">
-                    Registrarse
+                    Cambiar contraseña
                   </button>
                 </div>
 
                 {/* bottom */}
                 <p className="text-center text-gray-400 text-sm">
-                  Tienes una cuenta ?{' '}
+                  Ya tienes una cuenta?{' '}
                   <Link href={'/auth/login'} className="text-blue-700">
                     Login
                   </Link>
@@ -314,7 +224,7 @@ const Register = ({ categories, contact }: IProps) => {
   );
 };
 
-export default Register;
+export default RecoverPasswordPage;
 
 export async function getStaticProps() {
   try {
@@ -326,8 +236,10 @@ export async function getStaticProps() {
     );
 
     // contactData;
-    const responseContact = await settingService.find('name', 'CONTACT_DATA');
-    const respContact = JSON.parse(responseContact[0].dataValues.values);
+    const responseContact = await settingService.find('name', 'contactData');
+    const respContact = responseContact.map(
+      (setting: any) => setting.dataValues
+    );
     const contact = respContact.reduce(
       (obj: any, cur: any) => ({ ...obj, [cur.feature]: cur.value }),
       {}

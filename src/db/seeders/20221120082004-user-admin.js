@@ -1,7 +1,6 @@
 'use strict';
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-// const { config } = require('../../config/config');
 
 module.exports = {
   async up(queryInterface) {
@@ -21,9 +20,20 @@ module.exports = {
           document: process.env.ADMIN_DOCUMENT,
           bill_name: process.env.ADMIN_BILL_NAME,
           bill_lastName: process.env.ADMIN_BILL_LASTNAME,
+          bill_document: process.env.ADMIN_DOCUMENT,
           addresses: JSON.stringify([
             {
-              id: process.env.ADMIN_ID,
+              id: 'delivery',
+              country_code: process.env.ADMIN_COUNTRY_CODE,
+              state: process.env.ADMIN_STATE,
+              city: process.env.ADMIN_CITY,
+              cp: process.env.ADMIN_CP,
+              street: process.env.ADMIN_STREET,
+              number: process.env.ADMIN_NUMBER,
+              observation: process.env.ADMIN_OBSERVATION,
+            },
+            {
+              id: 'billing',
               country_code: process.env.ADMIN_COUNTRY_CODE,
               state: process.env.ADMIN_STATE,
               city: process.env.ADMIN_CITY,

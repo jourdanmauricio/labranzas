@@ -44,7 +44,15 @@ a {
   animation-iteration-count: infinite;
 }
 
-/* Shake animation */
+.cloud-one {
+  animation: cloud__one 25.5s ease-in 0.9s infinite;
+}
+
+.cloud-two {
+  animation: cloud__two 18.5s ease-in 0.9s infinite;
+}
+
+/* ANIMATIONS */
 @keyframes shake {
   0% {
     transform: translate(1px, 1px) rotate(0deg);
@@ -90,6 +98,23 @@ a {
     transform: translate(1px, -2px) rotate(-1deg);
   }
 }
+@keyframes cloud__one {
+  0% {
+    transform: translateX(280%);
+  }
+  100% {
+    transform: translateX(-250%);
+  }
+}
+
+@keyframes cloud__two {
+  0% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(-250%);
+  }
+}
 
 .grid__image {
   display: grid;
@@ -116,6 +141,22 @@ a {
 
   .label-form {
     @apply text-sm;
+  }
+
+  .error__form {
+    @apply absolute top-0 w-full text-red-700 bg-red-100 bg-opacity-50 px-5 text-sm;
+  }
+
+  .input__form {
+    @apply min-h-[auto] w-full rounded border border-slate-600 bg-transparent py-[0.15rem] px-3 leading-[1.6] text-slate-900 outline-none block focus:outline-none focus:ring-0 focus:border-slate-900;
+  }
+
+  .label__form {
+    @apply absolute text-slate-600 duration-300 transform -translate-y-[1.50rem] scale-90 top-[0.25rem] z-10 origin-[0_0] left-3 mb-0 peer-focus:text-slate-600 peer-focus:scale-90 peer-focus:-translate-y-[1.50rem] peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100;
+  }
+
+  .error__input {
+    @apply absolute top-8 left-2 text-xs text-rose-500 transition-opacity duration-1000 ease-in-out;
   }
 
   .table__icon {

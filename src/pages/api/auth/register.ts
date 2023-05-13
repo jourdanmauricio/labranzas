@@ -33,6 +33,4 @@ export default async function handler(
     console.log('Error creando el usuario', error);
     res.status(500).json({ error: error });
   }
-
-  res.json({ message: 'Signup post request' });
 }

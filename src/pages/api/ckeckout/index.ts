@@ -63,7 +63,6 @@ export default async function handler(
   mercadopago.preferences
     .create(preference)
     .then(function (response: any) {
-      console.log('RESPONSE!!!', response);
       res.status(200).json({ global: response.body.id });
     })
     .catch((error: any) => {

@@ -4,12 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const adminMenu = [
-  { label: 'Perfil', route: '/admin/profile' },
+  { label: 'Perfil', route: '/profile' },
   { label: 'Settings', route: '/admin/products' },
 ];
 
 const userMenu = [
-  { label: 'Perfil', route: '/admin/profile' },
+  { label: 'Perfil', route: '/profile' },
   { label: 'Settings', route: '/admin/products' },
 ];
 

@@ -1,33 +1,50 @@
-// export { default } from "next-auth/middleware";
-import { withAuth } from 'next-auth/middleware';
+import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
-export default withAuth(
-  // `withAuth` augments your `Request` with the user's token.
-  function middleware(req) {
-    if (
-      req.nextUrl.pathname.startsWith('/admin') &&
-      req.nextauth.token?.role !== 'admin'
-    )
-      return NextResponse.rewrite(
-        new URL('/auth/login?message=You Are Not Authorized!', req.url)
-      );
-    if (
-      req.nextUrl.pathname.startsWith('/user') &&
-      req.nextauth.token?.role !== 'user' &&
-      req.nextauth.token?.role !== 'admin'
-    )
-      return NextResponse.rewrite(
-        new URL('/auth/login?message=You Are Not Authorized!', req.url)
-      );
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token,
-    },
+export async function middleware(req: NextRequest) {
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  // console.log('session', session);
+  if (req.nextUrl.pathname.startsWith('/admin')) {
+    if (!session || session?.role !== 'admin') {
+      const requestedPage = req.nextUrl.pathname;
+      const url = req.nextUrl.clone();
+      url.pathname = '/auth/login';
+      url.search = `callbackUrl=${requestedPage}`;
+
+      return NextResponse.redirect(url);
+    }
   }
-);
+
+  if (session) {
+    if (req.nextUrl.pathname.startsWith('/auth/recovery')) {
+      req.nextUrl.pathname = '/';
+      return NextResponse.redirect(req.nextUrl);
+    }
+    if (req.nextUrl.pathname === '/auth/register') {
+      req.nextUrl.pathname = '/';
+      return NextResponse.redirect(req.nextUrl);
+    }
+  }
+
+  if (req.nextUrl.pathname.startsWith('/checkout') && !session) {
+    const requestedPage = req.nextUrl.pathname;
+    const url = req.nextUrl.clone();
+    url.pathname = '/auth/register';
+    url.search = `callbackUrl=${requestedPage}`;
+
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ['/admin/:path*', '/user/:path*'],
+  matcher: [
+    '/admin/:path*',
+    '/auth/register',
+    '/auth/recovery',
+    '/auth/recoveryPassword',
+    '/checkout',
+  ],
 };

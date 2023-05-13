@@ -7,6 +7,8 @@ export * from './formValidate/register.validate';
 export * from './formValidate/suscribe.validate';
 export * from './formValidate/personalInfo.validate';
 export * from './formValidate/shippingInfo.validate';
+export * from './formValidate/recoveryPassword.validate';
+export * from './formValidate/recovery.validate';
 export * from './functions/isVariationContain';
 export * from './functions/isArrayEquals';
 export * from './functions/getVairationFromAtribs';

@@ -19,7 +19,6 @@ const ACTIONS = {
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.SET_SETTINGS:
-      console.log('action.payload', action.payload);
       return {
         ...state,
         settings: action.payload,
@@ -29,7 +28,6 @@ function reducer(state, action) {
         // error: null,
       };
     case ACTIONS.ADD_SETTING:
-      console.log('action.payload', action.payload);
       return {
         ...state,
         status: 'success',

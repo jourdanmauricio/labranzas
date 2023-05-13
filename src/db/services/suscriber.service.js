@@ -2,9 +2,7 @@ const { models, Sequelize } = require('@/db/config/sequelize');
 
 class suscibersService {
   async create(data) {
-    console.log('Create Suscriber');
     const newSuscriber = await models.Suscriber.create(data);
-    console.log('newSuscriber', newSuscriber);
     return newSuscriber;
   }
 

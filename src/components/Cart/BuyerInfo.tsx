@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
 interface IProps {
   formik: any;
@@ -6,6 +7,22 @@ interface IProps {
 
 const BuyerInfoForm = ({ formik }: IProps) => {
   const [showBillingData, setShowBillingData] = useState(false);
+  const { data: session } = useSession();
+  console.log('session', { session });
+
+  useEffect(() => {
+    formik.setFieldValue('name', session?.user.name || '');
+    formik.setFieldValue('lastName', session?.user.lastName || '');
+    formik.setFieldValue('email', session?.user.email || '');
+    formik.setFieldValue('phone', session?.user.phone || '');
+    formik.setFieldValue('dniCuil', session?.user.document || '');
+    formik.setFieldValue('billingName', session?.user.billingName || '');
+    formik.setFieldValue('billingDniCuil', session?.user.billingDniCuil || '');
+    formik.setFieldValue('pickUpName', session?.user.pickUpName || '');
+    formik.setFieldValue('pickUpDni', session?.user.pickUpDni || '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
   return (
     <div>
       <p className="text-center text-sm border bg-gray-100 p-1 font-bold">

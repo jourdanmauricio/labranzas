@@ -28,7 +28,6 @@ export default async function handler(
 
   if (req.method === 'GET') {
     try {
-      console.log('router settings', field, value);
       const settings = await service.find(field, value);
       res.status(200).json(settings);
     } catch (error) {

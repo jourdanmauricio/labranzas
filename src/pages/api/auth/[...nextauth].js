@@ -18,14 +18,14 @@ export const authOptions = {
   //   },
   // },
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID,
+    //   clientSecret: process.env.GITHUB_SECRET,
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_ID,
+    //   clientSecret: process.env.GOOGLE_SECRET,
+    // }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -33,11 +33,6 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        console.log(
-          'NEXTAUTH_URL',
-          `${process.env.NEXTAUTH_URL}/api/auth/login`
-        );
-
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/login`, {
           method: 'POST',
           body: JSON.stringify(credentials),
@@ -47,9 +42,14 @@ export const authOptions = {
         const user = await res.json();
 
         if (res.ok && user) {
+          delete user.created_at;
+          delete user.updated_at;
+          delete user.picture;
+          delete user.recovery_token;
           return user;
         }
-        return null;
+        throw new Error('Email o password incorrecto');
+        // return null;
       },
     }),
   ],
@@ -65,6 +65,7 @@ export const authOptions = {
   },
   pages: {
     signIn: '/auth/login',
+    error: '/auth/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
