@@ -70,6 +70,7 @@ const ConfirmationInfo = ({ formik, name, lastName, email }: IProps) => {
       }
     };
     getProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart]);
 
   return (

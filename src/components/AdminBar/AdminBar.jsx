@@ -1,13 +1,10 @@
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { FaBars } from 'react-icons/fa';
 import BarMenuProfile from '@/components/BarMenuProfile/BarMenuProfile';
 
 const AdminBar = () => {
   const [mobileMenu, setMobileMenu] = useState(true);
-  const { data: session } = useSession();
-  // console.log({ session });
 
   const handleMobileMenu = () => {
     setMobileMenu(!mobileMenu);
