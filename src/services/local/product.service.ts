@@ -11,6 +11,7 @@ import {
 import { axiosMl } from '../mlInterceptor';
 import axios from 'axios';
 import { initialSaleTerms } from '@/config/variables';
+import { normalizeUrl } from '@/utils';
 
 export class ProductHttpService {
   private static instance: ProductHttpService | null = null;
@@ -44,7 +45,7 @@ export class ProductHttpService {
       })),
       ml_id: productMl.id,
       sku,
-      slug: productMl.title.trim().replaceAll(' ', '-').toLowerCase(),
+      slug: normalizeUrl(productMl.title.trim()),
       status: 'under_review',
       category_id,
       pictures,
