@@ -71,9 +71,9 @@ const UploadImage = () => {
   return (
     <div className="w-full lg:w-[80%] mx-auto">
       <div className="my-5 mt-5">
-        <div className="w-[80%] h-[200px] mx-auto border border-solid border-gray-500 p-2">
+        <div className="w-[80%] mx-auto border border-solid border-gray-500 p-2">
           {picture && (
-            <div className="flex flex-col sm:flex-row gap-10">
+            <div className="flex flex-col sm:flex-row gap-10 h-full">
               <div className="mx-auto">
                 <label className="form__label" htmlFor="image">
                   Preview{' '}
@@ -87,8 +87,8 @@ const UploadImage = () => {
                   height={220}
                 />
               </div>
-              <div>
-                <p className="h-fit">
+              <div className="relative">
+                <p className="mb-10">
                   Recuerde optimizar la imagen en{' '}
                   <a href="https://tinyjpg.com/" target="_blank">
                     https://tinyjpg.com/ antes de subirla al servidor.
@@ -97,7 +97,7 @@ const UploadImage = () => {
                 <button
                   onClick={handleSubmit}
                   type="submit"
-                  className="btn-primary block mx-auto mt-5"
+                  className="absolute btn-primary mt-5 bottom-0 right-0"
                 >
                   Enviar
                 </button>
