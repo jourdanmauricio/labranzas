@@ -6,7 +6,7 @@ const Title = ({ formik }: IProps) => {
     formik.setFieldValue('title', value);
     formik.setFieldValue(
       'slug',
-      value.trim().replaceAll(' ', '-').toLowerCase()
+      value.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()
     );
   };
 
