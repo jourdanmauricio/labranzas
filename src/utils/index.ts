@@ -12,3 +12,4 @@ export * from './formValidate/recovery.validate';
 export * from './functions/isVariationContain';
 export * from './functions/isArrayEquals';
 export * from './functions/getVairationFromAtribs';
+export * from './functions/normalizeUrl';

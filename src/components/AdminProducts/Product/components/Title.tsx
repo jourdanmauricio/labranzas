@@ -1,3 +1,5 @@
+import { normalizeUrl } from '@/utils';
+
 interface IProps {
   formik: any;
 }
@@ -6,7 +8,13 @@ const Title = ({ formik }: IProps) => {
     formik.setFieldValue('title', value);
     formik.setFieldValue(
       'slug',
-      value.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()
+      normalizeUrl(value)
+      // value
+      //   .trim()
+      //   .replaceAll(' ', '-')
+      //   .replaceAll('.', '-')
+      //   .replaceAll('/', '-')
+      //   .toLowerCase()
     );
   };
 
