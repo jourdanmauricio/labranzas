@@ -56,6 +56,7 @@ const useCategories = () => {
   const CATEGORIES_COLUMNS = [
     {
       name: 'Categoría',
+      width: '40%',
       cell: (row: ICategory) => (
         <span>
           {row.id} - {row.name}
@@ -64,14 +65,22 @@ const useCategories = () => {
       sortable: true,
     },
     {
+      name: 'Cant Productos',
+      width: '20%',
+      center: true,
+      selector: (row: ICategory) => row.productsCount,
+      sortable: true,
+    },
+    {
       name: 'ML',
-      width: '160px',
+      width: '25%',
       selector: (row: ICategory) => row.ml_name,
       sortable: true,
     },
     {
       name: 'Acciones',
-      width: '120px',
+      width: '15%',
+      center: true,
       cell: (row: ICategory) => (
         <div>
           <button

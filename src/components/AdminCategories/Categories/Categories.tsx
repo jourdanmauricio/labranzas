@@ -20,6 +20,7 @@ const CategoriesPage = () => {
     closeMessage,
   } = useCategories();
 
+  console.log('categories', categories);
   return (
     <div>
       <Breadcrumbs catId={currentData.id} />
