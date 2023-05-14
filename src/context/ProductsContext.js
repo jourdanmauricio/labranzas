@@ -164,11 +164,22 @@ const ProductsProvider = ({ children }) => {
         payload: { field: 'status', value: 'loading' },
       });
 
-      // Change category
-      if (product.category_id !== product.category.id)
-        product.category_id = parseInt(product.category.id);
+      let _product = Object.assign({}, product);
 
-      const updProduct = await productService.update(product);
+      // Change category
+      if (_product.category_id !== _product.category.id)
+        _product.category_id = parseInt(_product.category.id);
+
+      // Variations quantity
+      if (_product.variations.length > 0) {
+        let quantity = 0;
+        _product.variations.forEach((variation) => {
+          quantity = quantity + parseInt(variation.available_quantity);
+        });
+        _product.available_quantity = quantity;
+      }
+
+      const updProduct = await productService.update(_product);
       dispatch({ type: ACTIONS.UPD_PRODUCT, payload: updProduct });
       dispatchNotif({
         type: 'SUCCESS',

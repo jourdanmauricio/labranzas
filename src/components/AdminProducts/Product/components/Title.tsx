@@ -6,16 +6,7 @@ interface IProps {
 const Title = ({ formik }: IProps) => {
   const handleChange = (value: string) => {
     formik.setFieldValue('title', value);
-    formik.setFieldValue(
-      'slug',
-      normalizeUrl(value)
-      // value
-      //   .trim()
-      //   .replaceAll(' ', '-')
-      //   .replaceAll('.', '-')
-      //   .replaceAll('/', '-')
-      //   .toLowerCase()
-    );
+    formik.setFieldValue('slug', normalizeUrl(value));
   };
 
   return (

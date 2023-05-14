@@ -13,6 +13,7 @@ const Quantity = ({ formik }: IProps) => {
         type="number"
         id="ml-id"
         {...formik.getFieldProps('available_quantity')}
+        disabled={formik.getFieldProps('variations').value.length > 0}
       />
       {formik.errors.available_quantity &&
         formik.touched.available_quantity && (
