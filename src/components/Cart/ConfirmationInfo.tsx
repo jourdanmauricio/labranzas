@@ -30,44 +30,44 @@ const ConfirmationInfo = ({ formik, name, lastName, email }: IProps) => {
       setTotal(total);
       setItemsCart(products);
 
-      // // CHECKOUT ID
-      // const data: any = await checkoutService.create(
-      //   name,
-      //   lastName,
-      //   email,
-      //   products
-      // );
+      // CHECKOUT ID
+      const data: any = await checkoutService.create(
+        name,
+        lastName,
+        email,
+        products
+      );
 
-      // // data.global is the ID that MP returns from the API, it comes from our backend route
-      // if (data.global) {
-      //   const script = document.createElement('script'); // Here we create the empty script tag
-      //   script.type = 'text/javascript'; // The type of the script
-      //   script.src = 'https://sdk.mercadopago.com/js/v2'; // The link where the script is hosted
-      //   script.setAttribute('data-preference-id', data.global); // Here we set its data-preference-id to the ID that the Mercado Pago API gives us
-      //   document.body.appendChild(script); // Here we append it to the body of our page
+      // data.global is the ID that MP returns from the API, it comes from our backend route
+      if (data.global) {
+        const script = document.createElement('script'); // Here we create the empty script tag
+        script.type = 'text/javascript'; // The type of the script
+        script.src = 'https://sdk.mercadopago.com/js/v2'; // The link where the script is hosted
+        script.setAttribute('data-preference-id', data.global); // Here we set its data-preference-id to the ID that the Mercado Pago API gives us
+        document.body.appendChild(script); // Here we append it to the body of our page
 
-      //   // Here we create the button, setting the container, our public key and the ID of the preference that Mercado Pago API returns in its response
-      //   // const mp = new window.MercadoPago(
-      //   await loadMercadoPago();
-      //   // @ts-ignore
-      //   const mp = new window.MercadoPago(
-      //     process.env.NEXT_PUBLIC_MP_PUBLIC_KEY,
-      //     {
-      //       locale: 'es-AR',
-      //     }
-      //   );
+        // Here we create the button, setting the container, our public key and the ID of the preference that Mercado Pago API returns in its response
+        // const mp = new window.MercadoPago(
+        await loadMercadoPago();
+        // @ts-ignore
+        const mp = new window.MercadoPago(
+          process.env.NEXT_PUBLIC_MP_PUBLIC_KEY,
+          {
+            locale: 'es-AR',
+          }
+        );
 
-      //   // The ".checkout" is the function that creates the connection between the button and the platform
-      //   mp.checkout({
-      //     preference: {
-      //       id: data.global,
-      //     },
-      //     render: {
-      //       container: '.cho-container',
-      //       label: 'Pagar ahora',
-      //     },
-      //   });
-      // }
+        // The ".checkout" is the function that creates the connection between the button and the platform
+        mp.checkout({
+          preference: {
+            id: data.global,
+          },
+          render: {
+            container: '.cho-container',
+            label: 'Pagar ahora',
+          },
+        });
+      }
     };
     getProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
