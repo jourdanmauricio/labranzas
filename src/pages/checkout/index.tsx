@@ -32,7 +32,6 @@ const CheckoutPage = ({ categories, contact }: IProps) => {
     useState<IRate[]>(defaultCarriers);
 
   const { data: session } = useSession();
-  console.log('session USEEEEEEE', session);
 
   const handleChangeTab = (value: number) => {
     setTab(value);
@@ -274,23 +273,10 @@ export async function getStaticProps() {
       {}
     );
 
-    // Session
-    const session = await getSession();
-    //  if (!session) {
-    //    return {
-    //      props: {},
-    //    };
-    //  }
-    //  const { user } = session;
-    //  return {
-    //    props: { user },
-    //  };
-
     return {
       props: {
         categories,
         contact,
-        session,
       },
     };
   } catch (error) {

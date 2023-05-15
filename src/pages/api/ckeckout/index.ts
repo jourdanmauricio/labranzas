@@ -1,6 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TProductDetail } from '../../../models';
-// import type { CreatePreferencePayload, PreferencePayer, PreferenceBackUrl } from 'mercadopago/models/preferences/create-payload.model'
+import { getSession } from 'next-auth/react';
+// import type {
+//   CreatePreferencePayload,
+//   PreferencePayer,
+//   PreferenceBackUrl,
+// } from 'mercadopago/models/preferences/create-payload.model';
 
 const mercadopago = require('mercadopago');
 
@@ -12,12 +17,12 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // console.log('getSession');
-  // const session = await getSession({ req });
+  const session = await getSession({ req });
   // console.log('ROUTE USERS session ', session);
 
-  // if (!session) {
-  //   return res.status(401).json({ message: 'Unauthorized' });
-  // }
+  if (!session) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 
   // Here is where we configure our session, setting the access token provided by MP
   mercadopago.configure({
